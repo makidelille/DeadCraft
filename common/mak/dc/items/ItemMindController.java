@@ -3,6 +3,7 @@ package mak.dc.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import mak.dc.entity.ai.EntityAIAvoidAPlayer;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -10,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
@@ -196,7 +198,7 @@ public class ItemMindController extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
 		if(ent != null && !ent.worldObj.isRemote) {
-		
+			//TODO add discharrge and dmg to item 
 			EntityLiving entLive = (EntityLiving) ent;
 			System.out.println(entLive);
 			if(entLive.isCreatureType(EnumCreatureType.creature, true)) {
@@ -204,9 +206,8 @@ public class ItemMindController extends Item {
 				System.out.println("test");
 			}
 			if(stack.getItemDamage() != 0 && checkEntity(entLive)) {
-				entLive.tasks.taskEntries.clear();  //TODO work sometimes idk why
-				System.out.println("done");
-				System.out.println(entLive.targetTasks.taskEntries);
+				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer(entLive,player,16F,1.2D,2D));
+				System.out.println(entLive.tasks.taskEntries);
 			}
 		}
 
