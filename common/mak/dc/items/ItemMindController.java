@@ -1,5 +1,6 @@
 package mak.dc.items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.lib.ItemInfo;
@@ -9,7 +10,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +32,8 @@ public class ItemMindController extends Item {
 	private static int _maxDamage = 12000;		
 
 	private static final String[] version =  new String[] {"passive","active","creative"};
+	
+	public static List<EntityLiving> blackListEntity = new ArrayList(); //TODO i'll do it later 
 
 
 	@SideOnly(Side.CLIENT)
@@ -187,26 +192,31 @@ public class ItemMindController extends Item {
 	
 	
 
+	//TODO finish ai modififcation plus add a case if player ;D
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
 		if(ent != null && !ent.worldObj.isRemote) {
-
-			//TODO inserer code de pascification en fonction de la charge et augmenter dmg
-			//TODO ainsi que mettre les blacklists et ajouter une identifiactaion de l'hostile
+		
 			EntityLiving entLive = (EntityLiving) ent;
+			System.out.println(entLive);
 			if(entLive.isCreatureType(EnumCreatureType.creature, true)) {
 				entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D ,this.itemID, false));
+				System.out.println("test");
 			}
-			
-			
-			if(stack.getItemDamage() != 0 && entLive.isCreatureType(EnumCreatureType.monster, true)) {
-				entLive.targetTasks.taskEntries.clear();
-				entLive.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget((EntityTameable) entLive));
+			if(stack.getItemDamage() != 0 && checkEntity(entLive)) {
+				entLive.tasks.taskEntries.clear();  //TODO work sometimes idk why
+				System.out.println("done");
+				System.out.println(entLive.targetTasks.taskEntries);
 			}
 		}
 
 
 		return false;
+	}
+
+	
+	private boolean checkEntity(EntityLiving entLive) {
+		return entLive.isCreatureType(EnumCreatureType.monster, true) && !blackListEntity.contains(entLive);
 	}
 
 
