@@ -206,7 +206,7 @@ public class ItemMindController extends Item {
 				System.out.println("test");
 			}
 			if(stack.getItemDamage() != 0 && checkEntity(entLive)) {
-				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer(entLive,player,16F,1.2D,2D));
+				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,16F,1.2D,2D));
 				System.out.println(entLive.tasks.taskEntries);
 			}
 		}
@@ -217,7 +217,7 @@ public class ItemMindController extends Item {
 
 	
 	private boolean checkEntity(EntityLiving entLive) {
-		return entLive.isCreatureType(EnumCreatureType.monster, true) && !blackListEntity.contains(entLive);
+		return entLive.isCreatureType(EnumCreatureType.monster, true) && !blackListEntity.contains(entLive) && entLive instanceof EntityCreature;
 	}
 
 
