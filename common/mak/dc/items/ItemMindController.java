@@ -11,12 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -30,16 +25,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMindController extends Item {
 
+
+	/** handle by config */	
 	private static int _maxCharge = 60000;
 	private static int _maxDamage = 12000;		
+	private static int _costForEntityUse = 100;
+	public static List<EntityCreature> blackListEntity = new ArrayList(); //TODO i'll do it later 
+
 
 	private static final String[] version =  new String[] {"passive","active","creative"};
-	
-	public static List<EntityLiving> blackListEntity = new ArrayList(); //TODO i'll do it later 
 
 
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons = {null,null,null};
+
 
 
 	public ItemMindController(int id) {
@@ -48,11 +47,10 @@ public class ItemMindController extends Item {
 		this.setHasSubtypes(true);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
-		this.setMaxDamage(0);
 		this.setFull3D();
 	}
 
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IconRegister iconRegister) {
@@ -102,7 +100,6 @@ public class ItemMindController extends Item {
 		if(!world.isRemote) {
 			if(is.getItemDamage() == 0) {						
 				NBTTagCompound newTag = new NBTTagCompound();
-
 				newTag.setInteger("damage", _maxDamage);
 				if(player.capabilities.isCreativeMode)
 					newTag.setInteger("charge", 0); //TODO don't forget to change after test 
@@ -123,7 +120,7 @@ public class ItemMindController extends Item {
 		}
 		return is;
 	}
-	
+
 
 	private void checkCrystal(EntityPlayer player, ItemStack is) {
 
@@ -132,11 +129,14 @@ public class ItemMindController extends Item {
 		//check the NBTtag of the is. 
 
 		if(!player.worldObj.isRemote) {
-			System.out.println("test");
 			NBTTagCompound tag = is.getTagCompound();
-			if(tag == null)
+			if(tag == null)	return;
+			if(is.getItemDamage() == 2) {
+				tag.setInteger("charge", _maxCharge);
+				is.setTagCompound(tag);
 				return;
-			long charge = tag.getInteger("charge");
+			}
+			int charge = tag.getInteger("charge");
 			int chargeEmpty = (int) (_maxCharge - charge);
 
 			int i=0;
@@ -148,67 +148,37 @@ public class ItemMindController extends Item {
 				ItemStack stack = inv.getStackInSlot(i);
 
 				if(stack != null && stack.getItem() instanceof ItemLifeCrystal) {
-					System.out.println("init : " + charge);
-					System.out.println(i);
 					int dmg = stack.getItemDamage();
 					int chargeCrystal = ItemLifeCrystal._maxValue - dmg;
-					System.out.println(dmg + " " + chargeCrystal);
 					if(chargeCrystal > 0) {
-						//TODO calcul des charges
-						//Bug I don't understand what happened here
-						//the controller does'nt want to charge properly :(
-						System.out.println("left" + chargeEmpty);
-
-						if(chargeCrystal >= chargeEmpty) {
-							System.out.println("chargeCrystal >= chargeEmpty");
-
-							chargeCrystal =- chargeEmpty;
-							charge =+ chargeEmpty;
-
-							stack.setItemDamage(ItemLifeCrystal._maxValue - chargeCrystal);
-						}else if(chargeCrystal < chargeEmpty) {
-							System.out.println("chargeCrystal < chargeEmpty");
-
-							charge =+ chargeCrystal;
-							System.out.println("en charge "  + charge);
-							chargeCrystal = 0;
-							stack.setItemDamage(ItemLifeCrystal._maxValue);
-
-						}
-						System.out.println("charge "  + charge);
-
+						chargeCrystal = chargeItem(is, chargeCrystal);
+						stack.setItemDamage(ItemLifeCrystal._maxValue - chargeCrystal);
 					}
+
 				}
+				charge = tag.getInteger("charge");
 				i++;
 			}
-			System.out.println(charge);
-			System.out.println(tag);
-			tag.setInteger("charge", (int) charge);
-			tag.setBoolean("charge done", true);
-			is.setTagCompound(tag);
-			System.out.println(is.getTagCompound());
 		}
 
 	}
-	
-	
-	
 
-	//TODO finish ai modififcation plus add a case if player ;D
+
+
+
+
+	//TODO add case for player (smthg funny)
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
-		if(ent != null && !ent.worldObj.isRemote && !(ent instanceof EntityPlayer)) {
-			//TODO add discharrge and dmg to item 
+		if(ent != null && !ent.worldObj.isRemote && !(ent instanceof EntityPlayer) && isUserCretaor(stack, player)) {
 			EntityLiving entLive = (EntityLiving) ent;
-			System.out.println(entLive);
 			if(entLive.isCreatureType(EnumCreatureType.creature, true)) {
 				entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D ,this.itemID, false));
-				System.out.println("test");
+				return true;
 			}
-			if(stack.getItemDamage() != 0 && checkEntity(entLive)) {
-				dischargeItem(stack);
+			if(stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack,_costForEntityUse)) {
 				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,4F,1.2D,2D));
-				System.out.println(entLive.tasks.taskEntries);
+				return true;
 			}
 		}
 
@@ -216,15 +186,49 @@ public class ItemMindController extends Item {
 		return false;
 	}
 
-	
-	private void dischargeItem(ItemStack stack) {
-		//TODO add Discharge code
-		
+	/** amount should be positive or it will charge the item */
+	private boolean dischargeItem(ItemStack stack, int amount) {
+		if(stack.getItemDamage() == 2) return true;
+		NBTTagCompound tag = stack.getTagCompound();
+		if(tag != null) {
+			int charge = tag.getInteger("charge");
+			if(charge <= amount) return false;
+			charge -= amount;
+			tag.setInteger("charge", charge);
+			System.out.println(tag);
+			stack.setTagCompound(tag);
+			return true;
+		}
+		return false;
 	}
-	
-	private void chargeItem(ItemStack stack) {
-		//TDOO add charge code
+
+	private int chargeItem(ItemStack stack, int amount) {
+		NBTTagCompound tag = stack.getTagCompound();
+		int re = 0;
+		if(tag != null) {
+			int charge = tag.getInteger("charge");
+			if(charge + amount > _maxCharge) {
+				charge = _maxCharge;
+				re = charge + amount  - _maxCharge;
+			}else {
+				charge += amount;
+			}
+			tag.setInteger("charge", charge);
+			stack.setTagCompound(tag);
+		}
+		return re;
 	}
+
+	private boolean isUserCretaor(ItemStack stack, EntityPlayer player) {
+		if(!player.isClientWorld()) {
+			NBTTagCompound tag = stack.stackTagCompound;
+			if(tag == null || stack.getItemDamage() == 0) return true;
+			String user = tag.getString("player");
+			if(user.equalsIgnoreCase(player.username)) return true;
+		}
+		return false;
+	}
+
 
 
 	private boolean checkEntity(EntityLiving entLive) {

@@ -56,7 +56,7 @@ public class ItemLifeCrystal extends ItemFood{
 						int dmg = stack.getItemDamage();
 
 						if(wandDmg > 0 && !isCharged(dmg)) {
-							stack.setItemDamage(dmg - wandDmg);
+							chargeItem(stack, wandDmg);
 
 							ItemDeadWand wandItem = (ItemDeadWand) wand.getItem();
 							wandItem.resetStack(wand);
@@ -75,7 +75,7 @@ public class ItemLifeCrystal extends ItemFood{
 			ItemStack newStack = stack;
 			int dmg = stack.getItemDamage(); 
 			if(dmg < _crystalCost) {
-				newStack.setItemDamage(dmg + _crystalCost);
+				dischargeItem(newStack, _crystalCost);
 				player.addChatMessage("you've been healed and feed");
 				player.heal(500);
 				player.getFoodStats().setFoodSaturationLevel(20);
@@ -105,7 +105,15 @@ public class ItemLifeCrystal extends ItemFood{
 		return dmg == 0;
 	}
 
+	
+	private void chargeItem (ItemStack stack, int chargeAmount) {
+		stack.setItemDamage(stack.getItemDamage() - chargeAmount);
+	}
+	
 
+	private void dischargeItem (ItemStack stack, int chargeAmount) {
+		stack.setItemDamage(stack.getItemDamage() + chargeAmount);
+	}
 
 
 }
