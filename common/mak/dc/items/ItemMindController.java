@@ -197,7 +197,7 @@ public class ItemMindController extends Item {
 	//TODO finish ai modififcation plus add a case if player ;D
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
-		if(ent != null && !ent.worldObj.isRemote) {
+		if(ent != null && !ent.worldObj.isRemote && !(ent instanceof EntityPlayer)) {
 			//TODO add discharrge and dmg to item 
 			EntityLiving entLive = (EntityLiving) ent;
 			System.out.println(entLive);
@@ -206,7 +206,8 @@ public class ItemMindController extends Item {
 				System.out.println("test");
 			}
 			if(stack.getItemDamage() != 0 && checkEntity(entLive)) {
-				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,16F,1.2D,2D));
+				dischargeItem(stack);
+				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,4F,1.2D,2D));
 				System.out.println(entLive.tasks.taskEntries);
 			}
 		}
@@ -216,6 +217,16 @@ public class ItemMindController extends Item {
 	}
 
 	
+	private void dischargeItem(ItemStack stack) {
+		//TODO add Discharge code
+		
+	}
+	
+	private void chargeItem(ItemStack stack) {
+		//TDOO add charge code
+	}
+
+
 	private boolean checkEntity(EntityLiving entLive) {
 		return entLive.isCreatureType(EnumCreatureType.monster, true) && !blackListEntity.contains(entLive) && entLive instanceof EntityCreature;
 	}
