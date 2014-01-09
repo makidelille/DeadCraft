@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -123,10 +124,7 @@ public class ItemMindController extends Item {
 
 
 	private void checkCrystal(EntityPlayer player, ItemStack is) {
-
-		//TODO debug :(
-		// refresh the render of the item icon.
-		//check the NBTtag of the is. 
+		//TODO work on the refresh of the icons
 
 		if(!player.worldObj.isRemote) {
 			NBTTagCompound tag = is.getTagCompound();
@@ -167,17 +165,28 @@ public class ItemMindController extends Item {
 
 
 
-	//TODO add case for player (smthg funny)
+	//TODO add case for player (smthg funny) & calcul of the charges + do the cfg
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
-		if(ent != null && !ent.worldObj.isRemote && !(ent instanceof EntityPlayer) && isUserCretaor(stack, player)) {
-			EntityLiving entLive = (EntityLiving) ent;
-			if(entLive.isCreatureType(EnumCreatureType.creature, true)) {
-				entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D ,this.itemID, false));
-				return true;
-			}
-			if(stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack,_costForEntityUse)) {
-				entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,4F,1.2D,2D));
+		if(ent != null && !ent.worldObj.isRemote) {
+			if(!(ent instanceof EntityPlayer) && isUserCreator(stack, player)) {
+				EntityLiving entLive = (EntityLiving) ent;
+				if(entLive.isCreatureType(EnumCreatureType.creature, true)) {
+					entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D ,this.itemID, false));
+					return true;
+				}
+				if(stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack,costEntity(entLive))) {
+					entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive,player,4F,1.2D,2D));
+					return true;
+				}
+			}else if(!isUserCreator(stack, player)) {
+				player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj,player.posX,player.posY, player.posZ));
+				player.addChatMessage((EnumChatFormatting.RED + "" +EnumChatFormatting.BOLD + "don't use the items of the others" + EnumChatFormatting.RESET));
+				return false;
+			}else if(ent instanceof EntityPlayer) {
+				World world = player.worldObj;
+				world.spawnEntityInWorld(new EntityLightningBolt(world,ent.posX,ent.posY, ent.posZ));
+				world.spawnEntityInWorld(new EntityLightningBolt(world,player.posX,player.posY, player.posZ));
 				return true;
 			}
 		}
@@ -185,6 +194,15 @@ public class ItemMindController extends Item {
 
 		return false;
 	}
+
+	private int costEntity(EntityLiving entLive) {
+		float pv = entLive.getHealth();
+		int armor = entLive.getTotalArmorValue();
+//		int dmg = 
+		
+		return (int) ((pv) * armor);
+	}
+
 
 	/** amount should be positive or it will charge the item */
 	private boolean dischargeItem(ItemStack stack, int amount) {
@@ -219,7 +237,7 @@ public class ItemMindController extends Item {
 		return re;
 	}
 
-	private boolean isUserCretaor(ItemStack stack, EntityPlayer player) {
+	private boolean isUserCreator(ItemStack stack, EntityPlayer player) {
 		if(!player.isClientWorld()) {
 			NBTTagCompound tag = stack.stackTagCompound;
 			if(tag == null || stack.getItemDamage() == 0) return true;
