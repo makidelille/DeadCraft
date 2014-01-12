@@ -22,6 +22,7 @@ public class ConfigHandler {
 		ItemInfo.DEADWAND_ID = config.getItem(ItemInfo.DEADWAND_KEY, ItemInfo.DEADWAND_DEFAULT).getInt() - 256 ;
 		ItemInfo.LIFECRYSTAL_ID = config.getItem(ItemInfo.LIFECRYSTAL_KEY,ItemInfo.LIFECRYSTAL_DEFAULT).getInt() - 256 ;
 		ItemInfo.MINDCONTROLLER_ID = config.getItem(ItemInfo.MINDCONTROLLER_KEY, ItemInfo.MINDCONTROLLER_DEFFAULT).getInt() - 256;
+		ItemInfo.CONTROLLER_ID = config.getItem(ItemInfo.CONTROLLER_KEY, ItemInfo.CONTROLLER_DEFFAULT).getInt() - 256;
 		
 		
 		//load id for blocks

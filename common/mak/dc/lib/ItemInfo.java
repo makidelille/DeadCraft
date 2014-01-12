@@ -18,5 +18,10 @@ public class ItemInfo {
 	public static final int MINDCONTROLLER_DEFFAULT = 6002;
 	public static final String MINDCONTROLLER_KEY = "Mind Controller";
 	public static final String MINDCONTROLLER_UNLOCALIZED_NAME = "mindcontroller";
+
+    public static  int CONTROLLER_ID;
+    public static final int CONTROLLER_DEFFAULT = 6003;
+    public static final String CONTROLLER_KEY = "Controller";
+    public static final String CONTROLLER_UNLOCALIZED_NAME = "controller";
 	
 }

@@ -11,12 +11,13 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerEggSpawner extends Container {
+public class ContainerEggSpawner extends ContainerDeadCraft {
 
 	private TileEntityEggSpawner te;
 	
 	public ContainerEggSpawner(InventoryPlayer invPlayer, TileEntityEggSpawner te) {
-		this.te = te;
+	    super(invPlayer, te);
+	    this.te = te;
 	
 		for (int y = 0; y < 2; y++) {
 			for(int x = 0 ; x < 3; x++) {
@@ -44,10 +45,6 @@ public class ContainerEggSpawner extends Container {
 		return te;
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return te.isUseableByPlayer(player);
-	}
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {

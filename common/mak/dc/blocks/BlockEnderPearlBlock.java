@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockEnderPearlBlock extends Block {
+public class BlockEnderPearlBlock extends BlockDeadCraft {
 	
 	
 	public static boolean _IS_CREATIVE_MOVED; //if true, creatives players will be moved

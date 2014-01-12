@@ -1,5 +1,6 @@
 package mak.dc.init;
 
+import mak.dc.items.ItemController;
 import mak.dc.items.ItemDeadWand;
 import mak.dc.items.ItemLifeCrystal;
 import mak.dc.items.ItemMindController;
@@ -15,6 +16,8 @@ public class ItemInit {
 	public static Item deadWand;
 	public static Item lifeCrystal;
 	public static Item mindController;
+	public static Item controller; //TODO
+	public static Item superChargedNetherStar; //TODO craft usage
 	
 	static EnumArmorMaterial DC_ARMOR_MATERIAL = EnumHelper.addArmorMaterial("deadcraft_armor", 20, new int[]{2, 8, 4, 2}, 15);
 
@@ -26,9 +29,12 @@ public class ItemInit {
 		deadWand = new ItemDeadWand(ItemInfo.DEADWAND_ID);
 		lifeCrystal = new ItemLifeCrystal(ItemInfo.LIFECRYSTAL_ID);
 		mindController = new ItemMindController(ItemInfo.MINDCONTROLLER_ID);
+		controller = new ItemController(ItemInfo.CONTROLLER_ID);
 		
 		GameRegistry.registerItem(deadWand, ItemInfo.DEADWAND_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(lifeCrystal, ItemInfo.LIFECRYSTAL_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(mindController, ItemInfo.MINDCONTROLLER_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(controller, ItemInfo.CONTROLLER_KEY, Lib.MOD_ID);
 	
 	}
 	

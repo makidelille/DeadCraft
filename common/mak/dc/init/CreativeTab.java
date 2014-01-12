@@ -20,6 +20,7 @@ public class CreativeTab {
 		ItemInit.deadWand.setCreativeTab(tabDeadCraft);
 		ItemInit.lifeCrystal.setCreativeTab(tabDeadCraft);
 		ItemInit.mindController.setCreativeTab(tabDeadCraft);
+		ItemInit.controller.setCreativeTab(tabDeadCraft);
 
 		
 		BlockInit.eggSpawner.setCreativeTab(tabDeadCraft);

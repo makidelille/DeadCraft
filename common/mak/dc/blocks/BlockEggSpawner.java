@@ -1,5 +1,7 @@
 package mak.dc.blocks;
 
+//TODO create blockDC et ajouter lock avec nveaux items
+
 import java.util.Random;
 
 import mak.dc.DeadCraft;
@@ -20,7 +22,7 @@ import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockEggSpawner extends BlockContainer {
+public class BlockEggSpawner extends BlockDeadCraft {
 
 	
 	public BlockEggSpawner(int id) {

@@ -11,10 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.FMLLog;
 
-public class TileEntityEggSpawner extends TileEntity implements IInventory {
+public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory {
 		
 	/**handle by config */
 	private static boolean DEBUG = Lib.DEBUG;
@@ -220,7 +219,7 @@ public class TileEntityEggSpawner extends TileEntity implements IInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 25;
+		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 25 && this.isUserAllowed(player.username);
 	}
 	
 	

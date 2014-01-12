@@ -9,8 +9,11 @@ import net.minecraft.inventory.Container;
 
 public abstract class GuiCustom extends GuiContainer {
 
+    private Container container;
+    
 	public GuiCustom(Container par1Container) {
 		super(par1Container);
+		this.container = par1Container;
 	}
 
 	public int getLeft() {
@@ -44,6 +47,10 @@ public abstract class GuiCustom extends GuiContainer {
 	
 	public void close() {
 		 mc.thePlayer.closeScreen();
+	}
+	
+	public Container getContainer() {
+	    return this.container;
 	}
 	
 	
