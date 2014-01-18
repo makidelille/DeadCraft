@@ -2,6 +2,8 @@ package mak.dc.blocks;
 
 //TODO sinish switch
 
+import cpw.mods.fml.common.network.FMLNetworkHandler;
+import mak.dc.DeadCraft;
 import mak.dc.items.ItemController;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.BlockContainer;
@@ -43,21 +45,13 @@ public class BlockDeadCraft extends BlockContainer{
             if(te.isUserCreator(username)) {
                 if(player.getCurrentEquippedItem().getItem() instanceof ItemController) {
                     ItemStack is = player.getCurrentEquippedItem();
-                   ItemController controller = (ItemController)is.getItem();
-                   switch(controller.getMode(is)) {
-                       case 0 : //overwrite users list
-                           te.setAllowedUser(controller.getAllowedList(is));
+                   switch(is.getItemDamage()) {
+                       case 0 : //change autoratsation
+                           FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                            break;
-                       case 1 : //add Allowed Users
-                           te.addAllowedUser(controller.addUser(is));
+                       case 1 : //change stats (lock)
                            break;
-                       case 2 : //delete Allowed Users
-                           break;
-                       case 3 : //reset users
-                           break;
-                       case 4 : //change stats (lock)
-                           break;
-                       case 5 : //show infos
+                       case 2 : //show infos
                            break;
                        default : break;
                    }

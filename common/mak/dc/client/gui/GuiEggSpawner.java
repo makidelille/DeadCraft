@@ -123,7 +123,7 @@ public class GuiEggSpawner extends GuiCustom{
 	@Override
 	public void actionPerformed(GuiButton button) {
 		
-		PacketHandler.sendInterfacePacket((byte) 0,(byte) button.id);
+		PacketHandler.sendInterfacePacket((byte) 1,(byte) button.id);
 	}
 
 		

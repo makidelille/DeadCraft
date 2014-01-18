@@ -16,7 +16,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 	private TileEntityEggSpawner te;
 	
 	public ContainerEggSpawner(InventoryPlayer invPlayer, TileEntityEggSpawner te) {
-	    super(invPlayer, te);
+	    super(invPlayer, te, true);
 	    this.te = te;
 	
 		for (int y = 0; y < 2; y++) {

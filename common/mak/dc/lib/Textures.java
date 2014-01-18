@@ -23,7 +23,7 @@ public class Textures {
 	/**gui*/
 	public static final String EGGSPAWNER_GUI_TEXT_LOC = PATH_GUI + "eggspawner.png";
 	public static final String UTIL_GUI_TEXT_LOC = PATH_GUI +  "util.png";
-    public static final String ENTERNAME_TEXT_LOC = PATH_GUI + "entername.png";
+    public static final String DEADCRAFTMAIN_GUI_TEXT_LOC = PATH_GUI + "deadcraftmain.png";
 
 	
 }

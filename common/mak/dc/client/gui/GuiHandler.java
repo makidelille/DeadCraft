@@ -1,8 +1,8 @@
 package mak.dc.client.gui;
 
 import mak.dc.DeadCraft;
+import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
-import mak.dc.client.gui.container.ContainerEnterName;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,13 +21,16 @@ public class GuiHandler implements IGuiHandler {
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = null;
         switch(ID) {
-            case 0 :
+            case 0 : 
+                te = world.getBlockTileEntity(x, y, z);
+                if(te != null && te instanceof TileEntityDeadCraft) 
+                    return new ContainerDeadCraft(player.inventory , (TileEntityDeadCraft) te, false);
+                break;
+            case 1 :
                 te = world.getBlockTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEggSpawner)
                     return new ContainerEggSpawner(player.inventory, (TileEntityEggSpawner) te);
                 break;
-            case 1:
-                return new ContainerEnterName(player.inventory , player.getCurrentEquippedItem());
 
         }
 
@@ -38,13 +41,16 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement (int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = null;
         switch (ID) {
-            case 0:
+            case 0 : 
+                te = world.getBlockTileEntity(x, y, z);
+                if(te != null && te instanceof TileEntityDeadCraft) 
+                    return new GuiDeadCraftBlockMain(player.inventory , (TileEntityDeadCraft) te);
+                break;
+            case 1:
                 te = world.getBlockTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEggSpawner)
                     return new GuiEggSpawner(player.inventory, (TileEntityEggSpawner) te);
                 break;
-            case 1:
-                return new GuiEnterName(player.inventory,player.getCurrentEquippedItem());
 
         }
 

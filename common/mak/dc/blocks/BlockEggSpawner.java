@@ -5,6 +5,7 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
+import mak.dc.items.ItemController;
 import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
@@ -40,8 +41,8 @@ public class BlockEggSpawner extends BlockDeadCraft {
 	
 	@Override
 	public boolean onBlockActivated(World world,int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ ) {
-		if(!world.isRemote)
-			FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
+		if(!world.isRemote && player.getCurrentEquippedItem()!= null && !(player.getCurrentEquippedItem().getItem() instanceof ItemController))
+			FMLNetworkHandler.openGui(player, DeadCraft.instance, 1, world, x, y, z);
 		return true;		
 	}
 		
