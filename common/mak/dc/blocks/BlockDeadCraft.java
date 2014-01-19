@@ -37,29 +37,5 @@ public class BlockDeadCraft extends BlockContainer{
         }
     }
     
-    @Override
-    public void onBlockClicked (World world, int x, int y, int z, EntityPlayer player) {
-        if(!world.isRemote && world.blockHasTileEntity(x, y, z)) {
-            TileEntityDeadCraft te = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
-            String username = player.username;
-            if(te.isUserCreator(username)) {
-                if(player.getCurrentEquippedItem().getItem() instanceof ItemController) {
-                    ItemStack is = player.getCurrentEquippedItem();
-                   switch(is.getItemDamage()) {
-                       case 0 : //change autoratsation
-                           FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
-                           break;
-                       case 1 : //change stats (lock)
-                           break;
-                       case 2 : //show infos
-                           break;
-                       default : break;
-                   }
-                }
-                
-            }
-        }
-    }
-
-  
+ 
 }

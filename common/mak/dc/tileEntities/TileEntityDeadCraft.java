@@ -2,6 +2,7 @@ package mak.dc.tileEntities;
 
 //TODO test
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,9 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityDeadCraft extends TileEntity {
 
 
-    private String owner;
-    private List allowed; //TODO check utilistaion
-    private boolean locked;
+    protected String owner;
+    protected ArrayList allowed = new ArrayList(); //TODO change
+    protected boolean locked;
 
 
     public TileEntityDeadCraft() {
@@ -30,28 +31,27 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void addAllowedUser (String name) {
-        if(allowed.contains(name)) return;
         allowed.add(name);
     }
 
     public void removeAllowedUser (String name) {
-        if(!allowed.contains(name)) return;
         allowed.remove(name);
     }
 
-    public void setAllowedUser (List<String> users) {
+    public void setAllowedUser (ArrayList users) {
         allowed = users;
     }
 
 
-    public List<String> getAllowedUser () {
+    public ArrayList getAllowedUser () {
         return allowed;
     }
 
 
     public boolean isUserAllowed(String name) {
-        return (allowed != null ? allowed.contains(name) : false) || name.equalsIgnoreCase(this.owner) || !this.locked;
+        return (allowed.contains(name) || name.equalsIgnoreCase(this.owner) || !this.locked) ; //FIXME
     }
+
 
     public boolean isUserCreator(String name) {
         return name == this.owner;
@@ -75,16 +75,16 @@ public class TileEntityDeadCraft extends TileEntity {
     public void writeToNBT (NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setString("owner", this.owner);
-        if(allowed.size() != 0) {
-
-            int nbersAll = allowed.size();
-            NBTTagCompound tagAllowed = new NBTTagCompound();
-            for (int i = 0; i < nbersAll; i++ ) {
-                tagAllowed.setString("allowed " +i , (String) allowed.get(i));
-            }
-            tagAllowed.setInteger("nbAlllowed", nbersAll);
-            nbtTagCompound.setTag("allowed", tagAllowed);
-        }
+        //        if(allowed.size() != 0) {
+        //
+        //            int nbersAll = allowed.size();
+        //            NBTTagCompound tagAllowed = new NBTTagCompound();
+        //            for (int i = 0; i < nbersAll; i++ ) {
+        //                tagAllowed.setString("allowed " +i , (String) allowed.get(i));
+        //            }
+        //            tagAllowed.setInteger("nbAlllowed", nbersAll);
+        //            nbtTagCompound.setTag("allowed", tagAllowed);
+        //        }
         nbtTagCompound.setBoolean("locked", locked);
 
 
@@ -93,15 +93,15 @@ public class TileEntityDeadCraft extends TileEntity {
     @Override
     public void readFromNBT (NBTTagCompound nbtTagCompound) {
         this.owner = nbtTagCompound.getString("owner");
-        int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
-        NBTTagCompound tagAllowed = nbtTagCompound.getCompoundTag("allowed");
-        for (int i = 0; i < nbersAll; i++ ) {
-            allowed.add(tagAllowed.getString("allowed "  +i));
-        }
+        //        int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
+        //        NBTTagCompound tagAllowed = nbtTagCompound.getCompoundTag("allowed");
+        //        for (int i = 0; i < nbersAll; i++ ) {
+        //            allowed.add(tagAllowed.getString("allowed "  +i));
+        //        }
         this.locked = nbtTagCompound.getBoolean("locked");
     }
 
-   
+
 
 
 

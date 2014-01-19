@@ -29,6 +29,7 @@ public class ContainerDeadCraft extends Container {
 
     @Override
     public boolean canInteractWith (EntityPlayer entityplayer) {
+        if(!te.isUserAllowed(entityplayer.username)) entityplayer.addChatMessage("the block is locked");
         return te == null ? true : te.isUserAllowed(entityplayer.username)
                 && entityplayer.getDistanceSq(te.xCoord, te.yCoord, te.zCoord) <= 64;
     }
