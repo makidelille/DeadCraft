@@ -7,41 +7,51 @@ import java.util.List;
 
 import mak.dc.DeadCraft;
 import mak.dc.lib.ItemInfo;
+import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemController extends Item {
 
+    private static final String[] version = {"base","lock","info"};
+    private Icon[] icons = {null,null,null};
+    
     public ItemController (int id) {
         super(id);
         this.setUnlocalizedName(ItemInfo.CONTROLLER_KEY);
         this.setHasSubtypes(true);
     }
 
-    public ArrayList getAllowedList (ItemStack is) {
-        NBTTagCompound tag = is.getTagCompound();
-        ArrayList allowed = new ArrayList();
-        if (tag != null) {
-            int nbersAll = tag.getInteger("nbAlllowed");
-            NBTTagCompound tagAllowed = tag.getCompoundTag("allowed");
-            for (int i = 0; i < nbersAll; i++) {
+    
 
-                allowed.add(i, tagAllowed.getString("allowed " + i));
-            }
-        }
-        return allowed;
-    }
-
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
         // TODO
 
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons (IconRegister iconRegister) {
+        for(int i=0; i < version.length; i++)
+        icons[i]= iconRegister.registerIcon(Textures.CONTROLLER_TEXT_LOC[i]);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public Icon getIconFromDamage (int par1) {
+        return par1 <= 2 && par1 >= 0 ? icons[par1] : icons[0];
     }
 
     @Override
@@ -56,7 +66,7 @@ public class ItemController extends Item {
 
     }
 
- 
+
     @Override
     public boolean onItemUseFirst (ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
             float hitX, float hitY, float hitZ) {
@@ -86,14 +96,29 @@ public class ItemController extends Item {
         }
         return false;
     }
-    
+
     @Override
     public ItemStack onItemRightClick (ItemStack is, World world, EntityPlayer player) {
-       if(!world.isRemote) {
-           is.setItemDamage(is.getItemDamage() < 3 ? (is.getItemDamage() + 1) : 0);
-       }
-        
+        if(!world.isRemote && player.isSneaking()) {
+            is.setItemDamage(is.getItemDamage() < 2 ? (is.getItemDamage() + 1) : 0);
+        }
+
         return is;
+    }
+    
+    
+    public ArrayList getAllowedList (ItemStack is) {
+        NBTTagCompound tag = is.getTagCompound();
+        ArrayList allowed = new ArrayList();
+        if (tag != null) {
+            int nbersAll = tag.getInteger("nbAlllowed");
+            NBTTagCompound tagAllowed = tag.getCompoundTag("allowed");
+            for (int i = 0; i < nbersAll; i++) {
+
+                allowed.add(i, tagAllowed.getString("allowed " + i));
+            }
+        }
+        return allowed;
     }
 
     public String addUser (ItemStack is) {

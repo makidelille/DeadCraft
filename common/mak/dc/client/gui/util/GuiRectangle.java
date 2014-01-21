@@ -2,7 +2,9 @@ package mak.dc.client.gui.util;
 
 import java.util.Arrays;
 
-public class GuiRectangle {
+import net.minecraft.client.gui.GuiScreen;
+
+public class GuiRectangle extends GuiScreen{
 		
 	private int x;
 	private int y;
@@ -16,6 +18,7 @@ public class GuiRectangle {
 			this.w = width;
 			this.h = height;
 	}
+	
 			
 	public boolean inRect(GuiCustom gui, int mouseX, int mouseY) {
 		mouseX -= gui.getLeft();
@@ -126,8 +129,10 @@ public class GuiRectangle {
 		return re;
 	}
 
-	
 
+   
+
+    
 	
 }
 
