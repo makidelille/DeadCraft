@@ -74,6 +74,13 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         sliderTest.updateScreen();
     }
 
+    
+    @Override
+    protected void mouseClicked (int par1, int par2, int par3) {
+       sliderTest.mouseClicked(this,par1,par2,par3);
+    }
+    
+   
     @Override
     public void initGui () {
         super.initGui();

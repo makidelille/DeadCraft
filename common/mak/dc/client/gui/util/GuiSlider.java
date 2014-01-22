@@ -17,7 +17,7 @@ public class GuiSlider extends GuiRectangle {
     private static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
 
     public GuiSlider (int posX, int posY, int size, int initId) {
-        super(posX, posY, 4, 6);
+        super(posX, posY, 6 + size*2, 10);
 
         this.size = size;
         this.intiId = initId;
@@ -27,9 +27,9 @@ public class GuiSlider extends GuiRectangle {
         GL11.glColor4f(1, 1, 1, 1);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
-        gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY(), 1, 166, 2, 6);
+        gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY(), 1, 166, 1, 10);
         for (int i = 0; i < size; i++) {
-            gui.drawTexturedModalRect(gui.getLeft() + getX() + 2 + i, gui.getTop() + getY(), 3, 166, 2, 6);
+            gui.drawTexturedModalRect(gui.getLeft() + getX() +1+ i, gui.getTop() + getY(), 5, 166, 2, 10);
         }
 
         drawSlider(gui, getCursorPos());
@@ -40,51 +40,25 @@ public class GuiSlider extends GuiRectangle {
         GL11.glColor4f(1, 1, 1, 1);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
-        gui.drawTexturedModalRect(gui.getLeft() + getX() + pos + 1, gui.getTop() + getY(), 5, 166, 1, 6);
+        gui.drawTexturedModalRect(gui.getLeft() + getX() + pos + 1, gui.getTop() + getY(),7, 166, 2, 10);
     }
 
     private int getCursorPos () {
-        cursorPos = (cursorPos <= size && cursorPos >= 0) ? cursorPos : 0;
+        cursorPos = (cursorPos <= size - 2 && cursorPos >= 0) ? cursorPos : 0;
         return cursorPos;
     }
 
     private void setCursorPos (int pos) {
-        cursorPos = (pos <= size && pos >= 0) ? pos : 0;
+        cursorPos = pos <= size - 2 ? (pos >= 0 ? pos : 0) : size - 2;
     }
-
-
-
-    private void mouseDragged(GuiCustom gui , int mouseX, int mouseY) {
-        if(selected) {
-            if(mouseX > cursorPos + getX()) setCursorPos(cursorPos++);
-            else if(mouseX < cursorPos + getX()) setCursorPos(cursorPos--);
-        }
-
-    }
-
-    @Override
-    protected void mouseMovedOrUp(int mouseX, int mouseY, int type)
-    {
-        System.out.println(inRect(mouseX, mouseY));
-        if(type == 0 || type == 1 )
-          this.selected = false;
-        else if (type == -1)
-            if(mouseX > cursorPos + getX()) setCursorPos(cursorPos++);
-            else if(mouseX < cursorPos + getX()) setCursorPos(cursorPos--);
-
-    }
-    
-    @Override
-    protected void mouseClicked(int x, int y, int par3) {
-        System.out.println("click");
-        if(inRect(x, y)) this.selected = true;
+        
+    public void mouseClicked(GuiCustom gui,int x, int y, int par3) {
+        if(inRect(gui,x, y)) setCursorPos(x - gui.getLeft());
         
     }
 
     
-    private boolean inRect(int mouseX, int mouseY) {
-        return (mouseX == getCursorPos()+ getX() && mouseY >= getY() && mouseY <= getY() + 6);
-    }
+   
     
     @Override
     public void updateScreen () {
