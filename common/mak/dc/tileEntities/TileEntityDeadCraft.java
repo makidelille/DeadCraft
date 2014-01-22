@@ -73,18 +73,16 @@ public class TileEntityDeadCraft extends TileEntity {
 
     @Override
     public void writeToNBT (NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setString("owner", this.owner);
-        //        if(allowed.size() != 0) {
-        //
-        //            int nbersAll = allowed.size();
-        //            NBTTagCompound tagAllowed = new NBTTagCompound();
-        //            for (int i = 0; i < nbersAll; i++ ) {
-        //                tagAllowed.setString("allowed " +i , (String) allowed.get(i));
-        //            }
-        //            tagAllowed.setInteger("nbAlllowed", nbersAll);
-        //            nbtTagCompound.setTag("allowed", tagAllowed);
-        //        }
+                if(allowed.size() != 0) {        
+                    int nbersAll = allowed.size();
+                    NBTTagCompound tagAllowed = new NBTTagCompound();
+                    for (int i = 0; i < nbersAll; i++ ) {
+                        tagAllowed.setString("allowed " +i , (String) allowed.get(i));
+                    }
+                    tagAllowed.setInteger("nbAlllowed", nbersAll);
+                    nbtTagCompound.setTag("allowed", tagAllowed);
+                }
         nbtTagCompound.setBoolean("locked", locked);
 
 
@@ -93,11 +91,11 @@ public class TileEntityDeadCraft extends TileEntity {
     @Override
     public void readFromNBT (NBTTagCompound nbtTagCompound) {
         this.owner = nbtTagCompound.getString("owner");
-        //        int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
-        //        NBTTagCompound tagAllowed = nbtTagCompound.getCompoundTag("allowed");
-        //        for (int i = 0; i < nbersAll; i++ ) {
-        //            allowed.add(tagAllowed.getString("allowed "  +i));
-        //        }
+                int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
+                NBTTagCompound tagAllowed = nbtTagCompound.getCompoundTag("allowed");
+                for (int i = 0; i < nbersAll; i++ ) {
+                    allowed.add(tagAllowed.getString("allowed "  +i));
+                }
         this.locked = nbtTagCompound.getBoolean("locked");
     }
 

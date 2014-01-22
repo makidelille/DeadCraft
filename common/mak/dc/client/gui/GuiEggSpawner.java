@@ -26,8 +26,8 @@ public class GuiEggSpawner extends GuiCustom{
 
 	private TileEntityEggSpawner te;
 	
-	public GuiEggSpawner(InventoryPlayer inventory, TileEntityEggSpawner te) {
-		super(new ContainerEggSpawner(inventory, te));
+	public GuiEggSpawner(InventoryPlayer inventory, TileEntityEggSpawner te, int iD) {
+		super(new ContainerEggSpawner(inventory, te), iD);
 		
 		this.te = te;
 		
@@ -123,7 +123,7 @@ public class GuiEggSpawner extends GuiCustom{
 	@Override
 	public void actionPerformed(GuiButton button) {
 		
-		PacketHandler.sendInterfacePacket((byte) 1,(byte) button.id);
+		PacketHandler.sendInterfaceButtonPacket((byte) this.id,(byte) button.id);
 	}
 
 		

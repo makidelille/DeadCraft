@@ -6,6 +6,7 @@ import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
 import mak.dc.client.gui.util.GuiSlider;
+import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
@@ -21,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiDeadCraftBlockMain extends GuiCustom {
 
     private GuiRectangle            names;
-    private GuiRectangle            infos;
+    private GuiSwitch               lock;
     private GuiTextField            entername;
     private GuiSlider               sliderTest;
     private TileEntityDeadCraft     te;
@@ -30,15 +31,15 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     private static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
 
-    public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te) {
-        super(new ContainerDeadCraft(invPlayer, te, false));
+    public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te, int iD) {
+        super(new ContainerDeadCraft(invPlayer, te, false), iD);
 
         xSize = 176;
         ySize = 166;
 
-        infos = new GuiRectangle(121, 53, 50, 24);
         names = new GuiRectangle(7, 10, 120, 100);
-        sliderTest = new GuiSlider(123, 62, 40, 0);
+        sliderTest = new GuiSlider(108, 25, 20, 0, true);
+        sliderTest.show();
 
         this.te = te;
         this.user = invPlayer.player.username;
@@ -74,13 +75,25 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         sliderTest.updateScreen();
     }
 
-    
+
     @Override
     protected void mouseClicked (int par1, int par2, int par3) {
-       sliderTest.mouseClicked(this,par1,par2,par3);
+        sliderTest.mouseClicked(this,par1,par2,par3);
+    }
+
+   
+    @Override
+    protected void mouseClickMove (int par1, int par2, int par3, long par4) {
+       sliderTest.mouseClickMove(this, par1, par2);
     }
     
-   
+    @Override
+    protected void mouseMovedOrUp (int par1, int par2, int par3) {
+
+        sliderTest.mouseMovedOrUp(this,par1,par2,par3);
+    }
+
+
     @Override
     public void initGui () {
         super.initGui();

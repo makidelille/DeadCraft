@@ -10,10 +10,12 @@ import net.minecraft.inventory.Container;
 public abstract class GuiCustom extends GuiContainer {
 
     private Container container;
+    public int id;
     
-	public GuiCustom(Container par1Container) {
+	public GuiCustom(Container par1Container, int id) {
 		super(par1Container);
 		this.container = par1Container;
+		this.id=id;
 	}
 
 	public int getLeft() {

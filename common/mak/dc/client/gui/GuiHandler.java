@@ -44,12 +44,12 @@ public class GuiHandler implements IGuiHandler {
             case 0 : 
                 te = world.getBlockTileEntity(x, y, z);
                 if(te != null && te instanceof TileEntityDeadCraft) 
-                    return new GuiDeadCraftBlockMain(player.inventory , (TileEntityDeadCraft) te);
+                    return new GuiDeadCraftBlockMain(player.inventory , (TileEntityDeadCraft) te,ID);
                 break;
             case 1:
                 te = world.getBlockTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEggSpawner)
-                    return new GuiEggSpawner(player.inventory, (TileEntityEggSpawner) te);
+                    return new GuiEggSpawner(player.inventory, (TileEntityEggSpawner) te,ID);
                 break;
 
         }
