@@ -111,7 +111,7 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		
 		Random rand = world.rand;
 		
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 		
 		float xCoord = (float) (x + 0.5);
 		float yCoord = (float) (y + rand.nextFloat());

@@ -1,12 +1,14 @@
 package mak.dc.client.gui.util;
 
-import org.lwjgl.opengl.GL11;
-
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiSlider extends GuiRectangle {
 
@@ -92,6 +94,12 @@ public class GuiSlider extends GuiRectangle {
         }
     }
 
+
+    public void wheel(GuiCustom gui,int x, int y) { //TODO
+        int dx = Mouse.getDWheel();
+        if(inRect(gui, x, y)) setCursorPos(cursorPos + dx);
+    }
+
     public int getRatio () {
         return (int) (100 * ((float) cursorPos / (float) (this.size - 2)));
     }
@@ -103,5 +111,7 @@ public class GuiSlider extends GuiRectangle {
     public void show () {
         this.display = true;
     }
+
+    
 
 }
