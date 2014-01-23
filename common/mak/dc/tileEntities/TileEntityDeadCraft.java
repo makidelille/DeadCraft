@@ -58,14 +58,16 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void invertlock() {
-        this.locked = !locked;
+        setLocked(!locked);
     }
 
     public boolean isLocked() {
+        System.out.println(locked);
         return this.locked;
     }
 
     public void setLocked(boolean par) {
+        System.out.println(par);
         this.locked = par;
     }
 

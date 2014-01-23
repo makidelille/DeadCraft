@@ -72,7 +72,7 @@ public class GuiSlider extends GuiRectangle {
     }
 
     public void mouseClicked (GuiCustom gui, int x, int y, int button) {
-        if (inRect(gui, x, y)) {
+        if (inRect(gui, x, y) && display) {
             if (!isVertical) setCursorPos(x - gui.getLeft() - getX());
             else if (isVertical) setCursorPos(y - gui.getTop() - getY());
             this.started = true;
@@ -81,14 +81,14 @@ public class GuiSlider extends GuiRectangle {
     }
 
     public void mouseClickMove (GuiCustom gui, int mouseX, int mouseY) {
-        if (started) {
+        if (started && display) {
             if (!isVertical) setCursorPos(mouseX - gui.getLeft() - getX());
             else if (isVertical) setCursorPos(mouseY - gui.getTop() - getY());
         }
     }
 
     public void mouseMovedOrUp (GuiCustom gui, int par1, int par2, int type) {
-        if (type == 0) {
+        if (type == 0 && display) {
             started = false;
             if(!isClientOnly) PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, (int) getRatio());
         }
@@ -97,7 +97,7 @@ public class GuiSlider extends GuiRectangle {
 
     public void wheel(GuiCustom gui,int x, int y) { //TODO
         int dx = Mouse.getDWheel();
-        if(inRect(gui, x, y)) setCursorPos(cursorPos + dx);
+        if(inRect(gui, x, y) && display) setCursorPos(cursorPos + dx);
     }
 
     public int getRatio () {

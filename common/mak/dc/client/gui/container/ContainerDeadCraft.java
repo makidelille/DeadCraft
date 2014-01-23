@@ -33,5 +33,9 @@ public class ContainerDeadCraft extends Container {
         return te == null ? true : te.isUserAllowed(entityplayer.username)
                 && entityplayer.getDistanceSq(te.xCoord, te.yCoord, te.zCoord) <= 64;
     }
+    
+    public TileEntityDeadCraft getTileEntity() {
+        return te;
+    }
 
 }

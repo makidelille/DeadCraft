@@ -40,7 +40,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
         names = new GuiRectangle(7, 10, 120, 100);
         scrollSlider = new GuiSlider(108, 25, 49, 0, true);
-        scrollSlider.show();
+        scrollSlider.hide();
+        lock = new GuiSwitch(123, 57, 0, te.isLocked(), true); //bug on the init
 
         this.te = te;
         this.user = invPlayer.player.username;
@@ -61,6 +62,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         }
 
         scrollSlider.draw(this);
+        lock.draw(this);
         initGui();
 
     }
@@ -68,7 +70,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void drawGuiContainerForegroundLayer (int x, int y) {
         this.entername.drawTextBox();
-
+        lock.drawString(this, "lock :", 134 ,58,50, "gray");
+        lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
     }
 
     public void updateScreen () {
@@ -80,6 +83,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void mouseClicked (int par1, int par2, int par3) {
         scrollSlider.mouseClicked(this,par1,par2,par3);
+        lock.mouseClicked(this, par1, par2,par3);
     }
 
    
