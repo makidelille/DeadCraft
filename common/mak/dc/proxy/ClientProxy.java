@@ -15,6 +15,6 @@ public class ClientProxy extends CommonProxy{
 	
 	@Override
 	public void registerRender() {
-		MinecraftForgeClient.registerItemRenderer(ItemInfo.MINDCONTROLLER_ID + 256, (IItemRenderer) new RendererMindController());
+		MinecraftForgeClient.registerItemRenderer(ItemInfo.MINDCONTROLLER_ID + 256, new RendererMindController());
 	}
 }

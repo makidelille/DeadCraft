@@ -8,8 +8,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-
 public class GuiSwitch extends GuiRectangle{
     
     private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID,Textures.UTIL_GUI_TEXT_LOC);

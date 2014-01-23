@@ -6,7 +6,6 @@ import mak.dc.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -90,7 +89,7 @@ public class GuiSlider extends GuiRectangle {
     public void mouseMovedOrUp (GuiCustom gui, int par1, int par2, int type) {
         if (type == 0 && display) {
             started = false;
-            if(!isClientOnly) PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, (int) getRatio());
+            if(!isClientOnly) PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
         }
     }
 

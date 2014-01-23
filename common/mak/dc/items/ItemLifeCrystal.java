@@ -4,10 +4,8 @@ package mak.dc.items;
 // files /D
 
 import mak.dc.lib.ItemInfo;
-import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;

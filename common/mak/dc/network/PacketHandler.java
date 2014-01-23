@@ -57,7 +57,7 @@ public class PacketHandler implements IPacketHandler {
                                     byte switchId = reader.readByte();
                                     switch(switchId) {
                                         case 0:
-                                            teDc.setLocked(!reader.readBoolean());
+                                            teDc.setLocked(reader.readBoolean());
                                             break;
                                     }
 

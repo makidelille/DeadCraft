@@ -1,10 +1,5 @@
 package mak.dc.blocks;
 
-//TODO sinish switch
-
-import cpw.mods.fml.common.network.FMLNetworkHandler;
-import mak.dc.DeadCraft;
-import mak.dc.items.ItemController;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,6 +16,7 @@ public class BlockDeadCraft extends BlockContainer{
         super(par1, par2Material);
     }
 
+    @Override
     public TileEntity createNewTileEntity (World world) {
         return new TileEntityDeadCraft();
     }
@@ -35,6 +31,14 @@ public class BlockDeadCraft extends BlockContainer{
                 System.out.println("valid");
             }
         }
+    }
+    
+    @Override
+    public boolean onBlockActivated(World world,int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ ) {
+        if(world.getBlockTileEntity(x, y, z) != null && world.getBlockTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
+            if(!((TileEntityDeadCraft)world.getBlockTileEntity(x, y, z)).isUserAllowed(player.username)) return false;
+        }
+        return false;
     }
     
  

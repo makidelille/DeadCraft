@@ -57,6 +57,8 @@ public abstract class GuiCustom extends GuiContainer {
 	
 	
 
-	protected abstract void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY);
-	protected abstract void drawGuiContainerForegroundLayer(int x, int y);
+	@Override
+    protected abstract void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY);
+	@Override
+    protected abstract void drawGuiContainerForegroundLayer(int x, int y);
 }

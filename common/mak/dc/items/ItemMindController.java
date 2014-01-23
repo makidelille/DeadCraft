@@ -2,7 +2,6 @@ package mak.dc.items;
 
 //TODO handle dmg of the stack
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
@@ -22,7 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
@@ -130,13 +128,13 @@ public class ItemMindController extends Item {
                 return;
             }
             int charge = tag.getInteger("charge");
-            int chargeEmpty = (int) (_maxCharge - charge);
+            int chargeEmpty = _maxCharge - charge;
 
             int i = 0;
             IInventory inv = player.inventory;
 
             while (chargeEmpty > 0 && i < inv.getSizeInventory()) {
-                chargeEmpty = (int) (_maxCharge - charge);
+                chargeEmpty = _maxCharge - charge;
                 ItemStack stack = inv.getStackInSlot(i);
 
                 if (stack != null && stack.getItem() instanceof ItemLifeCrystal) {

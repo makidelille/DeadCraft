@@ -1,13 +1,12 @@
 package mak.dc.items;
 
-// TODO not finsihed don't forget the textures :D
-
 import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.DeadCraft;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
+import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -80,7 +79,7 @@ public class ItemController extends Item {
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 1: // change stats (lock)
-                        te.invertlock();
+                        PacketHandler.sendInterfaceSwitchPacket((byte)0,(byte) 0, !(te.isLocked()));
                         player.addChatMessage("the block is now locked : " + te.isLocked());
                         break;
                     case 2: // show infos

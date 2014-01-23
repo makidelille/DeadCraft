@@ -9,7 +9,8 @@ public class CreativeTab {
 
 	public static void init() {
 		tabDeadCraft = new CreativeTabs("DeadCraft") {
-			public ItemStack getIconItemStack() {
+			@Override
+            public ItemStack getIconItemStack() {
 				return new ItemStack(ItemInit.deadWand, 1, 0);
 		}};
 		postInit();

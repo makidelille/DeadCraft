@@ -1,15 +1,11 @@
 package mak.dc.blocks;
 
-//TODO create blockDC et ajouter lock avec nveaux items
-
 import java.util.Random;
 
 import mak.dc.DeadCraft;
-import mak.dc.items.ItemController;
 import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.item.EntityItem;
@@ -114,12 +110,12 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		for (int i = 0; i < 5; i++) {
 		
 		float xCoord = (float) (x + 0.5);
-		float yCoord = (float) (y + rand.nextFloat());
+		float yCoord = y + rand.nextFloat();
 		float zCoord = (float) (z +0.5);
 		
-		float vecX = (float) 2 * (-0.5F + rand.nextFloat());
-		float vecY = (float) (-0.5F + 2 * rand.nextFloat());
-		float vecZ = (float) 2* (-0.5F +  rand.nextFloat());
+		float vecX = 2 * (-0.5F + rand.nextFloat());
+		float vecY = -0.5F + 2 * rand.nextFloat();
+		float vecZ = 2* (-0.5F +  rand.nextFloat());
 
 		world.spawnParticle("portal", xCoord, yCoord, zCoord, vecX, vecY, vecZ);
 		}

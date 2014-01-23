@@ -46,7 +46,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
 			if(hasStarted() && getProgress() < 100) {
-				buildTime += Math.max((int)getLifeMultiplier(),1);
+				buildTime += Math.max(getLifeMultiplier(),1);
 				tickLifeCrystal();
 			}if(hasStarted() && getProgress() >= 100) {
 				setBuildTime(0);

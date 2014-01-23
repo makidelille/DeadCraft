@@ -74,6 +74,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
     }
 
+    @Override
     public void updateScreen () {
         this.entername.updateCursorCounter();
         scrollSlider.updateScreen();
@@ -116,6 +117,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         Keyboard.enableRepeatEvents(false);
     }
 
+    @Override
     protected void keyTyped (char par1, int par2) {
         this.entername.textboxKeyTyped(par1, par2);
         ((GuiButton) this.buttonList.get(0)).enabled = this.entername.getText().trim().length() > 0;

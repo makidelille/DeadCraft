@@ -4,7 +4,6 @@ import java.util.Random;
 
 import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -88,7 +87,7 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
 				float zFx = (float) (z + rand.nextFloat());
 							
 				float vectX = 0;
-				float vectY = (float)-1 - rand.nextFloat();
+				float vectY = (-1) - rand.nextFloat();
 				float vectZ = 0;
 				
 				world.spawnParticle("portal", xFx, yFx, zFx, vectX, vectY, vectZ);			

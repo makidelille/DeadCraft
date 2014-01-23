@@ -4,7 +4,6 @@ import mak.dc.client.gui.container.slot.SlotEggSpawner;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -41,7 +40,8 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 		
 	}
 	
-	public TileEntityEggSpawner getTileEntity() {
+	@Override
+    public TileEntityEggSpawner getTileEntity() {
 		return te;
 	}
 
@@ -49,7 +49,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		
-		Slot slot = (Slot)getSlot(i);
+		Slot slot = getSlot(i);
 		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();

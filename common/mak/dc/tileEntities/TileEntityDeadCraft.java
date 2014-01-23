@@ -1,9 +1,6 @@
 package mak.dc.tileEntities;
 
-//TODO test
-
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +9,7 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     protected String owner;
-    protected ArrayList allowed = new ArrayList(); //TODO change
+    protected ArrayList allowed = new ArrayList(); 
     protected boolean locked;
 
 
@@ -49,7 +46,9 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     public boolean isUserAllowed(String name) {
-        return (allowed.contains(name) || name.equalsIgnoreCase(this.owner) || !this.locked) ; //FIXME
+        if(!this.locked || isUserCreator(name)) return true;
+        else if(this.isLocked()) return false;
+        else return isUserAllowed(name);//FIXME
     }
 
 
