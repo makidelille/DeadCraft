@@ -34,7 +34,11 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te, int iD) {
         super(new ContainerDeadCraft(invPlayer, te, false), iD);
-
+      
+        this.te = te;
+        this.user = invPlayer.player.username;
+        this.allowed = te.getAllowedUser();
+        
         xSize = 176;
         ySize = 166;
 
@@ -43,10 +47,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         scrollSlider.hide();
         lock = new GuiSwitch(123, 57, 0, te.isLocked(), true); //bug on the init
 
-        this.te = te;
-        this.user = invPlayer.player.username;
 
-        this.allowed = te.getAllowedUser();
 
     }
 
@@ -87,18 +88,18 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.mouseClicked(this, par1, par2,par3);
     }
 
-   
+
     @Override
     protected void mouseClickMove (int par1, int par2, int par3, long par4) {
-       scrollSlider.mouseClickMove(this, par1, par2);
+        scrollSlider.mouseClickMove(this, par1, par2);
     }
-    
+
     @Override
     protected void mouseMovedOrUp (int par1, int par2, int par3) {
         scrollSlider.mouseMovedOrUp(this,par1,par2,par3);
     }
-    
-    
+
+
 
     @Override
     public void initGui () {

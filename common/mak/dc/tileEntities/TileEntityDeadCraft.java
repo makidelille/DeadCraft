@@ -48,7 +48,7 @@ public class TileEntityDeadCraft extends TileEntity {
     public boolean isUserAllowed(String name) {
         if(!this.locked || isUserCreator(name)) return true;
         else if(this.isLocked()) return false;
-        else return isUserAllowed(name);//FIXME
+        else return isUserAllowed(name);
     }
 
 
