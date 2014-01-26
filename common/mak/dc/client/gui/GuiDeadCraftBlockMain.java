@@ -9,6 +9,7 @@ import mak.dc.client.gui.util.GuiSlider;
 import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
+import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -34,18 +35,18 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te, int iD) {
         super(new ContainerDeadCraft(invPlayer, te, false), iD);
-      
+
         this.te = te;
         this.user = invPlayer.player.username;
         this.allowed = te.getAllowedUser();
-        
+
         xSize = 176;
         ySize = 166;
 
         names = new GuiRectangle(7, 10, 120, 100);
         scrollSlider = new GuiSlider(108, 25, 49, 0, true);
         scrollSlider.hide();
-        lock = new GuiSwitch(123, 57, 0, te.isLocked(), true); //bug on the init
+        lock = new GuiSwitch(123, 57, 0, !te.isLocked(), true); //BUG 
 
 
 
@@ -86,6 +87,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     protected void mouseClicked (int par1, int par2, int par3) {
         scrollSlider.mouseClicked(this,par1,par2,par3);
         lock.mouseClicked(this, par1, par2,par3);
+        entername.mouseClicked(par1, par2, par3);
     }
 
 
@@ -126,6 +128,14 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         if (par2 == 28 || par2 == 156) {
             this.actionPerformed((GuiButton) this.buttonList.get(0));
         } else if (par2 == 1) this.close();
+    }
+
+    @Override
+    public void actionPerformed (GuiButton button) {
+        String s = entername.getText(); 
+        if(s != null)
+            PacketHandler.sendInterfaceStringPacket(this.id, button.id, s);
+
     }
 
 }

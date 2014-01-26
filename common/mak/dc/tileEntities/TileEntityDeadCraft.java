@@ -11,10 +11,12 @@ public class TileEntityDeadCraft extends TileEntity {
     protected String owner;
     protected ArrayList allowed = new ArrayList(); 
     protected boolean locked;
+    protected boolean needManager = true;
 
 
     public TileEntityDeadCraft() {
         this.locked = false;
+        this.owner = "null";
 
     }
 
@@ -46,6 +48,7 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     public boolean isUserAllowed(String name) {
+        if(!needManager) return false;
         if(!this.locked || isUserCreator(name)) return true;
         else if(this.isLocked()) return false;
         else return isUserAllowed(name);
@@ -53,27 +56,34 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     public boolean isUserCreator(String name) {
-        return name == this.owner;
+        return name.equalsIgnoreCase(owner);
     }
 
     public void invertlock() {
+        if(!needManager) return ;
         setLocked(!locked);
     }
 
     public boolean isLocked() {
-        System.out.println(locked);
         return this.locked;
     }
 
     public void setLocked(boolean par) {
+        if(!needManager) return ;
         System.out.println(par);
         this.locked = par;
+    }
+    
+    public void setUnManagable() {
+        this.needManager = false;
     }
 
 
 
     @Override
     public void writeToNBT (NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
+        
         nbtTagCompound.setString("owner", this.owner);
                 if(allowed.size() != 0) {        
                     int nbersAll = allowed.size();
@@ -85,12 +95,12 @@ public class TileEntityDeadCraft extends TileEntity {
                     nbtTagCompound.setTag("allowed", tagAllowed);
                 }
         nbtTagCompound.setBoolean("locked", locked);
-
-
     }
 
     @Override
     public void readFromNBT (NBTTagCompound nbtTagCompound) {
+        super.readFromNBT(nbtTagCompound);
+        
         this.owner = nbtTagCompound.getString("owner");
                 int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
                 NBTTagCompound tagAllowed = nbtTagCompound.getCompoundTag("allowed");

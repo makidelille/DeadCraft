@@ -37,10 +37,10 @@ public class ItemController extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
-        String[] infos = {"","","","","","",""};
-        infos[0] = EnumChatFormatting.UNDERLINE + "shift right click on a block to change state";
-        infos[1] = EnumChatFormatting.RESET + "wrench mode : " +EnumChatFormatting.ITALIC + "" +  (is.getItemDamage() == 0 ? "classic" : (is.getItemDamage() == 1 ? "lock" : (is.getItemDamage() == 2? "infos" : EnumChatFormatting.RED + "should not exist")));
-        infos[2] = (player.isSneaking() ? getDescription(is.getItemDamage()) : "null");
+        String[] infos = {"","",""};
+        infos[0] = EnumChatFormatting.UNDERLINE + "shift right click to change state";
+        infos[1] = EnumChatFormatting.RESET + "wrench mode : " +EnumChatFormatting.ITALIC + "" +  (is.getItemDamage() == 0 ? "basic" : (is.getItemDamage() == 1 ? "lock" : (is.getItemDamage() == 2? "infos" : EnumChatFormatting.RED + "should not exist")));
+        infos[2] = getDescription(is.getItemDamage());
         
        
         
@@ -54,11 +54,13 @@ public class ItemController extends Item {
         String re = "";
         switch(itemDamage) {
             case 0 :
-                re = "with this mode, you can change evrything on the block";
+                re = "you can change propeties of the block";
                 break;
             case 1 :
+                re = "you can lock the block";
                 break;
             case 2:
+                re  = "you get infos on the block";
                 break;
                 default : break;
         }
@@ -108,6 +110,7 @@ public class ItemController extends Item {
             }else if(player.isSneaking()){
                 stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
             }else{
+                showData(te,player);
                 player.addChatMessage("You're not the owner of the block");
             }
         }
@@ -116,7 +119,7 @@ public class ItemController extends Item {
 
     private void showData (TileEntityDeadCraft te, EntityPlayer player) {
         player.addChatMessage("owner : " + te.getowner());
-        player.addChatMessage("state"  + (te.isLocked()  ? "private"  :"public") + " acces");
+        player.addChatMessage("state "  + (te.isLocked()  ? "private"  :"public"));
         player.addChatMessage("allowed users : "  + te.getAllowedUser().toString());
     }
 

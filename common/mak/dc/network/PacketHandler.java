@@ -41,19 +41,24 @@ public class PacketHandler implements IPacketHandler {
                 // TODO some code here
 
                 break;
-            case 1: // interfaces
+            /**interfaces */
+            case 1: 
                 byte interfaceId = reader.readByte();
                 byte typeSent = reader.readByte();
-                switch (interfaceId) {
-                    case 0: //deadCraftMainInterface
+                switch (interfaceId) { 
+                    /**deadCraftMainInterface*/
+                    case 0:
                         if (container != null && container instanceof ContainerDeadCraft) {
                             TileEntityDeadCraft teDc = ((ContainerDeadCraft)container).getTileEntity();
                             switch(typeSent) {
-                                case 0 : //buttons
+                                /**buttons*/
+                                case 0 : 
                                     break;
-                                case 1 : //slider
+                                /**slider*/
+                                case 1 :
                                     break;
-                                case 2 : //switch
+                                /**switch*/
+                                case 2 : 
                                     byte switchId = reader.readByte();
                                     switch(switchId) {
                                         case 0:
@@ -62,13 +67,28 @@ public class PacketHandler implements IPacketHandler {
                                     }
 
                                     break;
+                                /**strings */
+                                case 3:
+                                    byte stringId = reader.readByte();
+                                    String s = reader.readUTF();
+                                    switch(stringId) {
+                                        case 0 :
+                                            teDc.addAllowedUser(s);
+                                            break;
+                                        case 1 :
+                                            teDc.removeAllowedUser(s);
+                                            break;
+                                    }
+                                    break;
                             }
                         }
 
                         break;
-                    case 1: // eggspawner interface
+                    /** eggspawner interface*/
+                    case 1: 
                         switch (typeSent) {
-                            case 0: //buttons
+                            /**buttons*/
+                            case 0: 
                                 buttonId = reader.readByte();
                                 if (container != null && container instanceof ContainerEggSpawner) {
                                     TileEntityEggSpawner te = ((ContainerEggSpawner) container).getTileEntity();
@@ -147,7 +167,7 @@ public class PacketHandler implements IPacketHandler {
         try {
             dataStream.writeByte(1); // Interfaces are 1
             dataStream.writeByte(interfaceId);
-            dataStream.writeByte(2); // Switches are 1
+            dataStream.writeByte(2); // Switches are 2
             dataStream.writeByte(switchId);
             dataStream.writeBoolean(state);
 
@@ -158,6 +178,26 @@ public class PacketHandler implements IPacketHandler {
                     + "with state : " + state);
         }
 
+    }
+
+    public static void sendInterfaceStringPacket (int interfaceId, int stringId, String string) {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        DataOutputStream dataStream = new DataOutputStream(byteStream);
+
+        try {
+            dataStream.writeByte(1); // Interfaces are 1
+            dataStream.writeByte(interfaceId);
+            dataStream.writeByte(2); // Strings are 3
+            dataStream.writeByte(stringId);
+            dataStream.writeUTF(string);
+
+            PacketDispatcher.sendPacketToServer(PacketDispatcher.getPacket(Lib.MOD_ID, byteStream.toByteArray()));
+        }
+        catch (IOException ex) {
+            System.out.println("failed to send interface packet from interface " + interfaceId + " from StringId " + stringId
+                    + "with string : " + string);
+        }
+        
     }
 
 }
