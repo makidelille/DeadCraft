@@ -13,7 +13,6 @@ import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiSmallButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -107,8 +106,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     public void initGui () {
         super.initGui();
         Keyboard.enableRepeatEvents(true);
-        this.buttonList.add(new GuiSmallButton(0, guiLeft + 125, guiTop + 10, 16, 10, "+"));
-        this.buttonList.add(new GuiSmallButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-"));
+        this.buttonList.add(new GuiButton(0, guiLeft + 125, guiTop + 10, 16, 10, "+"));
+        this.buttonList.add(new GuiButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-"));
 
         this.entername = new GuiTextField(fontRenderer, 7, 10, 112, 10);
         this.entername.setFocused(true);
@@ -124,7 +123,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     protected void keyTyped (char par1, int par2) {
         this.entername.textboxKeyTyped(par1, par2);
         ((GuiButton) this.buttonList.get(0)).enabled = this.entername.getText().trim().length() > 0;
-
+        ((GuiButton) this.buttonList.get(1)).enabled = this.entername.getText().trim().length() > 0;
         if (par2 == 28 || par2 == 156) {
             this.actionPerformed((GuiButton) this.buttonList.get(0));
         } else if (par2 == 1) this.close();
