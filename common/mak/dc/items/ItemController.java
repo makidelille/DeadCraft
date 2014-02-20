@@ -30,6 +30,7 @@ public class ItemController extends Item {
         super(id);
         this.setUnlocalizedName(ItemInfo.CONTROLLER_KEY);
         this.setHasSubtypes(true);
+        this.setMaxStackSize(1);
     }
 
 
@@ -90,7 +91,7 @@ public class ItemController extends Item {
                 && world.getBlockTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
             String username = player.username;
-            if (te.isUserCreator(username)) {
+            if (te.isUserCreator(username) && !player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0: // change autoratsation
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);

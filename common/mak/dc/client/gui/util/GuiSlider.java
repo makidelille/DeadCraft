@@ -11,12 +11,11 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiSlider extends GuiRectangle {
 
-    private int                     size;
+    private final int               size;
     private int                     cursorPos;
-    private int                     sliderId;
+    private final int               sliderId;
     private boolean                 started;
-    private boolean                 isVertical;
-    private boolean                 display      = true;
+    private final boolean           isVertical;
     private boolean                 isClientOnly = false;
 
     private static ResourceLocation texture      = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
@@ -32,7 +31,7 @@ public class GuiSlider extends GuiRectangle {
     }
 
     public void draw (GuiCustom gui) {
-        if (display) {
+        if (this.shouldDisplay()) {
             GL11.glColor4f(1, 1, 1, 1);
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             if (!isVertical) {
@@ -80,37 +79,26 @@ public class GuiSlider extends GuiRectangle {
     }
 
     public void mouseClickMove (GuiCustom gui, int mouseX, int mouseY) {
-        if (started && display) {
+        if (started && this.shouldDisplay()) {
             if (!isVertical) setCursorPos(mouseX - gui.getLeft() - getX());
             else if (isVertical) setCursorPos(mouseY - gui.getTop() - getY());
         }
     }
 
     public void mouseMovedOrUp (GuiCustom gui, int par1, int par2, int type) {
-        if (type == 0 && display) {
+        if (type == 0 && this.shouldDisplay()) {
             started = false;
-            if(!isClientOnly) PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
+            if (!isClientOnly)
+                PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
         }
     }
 
-
-    public void wheel(GuiCustom gui,int x, int y) { //TODO
+    public void wheel (GuiCustom gui, int x, int y) { // TODO
         int dx = Mouse.getDWheel();
-        if(inRect(gui, x, y) && display) setCursorPos(cursorPos + dx);
+        if (inRect(gui, x, y) && this.shouldDisplay()) setCursorPos(cursorPos + dx);
     }
 
     public int getRatio () {
         return (int) (100 * ((float) cursorPos / (float) (this.size - 2)));
     }
-
-    public void hide () {
-        this.display = false;
-    }
-
-    public void show () {
-        this.display = true;
-    }
-
-    
-
 }

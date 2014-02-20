@@ -11,7 +11,7 @@ public class TileEntityDeadCraft extends TileEntity {
     protected String owner;
     protected ArrayList allowed = new ArrayList(); 
     protected boolean locked;
-    protected boolean needManager = true;
+    protected boolean isManagable = true;
 
 
     public TileEntityDeadCraft() {
@@ -22,7 +22,6 @@ public class TileEntityDeadCraft extends TileEntity {
 
     public void setOwner(String username) {
         this.owner = username;
-        System.out.println(this.owner);
     }
 
     public String getowner() {
@@ -30,11 +29,13 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void addAllowedUser (String name) {
-        allowed.add(name);
+        if(!allowed.contains(name.toLowerCase()))
+            allowed.add(name.toLowerCase());
     }
 
     public void removeAllowedUser (String name) {
-        allowed.remove(name);
+        if(allowed.contains(name.toLowerCase()))
+            allowed.remove(name.toLowerCase());
     }
 
     public void setAllowedUser (ArrayList users) {
@@ -48,19 +49,20 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     public boolean isUserAllowed(String name) {
-        if(!needManager) return false;
-        if(!this.locked || isUserCreator(name)) return true;
+        if(!isManagable) return false;
+        else if(!this.locked || isUserCreator(name)) return true;
+        else if(allowed.contains(name.toLowerCase())) return true;
         else if(this.isLocked()) return false;
-        else return isUserAllowed(name);
+        else return false;
+        
     }
-
-
+    
     public boolean isUserCreator(String name) {
         return name.equalsIgnoreCase(owner);
     }
 
     public void invertlock() {
-        if(!needManager) return ;
+        if(!isManagable) return ;
         setLocked(!locked);
     }
 
@@ -69,13 +71,12 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void setLocked(boolean par) {
-        if(!needManager) return ;
-        System.out.println(par);
+        if(!isManagable) return ;
         this.locked = par;
     }
     
     public void setUnManagable() {
-        this.needManager = false;
+        this.isManagable = false;
     }
 
 

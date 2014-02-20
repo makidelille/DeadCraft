@@ -71,6 +71,7 @@ public class PacketHandler implements IPacketHandler {
                                 case 3:
                                     byte stringId = reader.readByte();
                                     String s = reader.readUTF();
+                                    System.out.println("recieve " + s);
                                     switch(stringId) {
                                         case 0 :
                                             teDc.addAllowedUser(s);
@@ -187,10 +188,11 @@ public class PacketHandler implements IPacketHandler {
         try {
             dataStream.writeByte(1); // Interfaces are 1
             dataStream.writeByte(interfaceId);
-            dataStream.writeByte(2); // Strings are 3
+            dataStream.writeByte(3); // Strings are 3
             dataStream.writeByte(stringId);
             dataStream.writeUTF(string);
 
+            
             PacketDispatcher.sendPacketToServer(PacketDispatcher.getPacket(Lib.MOD_ID, byteStream.toByteArray()));
         }
         catch (IOException ex) {

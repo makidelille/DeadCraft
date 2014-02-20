@@ -39,17 +39,16 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement (int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = null;
         switch (ID) {
             case 0 : 
-                te = world.getBlockTileEntity(x, y, z);
-                if(te != null && te instanceof TileEntityDeadCraft) 
-                    return new GuiDeadCraftBlockMain(player.inventory , (TileEntityDeadCraft) te,ID);
+                TileEntityDeadCraft te0 = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
+                if(te0 != null ) 
+                    return new GuiDeadCraftBlockMain(player.inventory , te0,ID);
                 break;
             case 1:
-                te = world.getBlockTileEntity(x, y, z);
-                if (te != null && te instanceof TileEntityEggSpawner)
-                    return new GuiEggSpawner(player.inventory, (TileEntityEggSpawner) te,ID);
+                TileEntityEggSpawner te1 = (TileEntityEggSpawner) world.getBlockTileEntity(x, y, z);
+                if (te1 != null )
+                    return new GuiEggSpawner(player.inventory,  te1,ID);
                 break;
 
         }

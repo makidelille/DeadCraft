@@ -10,6 +10,7 @@ public class GuiRectangle extends GuiScreen{
 	private int y;
 	protected int w;
 	protected int h;
+	protected boolean display = true;
 		
 	public GuiRectangle(int x, int y, int width, int height) {
 			
@@ -127,6 +128,18 @@ public class GuiRectangle extends GuiScreen{
 			
 		}
 		return re;
+	}
+	
+	public void hide() {
+	    this.display = false;
+	}
+	
+	public void show() {
+	    this.display = true;
+	}
+	
+	protected boolean shouldDisplay() {
+	    return this.display;
 	}
 
 

@@ -103,7 +103,7 @@ public class GuiEggSpawner extends GuiCustom{
 		}
 		
 		for (int i = 4 ; i < 6 ; i++) {
-			infoProd.drawButtonBasedOnState(this, i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4));
+			infoProd.drawButtonBasedOnState(this, i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
 		}
 	
 	

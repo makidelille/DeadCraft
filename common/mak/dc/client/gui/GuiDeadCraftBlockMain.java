@@ -29,6 +29,9 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     private TileEntityDeadCraft     te;
     private String                  user;
     private ArrayList               allowed;
+    private boolean hasChanged;
+    private String s;
+    private boolean hasInit = false;
 
     private static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
 
@@ -41,42 +44,58 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
         xSize = 176;
         ySize = 166;
+        
+        this.s = "";
 
         names = new GuiRectangle(7, 10, 120, 100);
         scrollSlider = new GuiSlider(108, 25, 49, 0, true);
         scrollSlider.hide();
-        lock = new GuiSwitch(123, 57, 0, !te.isLocked(), true); //BUG 
-
+        lock = new GuiSwitch(123, 57, 0, te.isLocked(), true); //TODO BUG
 
 
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer (float f, int mouseX, int mouseY) {
+        if(!hasInit ) initGui();
+        if(hasChanged) {
+            allowed = te.getAllowedUser();
+            hasChanged = false;
+        }
         GL11.glColor4f(1, 1, 1, 1);
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
+        //System.out.println(allowed);
+        
         for (int i = 0; i < allowed.size(); i++) {
-            names.drawString(this, allowed.get(i).toString(), 7, 10 + 10 * i, 110);
+            System.out.println(allowed.get(i).toString());
+           names.drawString(this, allowed.get(i).toString(), 7, 10 + 10 * i, 110);
         }
 
         scrollSlider.draw(this);
         lock.draw(this);
-        initGui();
-
+        
+        
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer (int x, int y) {
-        this.entername.drawTextBox();
         lock.drawString(this, "lock :", 134 ,58,50, "gray");
         lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
+        this.entername.drawTextBox();
+    }
+    
+    @Override
+    public void drawScreen (int par1, int par2, float par3) {
+        super.drawScreen(par1, par2, par3);
+       
     }
 
     @Override
     public void updateScreen () {
+        super.updateScreen();
         this.entername.updateCursorCounter();
         scrollSlider.updateScreen();
     }
@@ -84,19 +103,22 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     @Override
     protected void mouseClicked (int par1, int par2, int par3) {
+        super.mouseClicked(par1, par2, par3);
         scrollSlider.mouseClicked(this,par1,par2,par3);
         lock.mouseClicked(this, par1, par2,par3);
-        entername.mouseClicked(par1, par2, par3);
+  
     }
 
 
     @Override
     protected void mouseClickMove (int par1, int par2, int par3, long par4) {
+        super.mouseClickMove(par1, par2, par3, par4);
         scrollSlider.mouseClickMove(this, par1, par2);
     }
 
     @Override
     protected void mouseMovedOrUp (int par1, int par2, int par3) {
+        super.mouseMovedOrUp(par1, par2, par3);
         scrollSlider.mouseMovedOrUp(this,par1,par2,par3);
     }
 
@@ -106,12 +128,22 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     public void initGui () {
         super.initGui();
         Keyboard.enableRepeatEvents(true);
-        this.buttonList.add(new GuiButton(0, guiLeft + 125, guiTop + 10, 16, 10, "+"));
-        this.buttonList.add(new GuiButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-"));
 
-        this.entername = new GuiTextField(fontRenderer, 7, 10, 112, 10);
+        GuiButton b0 = new GuiButton(0, guiLeft + 125, guiTop + 10, 16, 10, "+");
+        b0.enabled =false;
+        GuiButton b1 = new GuiButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-");
+        b1.enabled = false;
+        
+        this.buttonList.add(b0);
+        this.buttonList.add(b1);
+
+        this.entername = new GuiTextField(fontRenderer, 7,10, 112, 12); //BUG
         this.entername.setFocused(true);
+        this.entername.setEnabled(true);
+        this.entername.setCanLoseFocus(true);
 
+        this.hasInit = true;
+        
     }
 
     @Override
@@ -121,20 +153,29 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     @Override
     protected void keyTyped (char par1, int par2) {
+        if (par2 == 28 || par2 == 156) {
+           this.actionPerformed((GuiButton) this.buttonList.get(0));
+        } else if (par2 == 1) this.close();
+        if(!entername.isFocused()) entername.setFocused(true);
         this.entername.textboxKeyTyped(par1, par2);
         ((GuiButton) this.buttonList.get(0)).enabled = this.entername.getText().trim().length() > 0;
         ((GuiButton) this.buttonList.get(1)).enabled = this.entername.getText().trim().length() > 0;
-        if (par2 == 28 || par2 == 156) {
-            this.actionPerformed((GuiButton) this.buttonList.get(0));
-        } else if (par2 == 1) this.close();
+        
     }
 
     @Override
     public void actionPerformed (GuiButton button) {
+        System.out.println(button.id);
         String s = entername.getText(); 
-        if(s != null)
+        System.out.println(s);
+        if(s != "") {
             PacketHandler.sendInterfaceStringPacket(this.id, button.id, s);
+            this.hasChanged = true;
+        }
 
+        
     }
+    
+    
 
 }
