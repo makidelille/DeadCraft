@@ -72,14 +72,14 @@ public class ItemDeadWand extends Item {
                 player.addPotionEffect(new PotionEffect(8, 1000, 5, false));
                 player.addPotionEffect(new PotionEffect(10, 1000, 5, false));
                 stack.setItemDamage(getMaxDamage());
-                return true;
+                return false;
             }
 
             if (!isCharged(dmg)) {
                 stack.setItemDamage((int) (dmg - pv * 3 / 2));
             }
 
-            return true;
+            return false;
         }
         return false;
     }

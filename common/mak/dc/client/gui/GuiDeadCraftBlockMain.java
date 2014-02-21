@@ -40,8 +40,10 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
         this.te = te;
         this.user = invPlayer.player.username;
-        this.allowed = te.getAllowedUser();
-
+        this.allowed = te.getAllowedUser(); //TODO there is a bug somewher e:(
+        
+        System.out.println(allowed +" " + te +"  "  + te.getAllowedUser());
+        
         xSize = 176;
         ySize = 166;
         
@@ -70,7 +72,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         //System.out.println(allowed);
         
         for (int i = 0; i < allowed.size(); i++) {
-            System.out.println(allowed.get(i).toString());
+           System.out.println(allowed.get(i).toString());
            names.drawString(this, allowed.get(i).toString(), 7, 10 + 10 * i, 110);
         }
 
