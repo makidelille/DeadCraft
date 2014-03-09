@@ -119,9 +119,9 @@ public class ItemController extends Item {
     }
 
     private void showData (TileEntityDeadCraft te, EntityPlayer player) {
-//        player.addChatMessage("owner : " + te.getowner());
-//        player.addChatMessage("state "  + (te.isLocked()  ? "private"  :"public"));
-//        player.addChatMessage("allowed users : "  + te.getAllowedUser());
+        System.out.println("owner : " + te.getowner());
+        System.out.println("state "  + (te.isLocked()  ? "private"  :"public"));
+        System.out.println("allowed users : "  + te.getAllowedUser());
     }
 
 

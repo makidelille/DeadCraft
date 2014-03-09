@@ -2,6 +2,7 @@ package mak.dc.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 
@@ -25,6 +26,7 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@ChannelHandler.Sharable
 public class PacketPipeline extends
 		MessageToMessageCodec<FMLProxyPacket, AbstractPacket> {
 	
@@ -91,8 +93,8 @@ public class PacketPipeline extends
 
     // Method to call from FMLInitializationEvent
     public void initialise() {
-        this.channels = NetworkRegistry.INSTANCE.newChannel("DeadCraft", this);
-        registerPackets();
+        channels = NetworkRegistry.INSTANCE.newChannel("deadcraft", this);
+        //registerPackets();
     }
 
     private void registerPackets() {

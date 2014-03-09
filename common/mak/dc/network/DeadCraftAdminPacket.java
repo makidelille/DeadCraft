@@ -15,7 +15,6 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	int x ,y, z;
 	
 	boolean locked;
-	
 	ArrayList<String> allowed;
 	
 	
@@ -66,10 +65,15 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	public void handleServerSide(EntityPlayer player) {
 		World world = player.worldObj;
 		TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-		if(te == null) return;
+		if(te == null || !(te instanceof TileEntityDeadCraft)) return;
 		if(!te.isManagable()) return;
 		te.setAllowedUser(allowed);
 		te.setLocked(locked);
+	}
+	
+	@Override
+	public String toString() {
+		return ("coord : " + x +" " + y + " " +z + "\n locked : " + locked + "\n allowed : " + allowed );
 	}
 	
 	

@@ -16,7 +16,7 @@ public class ClientProxy extends CommonProxy{
 	
 	@Override
 	public void registerRender() {
-		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.controller, new RendererMindController());
+		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.mindController, new RendererMindController());
 	}
 	
 	@Override

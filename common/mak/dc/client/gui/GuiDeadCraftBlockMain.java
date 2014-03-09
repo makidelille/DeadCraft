@@ -2,6 +2,7 @@ package mak.dc.client.gui;
 
 import java.util.ArrayList;
 
+import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
@@ -9,6 +10,7 @@ import mak.dc.client.gui.util.GuiSlider;
 import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
+import mak.dc.network.DeadCraftAdminPacket;
 import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
@@ -32,6 +34,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     private boolean hasChanged;
     private String s;
     private boolean hasInit = false;
+	private boolean isLocked;
 
     private static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
 
@@ -41,6 +44,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         this.te = te;
         this.user = invPlayer.player.getCommandSenderName();
         this.allowed = te.getAllowedUser(); //TODO there is a bug somewher e:(
+        this.isLocked = te.isLocked();
         
         System.out.println(allowed +" " + te +"  "  + te.getAllowedUser());
         
@@ -52,8 +56,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         names = new GuiRectangle(7, 10, 120, 100);
         scrollSlider = new GuiSlider(108, 25, 49, 0, true);
         scrollSlider.hide();
-        lock = new GuiSwitch(123, 57, 0, te.isLocked(), true); //TODO BUG
-
+        lock = new GuiSwitch(123, 57, 0, this.isLocked, true); //TODO BUG
+        
 
     }
 
@@ -108,11 +112,20 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         super.mouseClicked(par1, par2, par3);
         scrollSlider.mouseClicked(this,par1,par2,par3);
         lock.mouseClicked(this, par1, par2,par3);
+        this.isLocked = lock.isActive();
+        sendPacket();
   
     }
 
 
-    @Override
+    private void sendPacket() {
+    	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te.xCoord, te.yCoord, te.zCoord, this.allowed, this.isLocked);
+    	System.out.println(pkt.toString());
+    	DeadCraft.packetPipeline.sendToServer(pkt);
+        this.hasChanged = true;		
+	}
+
+	@Override
     protected void mouseClickMove (int par1, int par2, int par3, long par4) {
         super.mouseClickMove(par1, par2, par3, par4);
         scrollSlider.mouseClickMove(this, par1, par2);
@@ -132,7 +145,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         Keyboard.enableRepeatEvents(true);
 
         GuiButton b0 = new GuiButton(0, guiLeft + 125, guiTop + 10, 16, 10, "+");
-        b0.enabled =false;
+        b0.enabled = false;
         GuiButton b1 = new GuiButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-");
         b1.enabled = false;
         
@@ -167,14 +180,16 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     @Override
     public void actionPerformed (GuiButton button) {
-        System.out.println(button.id);
-        String s = entername.getText(); 
-        System.out.println(s);
-        if(s != "") {
-//            PacketHandler.sendInterfaceStringPacket(this.id, button.id, s);
-            this.hasChanged = true;
-        }
-
+        String s = entername.getText();        
+        if(s == "") return;
+        if(button.id == 0){
+        	if(allowed.contains(s)) return;        	
+        	allowed.add(s);
+        }else if(button.id == 1 ) {
+        	if(!allowed.contains(s)) return;
+        	allowed.remove(s);
+        }        
+        sendPacket();
         
     }
     
