@@ -14,7 +14,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class GuiHandler implements IGuiHandler {
 
     public GuiHandler() {
-        NetworkRegistry.instance().registerGuiHandler(DeadCraft.instance, this);
+        NetworkRegistry.INSTANCE.registerGuiHandler(DeadCraft.instance, this);
     }
 
     @Override
@@ -22,12 +22,12 @@ public class GuiHandler implements IGuiHandler {
         TileEntity te = null;
         switch(ID) {
             case 0 : 
-                te = world.getBlockTileEntity(x, y, z);
+                te = world.getTileEntity(x, y, z);
                 if(te != null && te instanceof TileEntityDeadCraft) 
                     return new ContainerDeadCraft(player.inventory , (TileEntityDeadCraft) te, false);
                 break;
             case 1 :
-                te = world.getBlockTileEntity(x, y, z);
+                te = world.getTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEggSpawner)
                     return new ContainerEggSpawner(player.inventory, (TileEntityEggSpawner) te);
                 break;
@@ -41,12 +41,12 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement (int ID, EntityPlayer player, World world, int x, int y, int z) {
         switch (ID) {
             case 0 : 
-                TileEntityDeadCraft te0 = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
+                TileEntityDeadCraft te0 = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
                 if(te0 != null ) 
                     return new GuiDeadCraftBlockMain(player.inventory , te0,ID);
                 break;
             case 1:
-                TileEntityEggSpawner te1 = (TileEntityEggSpawner) world.getBlockTileEntity(x, y, z);
+                TileEntityEggSpawner te1 = (TileEntityEggSpawner) world.getTileEntity(x, y, z);
                 if (te1 != null )
                     return new GuiEggSpawner(player.inventory,  te1,ID);
                 break;

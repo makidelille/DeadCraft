@@ -6,6 +6,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.util.IChatComponent;
 
 public class ContainerDeadCraft extends Container {
 
@@ -29,8 +30,8 @@ public class ContainerDeadCraft extends Container {
 
     @Override
     public boolean canInteractWith (EntityPlayer entityplayer) {
-        if(!te.isUserAllowed(entityplayer.username)) entityplayer.addChatMessage("the block is locked");
-        return te == null ? true : te.isUserAllowed(entityplayer.username)
+        if(!te.isUserAllowed(entityplayer.getCommandSenderName())) System.out.println("test"); //TODO entityplayer.addChatMessage("the block is locked");
+        return te == null ? true : te.isUserAllowed(entityplayer.getCommandSenderName())
                 && entityplayer.getDistanceSq(te.xCoord, te.yCoord, te.zCoord) <= 64;
     }
     

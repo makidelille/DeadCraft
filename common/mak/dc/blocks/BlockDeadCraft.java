@@ -13,22 +13,18 @@ import net.minecraft.world.World;
 public class BlockDeadCraft extends Block implements ITileEntityProvider {
 
     
-    protected BlockDeadCraft (int par1, Material par2Material) {
-        super(par1, par2Material);
+    protected BlockDeadCraft (Material par2Material) {
+        super(par2Material);
     }
 
-    @Override
-    public TileEntity createNewTileEntity (World world) {
-        return new TileEntityDeadCraft();
-    }
       
     @Override
     public void onBlockPlacedBy (World world, int x, int y, int z, EntityLivingBase ent,  ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote) {
-            if(world.blockHasTileEntity(x, y, z) && ent instanceof EntityPlayer) {
-                TileEntityDeadCraft te = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
-                te.setOwner(((EntityPlayer)ent).username);
+            if(world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
+                TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+                te.setOwner(((EntityPlayer)ent).getCommandSenderName());
                 System.out.println("valid");
             }
         }
@@ -36,11 +32,16 @@ public class BlockDeadCraft extends Block implements ITileEntityProvider {
     
     @Override
     public boolean onBlockActivated(World world,int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ ) {
-        if(world.getBlockTileEntity(x, y, z) != null && world.getBlockTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
-            if(!((TileEntityDeadCraft)world.getBlockTileEntity(x, y, z)).isUserAllowed(player.username)) return false;
+        if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
+            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return false;
         }
         return false;
     }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		return new TileEntityDeadCraft();
+	}
     
  
 }

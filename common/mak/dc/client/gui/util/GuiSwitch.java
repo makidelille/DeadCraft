@@ -62,7 +62,7 @@ public class GuiSwitch extends GuiRectangle{
     public void mouseClicked (GuiCustom gui, int x, int y, int id) {
         if (inRect(gui, x, y) && this.shouldDisplay()) {
             setActiveState(!active);
-            PacketHandler.sendInterfaceSwitchPacket((byte) gui.id, (byte) this.id, isActive());
+//            PacketHandler.sendInterfaceSwitchPacket((byte) gui.id, (byte) this.id, isActive());
         }
 
 

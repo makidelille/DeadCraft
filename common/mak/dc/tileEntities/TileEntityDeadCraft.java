@@ -8,7 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityDeadCraft extends TileEntity {
 
 
-    protected String owner;
+    private static final byte deadcraftId = 0;
+	protected String owner;
     protected ArrayList<String> allowed = new ArrayList(); 
     protected boolean locked;
     protected boolean isManagable = true;
@@ -112,6 +113,18 @@ public class TileEntityDeadCraft extends TileEntity {
         this.isManagable = nbtTagCompound.getBoolean("managable");
         
     }
+
+	public boolean isManagable() {
+		return this.isManagable;
+	}
+
+	public byte getID() {
+		return this.deadcraftId;
+	}
+
+	public int[] getData() {
+		return null;
+	}
 
 
 

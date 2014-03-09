@@ -1,11 +1,12 @@
 package mak.dc.tileEntities;
 
-import mak.dc.client.sounds.Sound;
+import mak.dc.items.DeadCraftItems;
 import mak.dc.items.ItemLifeCrystal;
-import mak.dc.lib.Lib;
 import mak.dc.lib.TileEntitiesInfo;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,10 +16,9 @@ import cpw.mods.fml.common.FMLLog;
 
 public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory {
 		
-	/**handle by config */
-	private static boolean DEBUG = Lib.DEBUG;
+	private static final byte deadcraftId = 1;
 	
-	public static int _maxBuildTime;
+	public static int _maxBuildTime = 1000;
 	
 	
 	private ItemStack[] invContent;
@@ -68,7 +68,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 			else
 				wait--;
 			
-			onInventoryChanged();
+			//onInventoryChanged();
 			spawnEgg();
 			
 		
@@ -81,7 +81,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	private void tickLifeCrystal() {
 		int maxDmg = ItemLifeCrystal._maxValue;
 		
-		if(!worldObj.isRemote && !DEBUG) {
+		if(!worldObj.isRemote) {
 			if(Math.random() > 0.6) {
 				ItemStack crystal = invContent[6];
 				if(crystal != null && crystal.getItemDamage() != maxDmg - 1) {
@@ -163,7 +163,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 			}else{
 				itemstack = itemstack.splitStack(count);
 			}}
-		onInventoryChanged();
+		//onInventoryChanged();
 		return itemstack;
 		
 	}
@@ -181,22 +181,22 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		invContent[i] = itemstack;
 		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
 	            itemstack.stackSize = getInventoryStackLimit();
-	        onInventoryChanged();
+	        //onInventoryChanged();
 		
 	}
-		
+		//XXX
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 		if(slot == 0 || slot == 2)
-			return itemstack.getItem() == Item.netherStar ;
+			return itemstack.getItem() == Items.nether_star ;
 		else if(slot == 1)
-			return itemstack.getItem() == Item.skull;
+			return itemstack.getItem() == Items.skull;
 		else if(slot == 3 || slot == 5)
-			return itemstack.itemID == Block.obsidian.blockID;
+			return Item.getIdFromItem(itemstack.getItem()) == Block.getIdFromBlock(Blocks.obsidian);
 		else if (slot == 4)
-			return itemstack.itemID == Block.blockDiamond.blockID;
+			return Item.getIdFromItem(itemstack.getItem()) == Block.getIdFromBlock(Blocks.diamond_block);
 		else if(slot ==  6 || slot == 7)
-			return itemstack.getItem() instanceof ItemLifeCrystal;
+			return itemstack.getItem() == DeadCraftItems.lifeCrystal;
 		else		
 			return false;
 	}
@@ -206,28 +206,13 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		return 64;
 	}
 
-	@Override
-	public String getInvName() {
-		return TileEntitiesInfo.EGGSPAWNER_TILE_NAME;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 25 && this.isUserAllowed(player.username);
+		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 25 && this.isUserAllowed(player.getCommandSenderName());
 	}
 	
 	
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
@@ -259,10 +244,10 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		NBTTagList items = compound.getTagList("Items");
+		NBTTagList items = compound.getTagList("Items", 0);
 		
 		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound item = (NBTTagCompound)items.tagAt(i);
+			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
 			int slot = item.getByte("Slot");
 			
 			if (slot >= 0 && slot < getSizeInventory()) {
@@ -351,7 +336,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 				if(getStackInSlot(slot).stackSize == 0) {
 					setInventorySlotContents(slot, null);
 				}
-			onInventoryChanged();
+//			onInventoryChanged();
 						
 				
 		}
@@ -368,11 +353,11 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		
 		if(!worldObj.isRemote) {
 			if(worldObj.isAirBlock(xCoord, yCoord + 1, zCoord) && eggInStock >= 1) {
-				worldObj.setBlock(xCoord, yCoord + 1, zCoord, Block.dragonEgg.blockID);
+				worldObj.setBlock(xCoord, yCoord + 1, zCoord, Blocks.dragon_egg);
 				eggInStock--;
 				updateRedstone((byte) 1);
 				wait = 5;
-				Sound.EGG_SPAWN.play(xCoord +0.5D, yCoord +0.5D, zCoord + 0.5D, 3.0F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+//				Sound.EGG_SPAWN.play(xCoord +0.5D, yCoord +0.5D, zCoord + 0.5D, 3.0F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 //				worldObj.playSound(xCoord, yCoord, zCoord, "", 3.0F, orldObj.rand.nextFloat() * 0.1F + 0.9F, true);
 				return true;
 			}	
@@ -430,6 +415,31 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 
 	public void setStarted(byte started) {
 		this.started = started;
+	}
+
+	@Override
+	public void closeInventory() {}
+
+	@Override
+	public String getInventoryName() {
+		return TileEntitiesInfo.EGGSPAWNER_TILE_NAME;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+
+	@Override
+	public void openInventory() {}
+
+	@Override
+	public int[] getData() {
+		int [] re =  new int[3];
+		re[0] = this.redState;
+		re[1] = this.mode;
+		re[2] = this.created ? 1 : 0;
+		return re;
 	}
 
 

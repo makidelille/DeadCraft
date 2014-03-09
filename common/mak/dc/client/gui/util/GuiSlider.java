@@ -88,8 +88,8 @@ public class GuiSlider extends GuiRectangle {
     public void mouseMovedOrUp (GuiCustom gui, int par1, int par2, int type) {
         if (type == 0 && this.shouldDisplay()) {
             started = false;
-            if (!isClientOnly)
-                PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
+            if (!isClientOnly) return;
+//                PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
         }
     }
 

@@ -8,7 +8,7 @@ import mak.dc.entity.ai.EntityAIAvoidAPlayer;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
 import mak.dc.util.DamageSourceDeadCraft;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -23,7 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,10 +37,10 @@ public class ItemMindController extends Item {
     private static final String[]      version           = new String[] { "passive", "active", "creative" };
 
     @SideOnly (Side.CLIENT)
-    private Icon[]                     icons             = { null, null, null };
+    private IIcon[]                     icons             = { null, null, null };
 
-    public ItemMindController (int id) {
-        super(id);
+    public ItemMindController () {
+        super();
         this.setUnlocalizedName(ItemInfo.MINDCONTROLLER_UNLOCALIZED_NAME);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -50,7 +50,7 @@ public class ItemMindController extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public void registerIcons (IconRegister iconRegister) {
+    public void registerIcons (IIconRegister iconRegister) {
         for (int i = 0; i < version.length; i++) {
             icons[i] = iconRegister.registerIcon(Textures.MINDCONTROLLER_TEXT_LOC[i]);
         }
@@ -58,7 +58,7 @@ public class ItemMindController extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public Icon getIconFromDamage (int meta) {
+    public IIcon getIconFromDamage (int meta) {
         return icons[meta];
     }
 
@@ -102,7 +102,7 @@ public class ItemMindController extends Item {
                 if (player.capabilities.isCreativeMode) newTag.setInteger("charge", _maxCharge);
                 else newTag.setInteger("charge", 0);
                 newTag.setBoolean("creative", player.capabilities.isCreativeMode);
-                newTag.setString("player", player.username);
+                newTag.setString("player", player.getCommandSenderName());
 
                 is.setTagCompound(newTag);
 
@@ -150,7 +150,7 @@ public class ItemMindController extends Item {
                 charge = tag.getInteger("charge");
                 i++;
             }
-            inv.onInventoryChanged();
+//          inv..onInventoryChanged();
         }
 
     }
@@ -161,7 +161,7 @@ public class ItemMindController extends Item {
             if (!(ent instanceof EntityPlayer) && isUserCreator(stack, player)) {
                 EntityLiving entLive = (EntityLiving) ent;
                 if (entLive.isCreatureType(EnumCreatureType.creature, true)) {
-                    entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D, this.itemID, false));
+                    entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D, this, false));
                     return true;
                 }
                 if (stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack, costEntity(entLive))) {
@@ -172,15 +172,15 @@ public class ItemMindController extends Item {
                 player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj, player.posX, player.posY,
                         player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-                player.addChatMessage((EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD
-                        + "do not use the items of the others" + EnumChatFormatting.RESET));
+//                player.addChatMessage((EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD
+//                        + "do not use the items of the others" + EnumChatFormatting.RESET));
                 return true;
             } else if (ent instanceof EntityPlayer || ent instanceof EntityVillager) {
                 World world = player.worldObj;
                 world.spawnEntityInWorld(new EntityLightningBolt(world, player.posX, player.posY, player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-                player.addChatMessage((EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD
-                        + "do not use the mindController on people" + EnumChatFormatting.RESET));
+//                player.addChatMessage((EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD
+//                        + "do not use the mindController on people" + EnumChatFormatting.RESET));
                 return true;
             }
         }
@@ -233,7 +233,7 @@ public class ItemMindController extends Item {
             if (tag == null || stack.getItemDamage() == 0) return false;
             String user = tag.getString("player");
             System.out.println(user);
-            if (user.equalsIgnoreCase(player.username)) return false;
+            if (user.equalsIgnoreCase(player.getCommandSenderName())) return false;
         }
         return true;
     }

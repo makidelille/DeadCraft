@@ -3,31 +3,32 @@ package mak.dc.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
+
 import mak.dc.DeadCraft;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
 import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemController extends Item {
 
     private static final String[] version = {"base","lock","info"};
-    private Icon[] icons = {null,null,null};
+    private IIcon[] icons = {null,null,null};
 
-    public ItemController (int id) {
-        super(id);
+    public ItemController () {
+        super();
         this.setUnlocalizedName(ItemInfo.CONTROLLER_KEY);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -69,17 +70,16 @@ public class ItemController extends Item {
     }
 
 
-
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerIcons (IconRegister iconRegister) {
+    public void registerIcons (IIconRegister iconRegister) {
         for(int i=0; i < version.length; i++)
             icons[i]= iconRegister.registerIcon(Textures.CONTROLLER_TEXT_LOC[i]);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public Icon getIconFromDamage (int par1) {
+    public IIcon getIconFromDamage (int par1) {
         return par1 <= 2 && par1 >= 0 ? icons[par1] : icons[0];
     }
 
@@ -87,18 +87,18 @@ public class ItemController extends Item {
     @Override
     public boolean onItemUseFirst (ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
             float hitX, float hitY, float hitZ) {
-        if (!world.isRemote && world.blockHasTileEntity(x, y, z)
-                && world.getBlockTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
-            TileEntityDeadCraft te = (TileEntityDeadCraft) world.getBlockTileEntity(x, y, z);
-            String username = player.username;
+        if (!world.isRemote && world.getTileEntity(x, y, z) != null
+                && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
+            TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+            String username = player.getCommandSenderName();
             if (te.isUserCreator(username) && !player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0: // change autoratsation
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 1: // change stats (lock)
-                        PacketHandler.sendInterfaceSwitchPacket((byte)0,(byte) 0, !(te.isLocked()));
-                        player.addChatMessage("the block is now locked : " + te.isLocked());
+//                        PacketHandler.sendInterfaceSwitchPacket((byte)0,(byte) 0, !(te.isLocked()));
+                        //player.addChatMessage("the block is now locked : " + te.isLocked());
                         break;
                     case 2: // show infos
                         showData(te,player);
@@ -112,16 +112,16 @@ public class ItemController extends Item {
                 stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
             }else{
                 showData(te,player);
-                player.addChatMessage("You're not the owner of the block");
+                //player.addChatMessage("You're not the owner of the block");
             }
         }
         return false;
     }
 
     private void showData (TileEntityDeadCraft te, EntityPlayer player) {
-        player.addChatMessage("owner : " + te.getowner());
-        player.addChatMessage("state "  + (te.isLocked()  ? "private"  :"public"));
-        player.addChatMessage("allowed users : "  + te.getAllowedUser());
+//        player.addChatMessage("owner : " + te.getowner());
+//        player.addChatMessage("state "  + (te.isLocked()  ? "private"  :"public"));
+//        player.addChatMessage("allowed users : "  + te.getAllowedUser());
     }
 
 

@@ -9,6 +9,7 @@ import mak.dc.lib.Textures;
 import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -67,23 +68,23 @@ public class GuiEggSpawner extends GuiCustom{
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		fontRenderer.drawSplitString("Dragon Egg Spawner", 122, 19, 46, 0x404040);
+		getFontRenderer().drawSplitString("Dragon Egg Spawner", 122, 19, 46, 0x404040);
 		
 		String str = null;
 		
 		str = ("State : " + (te.hasStarted() ? "active" : "inactive"));
-		fontRenderer.drawSplitString(str, 65, 56, 110, (te.hasStarted() ? 0x00FF00 : 0xFF0000));
+		getFontRenderer().drawSplitString(str, 65, 56, 110, (te.hasStarted() ? 0x00FF00 : 0xFF0000));
 		
 		
 		str = ("Progress : " + te.getProgress() + "%");
-		fontRenderer.drawSplitString(str, 65, 66, 110, 0x404040);
+		getFontRenderer().drawSplitString(str, 65, 66, 110, 0x404040);
 		
 		
 		str = ("Life multiplier : " + te.getLifeMultiplier() + "%");
-		fontRenderer.drawSplitString(str, 65, 76, 110, 0x404040);
+		getFontRenderer().drawSplitString(str, 65, 76, 110, 0x404040);
 		
 		str = ("Egg in stock : " + te.getEggInStock());
-		fontRenderer.drawSplitString(str, 65, 86, 110, 0x404040);
+		getFontRenderer().drawSplitString(str, 65, 86, 110, 0x404040);
 		
 		redGuiDisplay();
 		prodGuiDisplay();
@@ -119,11 +120,12 @@ public class GuiEggSpawner extends GuiCustom{
 		button.enabled = !te.hasStarted();
 		buttonList.add(button);
 	}
+	
 
 	@Override
 	public void actionPerformed(GuiButton button) {
 		
-		PacketHandler.sendInterfaceButtonPacket((byte) this.id,(byte) button.id);
+//		PacketHandler.sendInterfaceButtonPacket((byte) this.id,(byte) button.id);
 	}
 
 		

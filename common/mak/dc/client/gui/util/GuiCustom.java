@@ -27,12 +27,9 @@ public abstract class GuiCustom extends GuiContainer {
 	}
 	
 	protected void drawHoverString(List lst, int x, int y) {
-		drawHoveringText(lst, x, y, fontRenderer);
+		drawHoveringText(lst, x, y, fontRendererObj);
 	}	
 	
-	protected FontRenderer getFontRenderer() {
-		return fontRenderer;
-	}
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -61,4 +58,8 @@ public abstract class GuiCustom extends GuiContainer {
     protected abstract void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY);
 	@Override
     protected abstract void drawGuiContainerForegroundLayer(int x, int y);
+
+	public FontRenderer getFontRenderer() {
+		return fontRendererObj;
+	}
 }

@@ -5,11 +5,11 @@ package mak.dc.items;
 
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,10 +24,10 @@ public class ItemLifeCrystal extends ItemFood {
     public static int _maxValue;
 
     @SideOnly (Side.CLIENT)
-    private Icon[]    icons = { null, null };
+    private IIcon[]    icons = { null, null };
 
-    public ItemLifeCrystal (int id) {
-        super(id, 0, false);
+    public ItemLifeCrystal () {
+        super( 0, false);
         this.setMaxDamage(_maxValue);
         this.setUnlocalizedName(ItemInfo.LIFECRYSTAL_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
@@ -74,7 +74,7 @@ public class ItemLifeCrystal extends ItemFood {
             int dmg = stack.getItemDamage();
             if (dmg < _crystalCost) {
                 dischargeItem(newStack, _crystalCost);
-                player.addChatMessage("you've been healed and feed");
+//                player.addChatMessage("you've been healed and feed");
                 player.heal(500);
                 player.getFoodStats().setFoodSaturationLevel(20);
                 player.getFoodStats().setFoodLevel(20);
@@ -86,14 +86,14 @@ public class ItemLifeCrystal extends ItemFood {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public void registerIcons (IconRegister registerIcon) {
+    public void registerIcons (IIconRegister registerIcon) {
         for (int i = 0; i < 2; i++)
             icons[i] = registerIcon.registerIcon(Textures.LIFECRYSTAL_TEXT_LOC[i]);
     }
 
     @SideOnly (Side.CLIENT)
     @Override
-    public Icon getIconFromDamage (int dmg) {
+    public IIcon getIconFromDamage (int dmg) {
         return dmg == _maxValue ? icons[0] : icons[1];
     }
 

@@ -6,13 +6,13 @@ import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -23,9 +23,9 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
     public static boolean _IS_CREATIVE_MOVED; //if true, creatives players will be moved
 
 
-    public BlockEnderPearlBlock(int id) {
-        super(id, Material.rock);
-        this.setUnlocalizedName(BlockInfo.ENDERPEARLBLOCK_UNLOACLIZED_NAME);
+    public BlockEnderPearlBlock() {
+        super(Material.rock);
+        this.setBlockName(BlockInfo.ENDERPEARLBLOCK_UNLOACLIZED_NAME);
         this.setHardness(3.0F);
         this.setResistance(1.5F);
         this.setTickRandomly(true);
@@ -34,13 +34,13 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerIcons(IconRegister iconRegister) {
+    public void registerBlockIcons(IIconRegister iconRegister) {
         blockIcon = iconRegister.registerIcon(Textures.ENDERBLOCK_TEXT_LOC);		
     }
     
     @SideOnly(Side.CLIENT)
     @Override
-    public Icon getIcon(int side, int meta) {
+    public IIcon getIcon(int side, int meta) {
         return blockIcon;
 
     }	
@@ -59,7 +59,7 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote) {
 
-            ((TileEntityDeadCraft)(world.getBlockTileEntity(x, y, z))).setUnManagable();
+            ((TileEntityDeadCraft)(world.getTileEntity(x, y, z))).setUnManagable();
 
 
             if(!((EntityPlayer)ent).capabilities.isCreativeMode || (((EntityPlayer)ent).capabilities.isCreativeMode && _IS_CREATIVE_MOVED))

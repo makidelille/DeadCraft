@@ -1,9 +1,10 @@
 package mak.dc.proxy;
 
 import mak.dc.client.render.RendererMindController;
-import mak.dc.lib.ItemInfo;
-import net.minecraftforge.client.IItemRenderer;
+import mak.dc.items.DeadCraftItems;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy{
 
@@ -15,6 +16,11 @@ public class ClientProxy extends CommonProxy{
 	
 	@Override
 	public void registerRender() {
-		MinecraftForgeClient.registerItemRenderer(ItemInfo.MINDCONTROLLER_ID + 256, new RendererMindController());
+		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.controller, new RendererMindController());
+	}
+	
+	@Override
+	public World getClientWorld() {
+		return FMLClientHandler.instance().getClient().theWorld;
 	}
 }

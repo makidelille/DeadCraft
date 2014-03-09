@@ -6,7 +6,7 @@ import java.util.List;
 
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,17 +16,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDeadWand extends Item {
 
     @SideOnly (Side.CLIENT)
-    private Icon[] icons = { null, null };
+    private IIcon[] icons = { null, null };
 
-    public ItemDeadWand (int id) {
-        super(id);
+    public ItemDeadWand () {
+        super();
         this.setMaxStackSize(1);
         this.setUnlocalizedName(ItemInfo.DEADWAND_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
@@ -86,7 +86,7 @@ public class ItemDeadWand extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public void registerIcons (IconRegister registerIcon) {
+    public void registerIcons (IIconRegister registerIcon) {
         for (int i = 0; i < 2; i++)
             icons[i] = registerIcon.registerIcon(Textures.DEADWAND_TEXT_LOC[i]);
 
@@ -94,7 +94,7 @@ public class ItemDeadWand extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public Icon getIconFromDamage (int dmg) {
+    public IIcon getIconFromDamage (int dmg) {
         return isCharged(dmg) ? icons[1] : icons[0];
 
     }

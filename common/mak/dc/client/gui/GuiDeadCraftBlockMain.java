@@ -39,7 +39,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         super(new ContainerDeadCraft(invPlayer, te, false), iD);
 
         this.te = te;
-        this.user = invPlayer.player.username;
+        this.user = invPlayer.player.getCommandSenderName();
         this.allowed = te.getAllowedUser(); //TODO there is a bug somewher e:(
         
         System.out.println(allowed +" " + te +"  "  + te.getAllowedUser());
@@ -139,7 +139,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         this.buttonList.add(b0);
         this.buttonList.add(b1);
 
-        this.entername = new GuiTextField(fontRenderer, 7,10, 112, 12); //BUG
+        this.entername = new GuiTextField(getFontRenderer(), 7,10, 112, 12); //BUG
         this.entername.setFocused(true);
         this.entername.setEnabled(true);
         this.entername.setCanLoseFocus(true);
@@ -171,7 +171,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         String s = entername.getText(); 
         System.out.println(s);
         if(s != "") {
-            PacketHandler.sendInterfaceStringPacket(this.id, button.id, s);
+//            PacketHandler.sendInterfaceStringPacket(this.id, button.id, s);
             this.hasChanged = true;
         }
 

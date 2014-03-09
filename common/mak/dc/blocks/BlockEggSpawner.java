@@ -6,8 +6,9 @@ import mak.dc.DeadCraft;
 import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -15,23 +16,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockEggSpawner extends BlockDeadCraft {
 
 	
-	public BlockEggSpawner(int id) {
-		super(id, Material.iron);
+	public BlockEggSpawner() {
+		super(Material.iron);
 		this.setResistance(10F);
-		this.setStepSound(soundMetalFootstep);
+		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.5F);
-		this.setUnlocalizedName(BlockInfo.EGGSPAWNER_UNLOCALIZED_NAME);
+		this.setBlockName(BlockInfo.EGGSPAWNER_UNLOCALIZED_NAME);
 		}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileEntityEggSpawner();
 	}
 	
@@ -45,9 +46,9 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int meta) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		if(!world.isRemote) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te != null && te instanceof IInventory) {
 				IInventory inventory = (IInventory)te;
 				
@@ -72,7 +73,7 @@ public class BlockEggSpawner extends BlockDeadCraft {
 			}
 
 		
-			super.breakBlock(world, x, y, z, id, meta);
+			super.breakBlock(world, x, y, z, block, meta);
 		}
 	}
 	@Override
@@ -88,7 +89,7 @@ public class BlockEggSpawner extends BlockDeadCraft {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IconRegister registerIcon) {
+	public void registerBlockIcons(IIconRegister registerIcon) {
 		blockIcon = registerIcon.registerIcon(Textures.EGGSPAWNER_TEXT_LOC);
 		
 	}
