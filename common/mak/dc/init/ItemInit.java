@@ -6,9 +6,7 @@ import mak.dc.items.ItemLifeCrystal;
 import mak.dc.items.ItemMindController;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Lib;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.EnumHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemInit {
@@ -19,17 +17,16 @@ public class ItemInit {
 	public static Item controller; //TODO
 	public static Item superChargedNetherStar; //TODO craft usage
 	
-	static EnumArmorMaterial DC_ARMOR_MATERIAL = EnumHelper.addArmorMaterial("deadcraft_armor", 20, new int[]{2, 8, 4, 2}, 15);
 
 	
 	public static void init() {
 		
 		
 		
-		deadWand = new ItemDeadWand(ItemInfo.DEADWAND_ID);
-		lifeCrystal = new ItemLifeCrystal(ItemInfo.LIFECRYSTAL_ID);
-		mindController = new ItemMindController(ItemInfo.MINDCONTROLLER_ID);
-		controller = new ItemController(ItemInfo.CONTROLLER_ID);
+		deadWand = new ItemDeadWand();
+		lifeCrystal = new ItemLifeCrystal();
+		mindController = new ItemMindController();
+		controller = new ItemController();
 		
 		GameRegistry.registerItem(deadWand, ItemInfo.DEADWAND_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(lifeCrystal, ItemInfo.LIFECRYSTAL_KEY, Lib.MOD_ID);

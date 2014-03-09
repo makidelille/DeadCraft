@@ -5,6 +5,7 @@ import mak.dc.client.gui.GuiHandler;
 import mak.dc.config.ConfigHandler;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.lib.Lib;
+import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -26,6 +27,8 @@ public class DeadCraft {
 	    
 	    @Instance ("deadcraft")
 	    public static DeadCraft instance;
+	    
+	    public static final PacketPipeline packetPipeline = new PacketPipeline();
 		
 		@EventHandler
 		public void PreInit (FMLPreInitializationEvent event) {
@@ -60,11 +63,13 @@ public class DeadCraft {
 			DeadCraftItems.registerCraftRecipe();
 			DeadCraftBlocks.initTileEntity();
 			DeadCraftBlocks.registerCraftRecipe();
-
+			packetPipeline.initialise();
+			
 		}
 		
 		@EventHandler
 		public void PostInit (FMLPostInitializationEvent event) {
 			 DeadCraftItems.postInit();
+			 packetPipeline.postInitialise();
 		}
 }

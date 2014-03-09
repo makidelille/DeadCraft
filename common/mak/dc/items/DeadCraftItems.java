@@ -12,7 +12,7 @@ public class DeadCraftItems {
 	public static Item deadWand;
 	public static Item lifeCrystal;
 	public static Item mindController;
-	public static Item controller; //TODO
+	public static Item controller; //TODO finish
 	public static Item superChargedNetherStar; //TODO craft usage
 	public static CreativeTabs tabDeadCraft;
 	
