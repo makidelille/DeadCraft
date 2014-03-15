@@ -32,6 +32,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     private String                  user;
     private ArrayList               allowed;
     private boolean hasChanged;
+    private boolean hasToSend;
     private String s;
     private boolean hasInit = false;
 	private boolean isLocked;
@@ -45,9 +46,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         this.user = invPlayer.player.getCommandSenderName();
         this.allowed = te.getAllowedUser(); //TODO there is a bug somewher e:(
         this.isLocked = te.isLocked();
-        
-        System.out.println(allowed +" " + te +"  "  + te.getAllowedUser());
-        
+                
         xSize = 176;
         ySize = 166;
         
@@ -71,14 +70,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         GL11.glColor4f(1, 1, 1, 1);
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
-        //System.out.println(allowed);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);   
         
-        for (int i = 0; i < allowed.size(); i++) {
-           System.out.println(allowed.get(i).toString());
-           names.drawString(this, allowed.get(i).toString(), 7, 10 + 10 * i, 110);
-        }
 
         scrollSlider.draw(this);
         lock.draw(this);
@@ -91,6 +84,9 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.drawString(this, "lock :", 134 ,58,50, "gray");
         lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
         this.entername.drawTextBox();
+        for (int i = 0; i < allowed.size(); i++) {
+            names.drawString(this, allowed.get(i).toString(), 9, 25 + 10 * i, 110);
+         }
     }
     
     @Override
@@ -104,6 +100,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         super.updateScreen();
         this.entername.updateCursorCounter();
         scrollSlider.updateScreen();
+        if(hasToSend) sendPacket();
     }
 
 
@@ -113,7 +110,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         scrollSlider.mouseClicked(this,par1,par2,par3);
         lock.mouseClicked(this, par1, par2,par3);
         this.isLocked = lock.isActive();
-        sendPacket();
+        this.hasToSend = true;
   
     }
 
@@ -122,7 +119,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te.xCoord, te.yCoord, te.zCoord, this.allowed, this.isLocked);
     	System.out.println(pkt.toString());
     	DeadCraft.packetPipeline.sendToServer(pkt);
-        this.hasChanged = true;		
+        this.hasChanged = true;
+        this.hasToSend = false;
 	}
 
 	@Override
@@ -188,8 +186,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         }else if(button.id == 1 ) {
         	if(!allowed.contains(s)) return;
         	allowed.remove(s);
-        }        
-        sendPacket();
+        }
+        this.hasToSend = true;
         
     }
     

@@ -1,15 +1,15 @@
 package mak.dc.client.gui;
 
+import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
 import mak.dc.client.gui.util.GuiRectangleInfo;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.network.PacketHandler;
+import mak.dc.network.DeadCraftEggSpawnerPacket;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -124,8 +124,7 @@ public class GuiEggSpawner extends GuiCustom{
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		
-//		PacketHandler.sendInterfaceButtonPacket((byte) this.id,(byte) button.id);
+		DeadCraft.packetPipeline.sendToServer(new DeadCraftEggSpawnerPacket(te.xCoord, te.yCoord, te.zCoord,(byte) button.id));
 	}
 
 		

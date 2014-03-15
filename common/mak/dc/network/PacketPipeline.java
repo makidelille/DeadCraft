@@ -94,11 +94,12 @@ public class PacketPipeline extends
     // Method to call from FMLInitializationEvent
     public void initialise() {
         channels = NetworkRegistry.INSTANCE.newChannel("deadcraft", this);
-        //registerPackets();
+        registerPackets();
     }
 
     private void registerPackets() {
 		registerPacket(DeadCraftAdminPacket.class);
+		registerPacket(DeadCraftEggSpawnerPacket.class);
 		
 	}
 

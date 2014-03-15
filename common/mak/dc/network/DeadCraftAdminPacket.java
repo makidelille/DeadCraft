@@ -17,6 +17,10 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	boolean locked;
 	ArrayList<String> allowed;
 	
+	public DeadCraftAdminPacket() {
+		
+	}
+	
 	
 	public DeadCraftAdminPacket(int x, int y, int z, ArrayList<String> allowed,  boolean isLocked) {
 		this.x = x;
@@ -33,9 +37,8 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 		buf.writeInt(this.y);
 		buf.writeInt(this.z);
 		
-		
+		buf.writeInt(this.allowed.size());
 		if(!this.allowed.isEmpty()) {
-			buf.writeInt(this.allowed.size());
 			for (int i = 0; i < this.allowed.size(); i++)
 				ByteBufUtils.writeUTF8String(buf, this.allowed.get(i));
 		}
@@ -64,11 +67,13 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		World world = player.worldObj;
-		TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-		if(te == null || !(te instanceof TileEntityDeadCraft)) return;
-		if(!te.isManagable()) return;
-		te.setAllowedUser(allowed);
-		te.setLocked(locked);
+		if(!world.isRemote) {
+			TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+			if(te == null || !(te instanceof TileEntityDeadCraft)) return;
+			if(!te.isManagable()) return;
+			te.setAllowedUser(allowed);
+			te.setLocked(locked);
+		}
 	}
 	
 	@Override

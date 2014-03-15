@@ -330,7 +330,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	}
 
 
-	private void decrStackCreation() {
+	public void decrStackCreation() {
 			for (int slot = 0; slot < 6; slot++) {
 				getStackInSlot(slot).stackSize--;
 				if(getStackInSlot(slot).stackSize == 0) {
@@ -366,7 +366,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	}
 	
 
-	private boolean isInventoryComplete() {
+	public boolean isInventoryComplete() {
 		if(!worldObj.isRemote) {
 			boolean re = true;
 			for (byte i = 0; i < 6; i++) {
