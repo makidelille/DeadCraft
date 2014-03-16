@@ -11,7 +11,6 @@ import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.network.DeadCraftAdminPacket;
-import mak.dc.network.PacketHandler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

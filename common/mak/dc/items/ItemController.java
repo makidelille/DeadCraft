@@ -3,19 +3,19 @@ package mak.dc.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Icon;
-
 import mak.dc.DeadCraft;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
-import mak.dc.network.PacketHandler;
+import mak.dc.network.DeadCraftAdminPacket;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
@@ -93,14 +93,13 @@ public class ItemController extends Item {
             String username = player.getCommandSenderName();
             if (te.isUserCreator(username) && !player.isSneaking()) {
                 switch (stack.getItemDamage()) {
-                    case 0: // change autoratsation
+                    case 0:
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
-                    case 1: // change stats (lock)
-//                        PacketHandler.sendInterfaceSwitchPacket((byte)0,(byte) 0, !(te.isLocked()));
-                        //player.addChatMessage("the block is now locked : " + te.isLocked());
+                    case 1: 
+                    	DeadCraft.packetPipeline.sendToServer(new DeadCraftAdminPacket(x,y,z,te.getAllowedUser(),!te.isLocked()));
                         break;
-                    case 2: // show infos
+                    case 2: 
                         showData(te,player);
                         break;
                     default:
@@ -112,7 +111,7 @@ public class ItemController extends Item {
                 stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
             }else{
                 showData(te,player);
-                //player.addChatMessage("You're not the owner of the block");
+                player.addChatComponentMessage(new ChatComponentText("You're not the owner of the block"));
             }
         }
         return false;
@@ -166,9 +165,4 @@ public class ItemController extends Item {
         }
         System.out.println(is.getTagCompound());
     }
-
-    public void onInterfaceEventRecieve () {
-
-    }
-
 }

@@ -2,7 +2,6 @@ package mak.dc.client.gui.util;
 
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

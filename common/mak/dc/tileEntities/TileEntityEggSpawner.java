@@ -35,6 +35,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 
 
 	public TileEntityEggSpawner() {
+		super(true);
 		invContent = new ItemStack[9];
 		setStarted((byte) 0);
 		created = false;
