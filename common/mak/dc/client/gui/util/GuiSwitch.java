@@ -58,6 +58,7 @@ public class GuiSwitch extends GuiRectangle{
         return active;
     }
     
+    @Override
     public void mouseClicked (GuiCustom gui, int x, int y, int id) {
         if (inRect(gui, x, y) && this.shouldDisplay()) {
             setActiveState(!active);

@@ -42,6 +42,7 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 			for (int i = 0; i < this.allowed.size(); i++)
 				ByteBufUtils.writeUTF8String(buf, this.allowed.get(i));
 		}
+		buf.writeBoolean(locked);
 		
 	}
 	@Override
@@ -57,6 +58,7 @@ public class DeadCraftAdminPacket extends AbstractPacket {
     			newAllowed.add(ByteBufUtils.readUTF8String(buf));
     		this.allowed = newAllowed;
     	}
+    	this.locked = buf.readBoolean();
  
 		
 	}

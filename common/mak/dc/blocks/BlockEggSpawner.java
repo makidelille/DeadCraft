@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -48,7 +49,7 @@ public class BlockEggSpawner extends BlockDeadCraft {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		if(!world.isRemote) {
-			TileEntity te = world.getTileEntity(x, y, z);
+			TileEntityEggSpawner te = (TileEntityEggSpawner) world.getTileEntity(x, y, z);
 			if (te != null && te instanceof IInventory) {
 				IInventory inventory = (IInventory)te;
 				
@@ -70,6 +71,14 @@ public class BlockEggSpawner extends BlockDeadCraft {
 						
 						world.spawnEntityInWorld(droppedItem);
 					}}
+				
+				if(te.getEggInStock() > 0) {
+					EntityItem eggDropped = new EntityItem(world, x + world.rand.nextFloat(), y + world.rand.nextFloat(), z + world.rand.nextFloat(), new ItemStack(Blocks.dragon_egg, 0,te.getEggInStock()));
+					eggDropped.motionX = (-0.5F + world.rand.nextFloat()) * 0.05F;
+					eggDropped.motionY = (4 + world.rand.nextFloat()) * 0.05F;
+					eggDropped.motionZ = (-0.5F + world.rand.nextFloat()) * 0.05F;
+					world.spawnEntityInWorld(eggDropped);
+				}
 			}
 
 		

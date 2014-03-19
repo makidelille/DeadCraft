@@ -18,7 +18,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		
 	private static final byte deadcraftId = 1;
 	
-	public static int _maxBuildTime = 1000;
+	public static int _maxBuildTime = 1000; //TODO change
 	
 	
 	private ItemStack[] invContent;
@@ -69,7 +69,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 			else
 				wait--;
 			
-			//onInventoryChanged();
 			spawnEgg();
 			
 		
@@ -164,7 +163,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 			}else{
 				itemstack = itemstack.splitStack(count);
 			}}
-		//onInventoryChanged();
 		return itemstack;
 		
 	}
@@ -182,10 +180,9 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		invContent[i] = itemstack;
 		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
 	            itemstack.stackSize = getInventoryStackLimit();
-	        //onInventoryChanged();
 		
 	}
-		//XXX
+
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 		if(slot == 0 || slot == 2)
@@ -259,7 +256,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		
 		buildTime = compound.getInteger("buildtime");
 		created = compound.getBoolean("created");
-		setStarted(compound.getByte("started"));
+		started = compound.getByte("started");
 		eggInStock = compound.getInteger("eggInStock");
 		redState = compound.getByte("redState");
 		mode = compound.getByte("mode");
@@ -434,14 +431,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	@Override
 	public void openInventory() {}
 
-	@Override
-	public int[] getData() {
-		int [] re =  new int[3];
-		re[0] = this.redState;
-		re[1] = this.mode;
-		re[2] = this.created ? 1 : 0;
-		return re;
-	}
 
 
 }

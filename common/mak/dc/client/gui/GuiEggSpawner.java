@@ -1,5 +1,8 @@
 package mak.dc.client.gui;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.util.GuiCustom;
@@ -19,12 +22,6 @@ import org.lwjgl.opengl.GL11;
 public class GuiEggSpawner extends GuiCustom{
 
 	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.EGGSPAWNER_GUI_TEXT_LOC);
-
-	private GuiRectangle durationBar;
-	private GuiRectangle[] lifeBar = {null,null};
-	private GuiRectangleInfo infoRed = new GuiRectangleInfo();
-	private GuiRectangleInfo infoProd = new GuiRectangleInfo(); 
-
 	private TileEntityEggSpawner te;
 	
 	public GuiEggSpawner(InventoryPlayer inventory, TileEntityEggSpawner te, int iD) {
@@ -34,6 +31,9 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		xSize = 184;
 		ySize = 189;
+		
+		
+		
 		
 	}
 
@@ -49,18 +49,18 @@ public class GuiEggSpawner extends GuiCustom{
 		int[] lifeBarHeight = {0,0};
 		int durationBarLenght;
 		
-		for(int i =0; i < lifeBar.length; i++) {
+		for(int i =0; i < 2; i++) {
 			lifeBarHeight[i] = (int) (te.getLifeBar(i) * 6.3F) ;
-			lifeBar[i] = new GuiRectangle(27 + i * 18, 81 - lifeBarHeight[i], 2, lifeBarHeight[i]);
-			lifeBar[i].draw(this, xSize, 63 - lifeBarHeight[i]);
+			subRect.set((1+i),new GuiRectangle(27 + i * 18, 81 - lifeBarHeight[i], 2, lifeBarHeight[i]));
+			subRect.get(1+i).draw(this, xSize, 63 - lifeBarHeight[i]);
 		}
 		durationBarLenght =  (int)(te.getProgress() * 1.60);
-		durationBar = new GuiRectangle (11, 8, durationBarLenght, 3);
-		durationBar.draw(this, 0, ySize);
+		subRect.set(0, new GuiRectangle (11, 8, durationBarLenght, 3));
+		subRect.get(0).draw(this, 0, ySize);
 		
-		infoRed.drawTexturedLeftRect(this);	
+		((GuiRectangleInfo) subRect.get(3)).drawTexturedLeftRect(this);	
 		
-		infoRed.drawSeparatorH(this, -85, 80, 75);
+		((GuiRectangleInfo) subRect.get(4)).drawSeparatorH(this, -85, 80, 75);
 		
 		
 		initGui();
@@ -100,11 +100,11 @@ public class GuiEggSpawner extends GuiCustom{
 		drawButtonStartStop();
 		
 		for (int i = 0 ; i < 3; i++) {
-			infoRed.drawButtonRedState(this, i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(3)).drawButtonRedState(this, i + 1, -22, 20 + i * 20);
 		}
 		
 		for (int i = 4 ; i < 6 ; i++) {
-			infoProd.drawButtonBasedOnState(this, i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
+			((GuiRectangleInfo) subRect.get(4)).drawButtonBasedOnState(this, i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
 		}
 	
 	
@@ -132,10 +132,10 @@ public class GuiEggSpawner extends GuiCustom{
 		String str = "";
 		
 		for (int i = 0 ; i < 3; i++) {
-			infoRed.drawTexturedRedState(this, i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(3)).drawTexturedRedState(this, i + 1, -22, 20 + i * 20);
 		}
 		
-		infoRed.setActiveRedState(te.getRedstoneState());
+		((GuiRectangleInfo) subRect.get(3)).setActiveRedState(te.getRedstoneState());
 		
 		switch (te.getRedstoneState()) {
 		case 0:
@@ -151,7 +151,7 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		str = str + "when a dragon egg spawn";
 		
-		infoRed.drawString(this, str, - 90, 25, 70);
+		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, - 90, 25, 70);
 	}
 	
 
@@ -172,6 +172,16 @@ public class GuiEggSpawner extends GuiCustom{
 			str = "the spawner is in loop mode, it create eggs until you clicked ths 'Stop' button, or change mode";
 		}
 		
-		infoProd.drawString(this, str, -90,  85, 70);
+		((GuiRectangleInfo) subRect.get(4)).drawString(this, str, -90,  85, 70);
+	}
+
+	@Override
+	protected void defineSubRect() {
+		subRect.add(new GuiRectangle (11, 8, 0, 3));
+		subRect.add(new GuiRectangle(27 + 0 * 18, 81 - 0, 2, 0));
+		subRect.add(new GuiRectangle(27 + 1 * 18, 81 - 0, 2, 0));
+		subRect.add(new GuiRectangleInfo());
+		subRect.add(new GuiRectangleInfo());
+		
 	}
 }

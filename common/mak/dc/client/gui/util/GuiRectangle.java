@@ -143,6 +143,9 @@ public class GuiRectangle extends GuiScreen{
 	}
 
 
+	public void mouseClicked(GuiCustom gui, int x, int y, int id) {}
+
+
    
 
     

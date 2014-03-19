@@ -13,10 +13,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerEggSpawner extends ContainerDeadCraft {
 
 	private TileEntityEggSpawner te;
+	private InventoryPlayer inv;
 	
 	public ContainerEggSpawner(InventoryPlayer invPlayer, TileEntityEggSpawner te) {
 	    super(invPlayer, te, true);
 	    this.te = te;
+	    this.inv = invPlayer;
 	
 		for (int y = 0; y < 2; y++) {
 			for(int x = 0 ; x < 3; x++) {
@@ -63,33 +65,38 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 				int pSlot = ValidForASlot(stack);
 				
 				switch (pSlot) {
-				case -1 : 
-					return null;
 				case 0 : 
-					if(!mergeItemStack(stack,pSlot, pSlot +1,false) && !mergeItemStack(stack, pSlot +2 , pSlot +3, false))  {
-						return null;	
-					}
-					break;
-				case 3:
-					if(!mergeItemStack(stack,pSlot, pSlot +1,false) && !mergeItemStack(stack, pSlot +2 , pSlot +3, false))  {
-						return null;	
-					}
-					break;
+					return null;
 				case 1 : 
-					if(!mergeItemStack(stack, pSlot , pSlot + 1 , false)) {
+					if(!mergeItemStack(stack,pSlot, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
+						return null;	
+					}
+					break;
+				case 4:
+					if(!mergeItemStack(stack,pSlot, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
+						return null;	
+					}
+					break;
+				case 2 : 
+					if(!mergeItemStack(stack, pSlot-1 , pSlot, false)) {
 						return null;
 					}
 					break;
-				case 4 : 
-					if(!mergeItemStack(stack, pSlot , pSlot + 1 , false)) {
+				case 5 : 
+					if(!mergeItemStack(stack, pSlot-1 , pSlot, false)) {
 						return null;
 					}
 					break;
-				case 6 :
-					if (!mergeItemStack(stack, pSlot , pSlot + 2 , false)) {
+				case 7 :
+					if (!mergeItemStack(stack, pSlot-1 , pSlot + 1 , false)) {
 						return null;
 					}
 					break;
+				default : 
+					if(!mergeItemStack(stack, 8, 8+player.inventory.getSizeInventory() , false)) {
+						return null;
+					}
+						
 				
 				}
 	
@@ -111,11 +118,15 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 	private int ValidForASlot(ItemStack stack) {
 		for (int i=0; i< te.getSizeInventory(); i++) {
 			if(te.isItemValidForSlot(i, stack)) {
-				return i;
+				return i +1;
 				}
+		}for(int j =0; j < inv.getSizeInventory();j++) {
+			if(inv.isItemValidForSlot(j, stack)){
+				return -j -1 ;
+			}
 		}
 		
-		return -1;
+		return 0;
 	}
 
 	@Override

@@ -24,7 +24,6 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 		this.y = y;
 		this.z = z;
 		this.buttonId = id;
-		System.out.println("block : " + x + " " + y +" " + z +" " + buttonId);
 	}
 
 	@Override
@@ -50,9 +49,7 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
-
-		System.out.println("test");
-		
+	
 		World worldObj = player.worldObj;
 		TileEntityEggSpawner te = (TileEntityEggSpawner) worldObj
 				.getTileEntity(x, y, z);
@@ -60,8 +57,6 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 		if (!worldObj.isRemote) {
 			switch (buttonId) {
 			case 0:
-				if (te.hasStarted())
-					FMLLog.warning("Dragon Egg Sapwner already strated");
 				if (!te.hasStarted()) {
 					if (te.isInventoryComplete() && te.getProgress() == 0) {
 						te.decrStackCreation();

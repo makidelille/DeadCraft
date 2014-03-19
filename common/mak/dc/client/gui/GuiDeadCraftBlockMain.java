@@ -43,8 +43,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
         this.te = te;
         this.user = invPlayer.player.getCommandSenderName();
-        this.allowed = te.getAllowedUser(); //TODO there is a bug somewher e:(
-        this.isLocked = te.isLocked();
+        this.allowed = te.getAllowedUser(); //TODO there is a bug somewher :(
+        this.isLocked = this.te.isLocked();
                 
         xSize = 176;
         ySize = 166;
@@ -55,6 +55,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         scrollSlider = new GuiSlider(108, 25, 49, 0, true);
         scrollSlider.hide();
         lock = new GuiSwitch(123, 57, 0, this.isLocked, true); //TODO BUG
+        
+        System.out.println("init");
         
 
     }
@@ -189,6 +191,28 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         this.hasToSend = true;
         
     }
+
+	@Override
+	protected void defineSubRect() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private String[] getDisplayedName(int start) {
+		String[] re = new String[5];
+		int size = this.allowed.size();
+		if(size >= start + 5)
+			for(int i =0; i < 5; i++)
+				re[i] = (String) this.allowed.get(start + i);
+		else if(size < start + 5) {
+			int dif = start - size + 5;
+			if(dif <0) return null;
+			for(int i=0; i < dif; i++)
+				re[i] = (String) this.allowed.get(start + i);
+		}
+		
+		return re;
+	}
     
     
 
