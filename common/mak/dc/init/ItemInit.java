@@ -2,6 +2,7 @@ package mak.dc.init;
 
 import mak.dc.items.ItemController;
 import mak.dc.items.ItemDeadWand;
+import mak.dc.items.ItemGodCan;
 import mak.dc.items.ItemLifeCrystal;
 import mak.dc.items.ItemMindController;
 import mak.dc.lib.ItemInfo;
@@ -16,6 +17,7 @@ public class ItemInit {
 	public static Item mindController;
 	public static Item controller; //TODO
 	public static Item superChargedNetherStar; //TODO craft usage
+	public static Item godCan;
 	
 
 	
@@ -27,11 +29,13 @@ public class ItemInit {
 		lifeCrystal = new ItemLifeCrystal();
 		mindController = new ItemMindController();
 		controller = new ItemController();
+		godCan = new ItemGodCan();
 		
 		GameRegistry.registerItem(deadWand, ItemInfo.DEADWAND_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(lifeCrystal, ItemInfo.LIFECRYSTAL_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(mindController, ItemInfo.MINDCONTROLLER_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(controller, ItemInfo.CONTROLLER_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(godCan, ItemInfo.GODCAN_KEY, Lib.MOD_ID);
 	
 	}
 	
