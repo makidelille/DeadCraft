@@ -19,6 +19,7 @@ public class GuiRectangleList extends GuiRectangle {
 	private final static ResourceLocation texture      = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
 
 	private int _MAXSIZE;
+	private int selected = 0;
 
 
 	
@@ -27,7 +28,7 @@ public class GuiRectangleList extends GuiRectangle {
 	public GuiRectangleList(GuiCustom gui,int x, int y, int width, int height, ArrayList list, int sliderId, boolean isSliderVertical) {
 		super(gui, x, y, width, height);
 		
-		 scrollSlider = new GuiSlider(gui, x + width - 12, y + 2, height - 5 ,height -15, sliderId, isSliderVertical);  
+		 scrollSlider = new GuiSlider(gui, x + width - 12, y + 2, height - 5 ,15, sliderId, isSliderVertical);  
 	     this.list = list;
 	     this._MAXSIZE =  (int) (-1 + (int) (width /5));
 	     System.out.println(_MAXSIZE);
@@ -48,21 +49,32 @@ public class GuiRectangleList extends GuiRectangle {
 	}
 		
 	private void drawMask() {
-		// TODO Auto-generated method stub
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		
+	}
+//TODO finish see teselator and GL11
+	private void drawBox() {
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		int start = getPadding();
+		
+		
+		
+		for(int index =0 ; index < list.size(); index++) {
+			System.out.println(index);
+			String str = getStringToDisplay(index);
+			int size = (1+str.length() / _MAXSIZE) * 9;
+			for(int i =0; i < this.w - 15; i++) 
+				for(int j = 0; j < size;j++ )
+					this.drawTexturedModalRect(getX() + 2 + i, getY() + j - start + index * size, isSelected(index) ? 32 : 31, 166, 1, 1);
+				this.drawString(parent, str, getX() + 3, getY() - start + index * size, (int) (_MAXSIZE * 4.5));
+		}
 	}
 
-	private void drawBox() {
-		String str = getStringToDisplay(0);
-		int start = getPadding();
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		for(int i =0; i < this.w - 15; i++) 
-			for(int j = 0; j < 9.5 * (int)( 1 + ( (str.length() / _MAXSIZE > (int) (str.length() / _MAXSIZE) ? (str.length() / _MAXSIZE + 1 ): str.length() / _MAXSIZE)));j++ )
-				this.drawTexturedModalRect(getX() + 2 + i, getY() + j - start, 32, 166, 1, 1);
-				
-				this.drawString(parent, str, getX() + 3, getY() - start +2, (int) (_MAXSIZE * 4.5));
-		
+
+	private boolean isSelected(int index) {
+		return index == selected;
 	}
+
 
 
 	private void drawBody() {
@@ -110,14 +122,22 @@ public class GuiRectangleList extends GuiRectangle {
 	}
 	
 	private String getStringToDisplay(int index) {
-		if(list.size() > index)		
+		if(list.size() >= index)		
 			return list.get(index).toString();
 		else
-			return "NULLCAPSLINESMTHGTO";
+			return "NULL";
 	}
 	
 	private int getPadding() {
-		return (int) (scrollSlider.getRatio() * h * (Math.log(scrollSlider.getSizeBar()/scrollSlider.getSize()))) /(100);
+		//System.out.println(scrollSlider.getMult());
+		return (int)(scrollSlider.getMult()  * (scrollSlider.getRatio() * h ) /(100));
+	}
+
+
+
+	public void updateList(ArrayList list) {
+		this.list = list;
+		
 	}
 	
 	

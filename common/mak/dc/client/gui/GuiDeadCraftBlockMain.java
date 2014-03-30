@@ -61,10 +61,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void drawGuiContainerBackgroundLayer (float f, int mouseX, int mouseY) {
         if(!hasInit ) initGui();
-        if(haschange) {
-            allowed = te.getAllowedUser();
-            haschange = false;
-        }
+        
         GL11.glColor4f(1, 1, 1, 1);
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -96,7 +93,12 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         super.updateScreen();
         this.entername.updateCursorCounter();
         if(hasToSend) sendPacket();
-        //this.names.updateScreen();
+        this.names.updateScreen();
+        if(haschange) {
+            allowed = te.getAllowedUser();
+            names.updateList(allowed);
+            haschange = false;
+        }
     }
 
 

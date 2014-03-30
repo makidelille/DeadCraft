@@ -159,4 +159,8 @@ public class GuiSlider extends GuiRectangle {
 		return this.size;
 	}
 
+	public float getMult() {
+		return (float) (1/(Math.E + Math.exp((float) getSizeBar()/getSize())));
+	}
+
 }
