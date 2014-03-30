@@ -51,16 +51,16 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		for(int i =0; i < 2; i++) {
 			lifeBarHeight[i] = (int) (te.getLifeBar(i) * 6.3F) ;
-			subRect.set((1+i),new GuiRectangle(27 + i * 18, 81 - lifeBarHeight[i], 2, lifeBarHeight[i]));
-			subRect.get(1+i).draw(this, xSize, 63 - lifeBarHeight[i]);
+			subRect.set((1+i),new GuiRectangle(this, 27 + i * 18, 81 - lifeBarHeight[i], 2, lifeBarHeight[i]));
+			subRect.get(1+i).draw(xSize, 63 - lifeBarHeight[i]);
 		}
 		durationBarLenght =  (int)(te.getProgress() * 1.60);
-		subRect.set(0, new GuiRectangle (11, 8, durationBarLenght, 3));
-		subRect.get(0).draw(this, 0, ySize);
+		subRect.set(0, new GuiRectangle (this, 11, 8, durationBarLenght, 3));
+		subRect.get(0).draw(0, ySize);
 		
-		((GuiRectangleInfo) subRect.get(3)).drawTexturedLeftRect(this);	
+		((GuiRectangleInfo) subRect.get(3)).drawTexturedLeftRect();	
 		
-		((GuiRectangleInfo) subRect.get(4)).drawSeparatorH(this, -85, 80, 75);
+		((GuiRectangleInfo) subRect.get(4)).drawSeparatorH(-85, 80, 75);
 		
 		
 		initGui();
@@ -100,11 +100,11 @@ public class GuiEggSpawner extends GuiCustom{
 		drawButtonStartStop();
 		
 		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(3)).drawButtonRedState(this, i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(3)).drawButtonRedState(i + 1, -22, 20 + i * 20);
 		}
 		
 		for (int i = 4 ; i < 6 ; i++) {
-			((GuiRectangleInfo) subRect.get(4)).drawButtonBasedOnState(this, i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
+			((GuiRectangleInfo) subRect.get(4)).drawButtonBasedOnState(i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
 		}
 	
 	
@@ -132,7 +132,7 @@ public class GuiEggSpawner extends GuiCustom{
 		String str = "";
 		
 		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(3)).drawTexturedRedState(this, i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(3)).drawTexturedRedState(i + 1, -22, 20 + i * 20);
 		}
 		
 		((GuiRectangleInfo) subRect.get(3)).setActiveRedState(te.getRedstoneState());
@@ -177,11 +177,11 @@ public class GuiEggSpawner extends GuiCustom{
 
 	@Override
 	protected void defineSubRect() {
-		subRect.add(new GuiRectangle (11, 8, 0, 3));
-		subRect.add(new GuiRectangle(27 + 0 * 18, 81 - 0, 2, 0));
-		subRect.add(new GuiRectangle(27 + 1 * 18, 81 - 0, 2, 0));
-		subRect.add(new GuiRectangleInfo());
-		subRect.add(new GuiRectangleInfo());
+		subRect.add(new GuiRectangle (this, 11, 8, 0, 3));
+		subRect.add(new GuiRectangle(this,27 + 0 * 18, 81 - 0, 2, 0));
+		subRect.add(new GuiRectangle(this,27 + 1 * 18, 81 - 0, 2, 0));
+		subRect.add(new GuiRectangleInfo(this));
+		subRect.add(new GuiRectangleInfo(this));
 		
 	}
 }

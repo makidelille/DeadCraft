@@ -12,7 +12,8 @@ public abstract class GuiCustom extends GuiContainer {
 
     private Container container;
     public int id;
-    protected ArrayList<GuiRectangle> subRect = new ArrayList();;
+    protected ArrayList<GuiRectangle> subRect = new ArrayList();
+	protected boolean haschange;;
     
 	public GuiCustom(Container par1Container, int id) {
 		super(par1Container);
@@ -70,11 +71,38 @@ public abstract class GuiCustom extends GuiContainer {
 	protected void mouseClicked(int par1, int par2, int par3) {
 		super.mouseClicked(par1, par2, par3);
 		for(GuiRectangle rect : subRect) {
-			rect.mouseClicked(this, par1, par2, par3);
+			if(rect.hasMouseClicked(par1, par2, par3))
+				this.haschange = true;
 		}
+	}
+	
+	protected void mouseMovedOrUp(int par1, int par2, int par3) {
+		super.mouseMovedOrUp(par1, par2, par3);
+		for(GuiRectangle rect : subRect) {
+			if(rect.hasMouseMovedOrUp(par1, par2, par3))
+				this.haschange = true;
+		}
+		
+	}
+
+	protected void mouseClickMove(int par1, int par2, int par3, long par4) {
+		super.mouseClickMove(par1, par2, par3, par4);
+		for(GuiRectangle rect : subRect) {
+			if(rect.hasMouseClickMove(par1, par2, par3, par4))
+				this.haschange = true;
+		}
+	}
+	
+	protected void sendPacket() {
+		if(this.haschange) {
+			this.haschange = false;
+		}
+		else return;
 	}
 	
 	public FontRenderer getFontRenderer() {
 		return fontRendererObj;
 	}
+
+	
 }

@@ -10,8 +10,8 @@ public abstract class TabGui extends GuiRectangle {
 
 	private String name;
 
-	public TabGui(String name, int id, int x, int y, int width, int height) {
-		super(x, y, width, height);
+	public TabGui(GuiCustom gui,String name, int id, int x, int y, int width, int height) {
+		super(gui,x, y, width, height);
 		
 		this.name = name;
 		this.id = id;
@@ -23,9 +23,12 @@ public abstract class TabGui extends GuiRectangle {
 	
 	public abstract void drawBackground(GuiCustom gui, int x, int y);
 	public abstract void drawForeground(GuiCustom gui, int x, int y);
-	public void mouseClick(GuiCustom gui, int x, int y, int button) {}
-	public void mouseMoveClick(GuiCustom gui, int x, int y, int button, long timeSinceClicked) {}
-	public void mouseReleased(GuiCustom gui, int x, int y, int button) {}
+	public boolean hasMouseClick(GuiCustom gui, int x, int y, int button) {
+		return false;}
+	public boolean hasMouseMoveClick(GuiCustom gui, int x, int y, int button, long timeSinceClicked) {
+		return false;}
+	public boolean hasMouseReleased(GuiCustom gui, int x, int y, int button) {
+		return false;}
 
 	
 }

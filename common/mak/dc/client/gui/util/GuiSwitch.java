@@ -15,8 +15,8 @@ public class GuiSwitch extends GuiRectangle{
     private final int id;
     private final boolean isVertical;
 
-    public GuiSwitch (int x, int y, int id, boolean initState, boolean isVertical) {
-        super(x, y, 10 + (isVertical ? 0:9), 10 + (isVertical ? 9:0));
+    public GuiSwitch (GuiCustom gui,int x, int y, int id, boolean initState, boolean isVertical) {
+        super(gui,x, y, 10 + (isVertical ? 0:9), 10 + (isVertical ? 9:0));
         
         this.id = id;
         this.active = initState; 
@@ -59,10 +59,12 @@ public class GuiSwitch extends GuiRectangle{
     }
     
     @Override
-    public void mouseClicked (GuiCustom gui, int x, int y, int id) {
-        if (inRect(gui, x, y) && this.shouldDisplay()) {
+    public boolean hasMouseClicked (int x, int y, int id) {
+        super.hasMouseClicked(x, y, id);
+    	if (inRect(x, y) && this.shouldDisplay()) {
             setActiveState(!active);
-        }
+            return true;
+        }return false;
 
 
     }

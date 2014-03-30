@@ -1,8 +1,11 @@
 package mak.dc.client.gui.util;
 
+import java.awt.Button;
+
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Mouse;
@@ -13,50 +16,69 @@ public class GuiSlider extends GuiRectangle {
     private final int               size;
     private int                     cursorPos;
     private final int               sliderId;
+    private int sizeBar;
     private boolean                 started;
     private final boolean           isVertical;
     private boolean                 isClientOnly = false;
+    private boolean drawAmount;
 
-    private static ResourceLocation texture      = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
+    private final static ResourceLocation texture      = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
 
-    public GuiSlider (int posX, int posY, int size, int id, boolean isVertical) {
-        super(posX, posY, (!isVertical) ? (size >= 3 ? size * 2 : 2) : 10, (isVertical) ? (size >= 3 ? size * 2 : 2)
+    public GuiSlider (GuiCustom gui,int posX, int posY, int size,int sizeBar, int id, boolean isVertical) {
+        super(gui, posX, posY, (!isVertical) ? (size >= 3 ? size * 2 : 2) : 10, (isVertical) ? (size >= 3 ? size * 2 : 2)
                 : 10);
 
         this.size = size >= 3 ? size : 3;
+        this.sizeBar = sizeBar < size - 2 ? sizeBar : size - 2;
         this.sliderId = id;
         this.isVertical = isVertical;
+        this.drawAmount = true; //set to true to debug
+        
+        init();
 
     }
 
-    public void draw (GuiCustom gui) {
+    public void draw () {
         if (this.shouldDisplay()) {
             GL11.glColor4f(1, 1, 1, 1);
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             if (!isVertical) {
-                gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY(), 1, 166, 1, 10);
+                parent.drawTexturedModalRect(getX(), getY(), 1, 166, 1, 10);
                 for (int i = 0; i < size; i++) {
-                    gui.drawTexturedModalRect(gui.getLeft() + getX() + 1 + i, gui.getTop() + getY(), 5, 166, 2, 10);
+                    parent.drawTexturedModalRect(getX() + 1 + i, getY(), 5, 166, 2, 10);
                 }
             } else if (isVertical) {
-                gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY(), 9, 166, 10, 1);
+                parent.drawTexturedModalRect(getX(),getY(), 9, 166, 10, 1);
                 for (int i = 0; i < size; i++) {
-                    gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY() + 1 + i, 9, 170, 10, 2);
+                    parent.drawTexturedModalRect(getX(),getY() + 1 + i, 9, 170, 10, 2);
                 }
             }
-            drawSlider(gui, getCursorPos());
+            drawSlider(getCursorPos());
         }
     }
+    
+    @Override
+    public void handleMouseInput() {
+    	super.handleMouseInput();
+    	wheel(Mouse.getX(), Mouse.getY());
+    }
+    
 
-    private void drawSlider (GuiCustom gui, int pos) {
+
+    private void drawSlider (int pos) { //TODO fix it
         GL11.glColor4f(1, 1, 1, 1);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-        if (!isVertical) {
-            gui.drawTexturedModalRect(gui.getLeft() + getX() + pos + 1, gui.getTop() + getY(), 7, 166, 2, 10);
-            drawString(gui, "" + getRatio(), gui.getLeft() + getX(), gui.getTop() + getY() - 10, 100);
-        } else if (isVertical) {
-            gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY() + pos + 1, 9, 172, 10, 2);
+        for(int i =0 ; i < this.sizeBar; i++) {
+	        if (!isVertical) {
+	            parent.drawTexturedModalRect(getX() + pos + 1 + i, getY(), 7, 166, 2, 10);
+	            
+	        } else if (isVertical) {
+	            parent.drawTexturedModalRect(getX(),getY() + pos + 1 +i, 9, 172, 10, 2);
+	        }
         }
+        if( drawAmount)
+        	drawString(parent, "" + getRatio(),getX(), getY() - 10, 100);
+        
     }
 
     private int getCursorPos () {
@@ -65,39 +87,76 @@ public class GuiSlider extends GuiRectangle {
     }
 
     private void setCursorPos (int pos) {
-        cursorPos = pos <= size - 2 ? (pos >= 0 ? pos : 0) : size - 2;
+        cursorPos = pos <= size - 1 - sizeBar ? (pos >= 0 ? pos : 0) : size - sizeBar - 1;
+    }
+    
+    private void incCursorPos() {
+    	setCursorPos((this.getCursorPos()) + 1);
+    }
+    
+    private void decCursorpos() {
+    	setCursorPos((this.getCursorPos()) - 1);
     }
 
-    public void mouseClicked (GuiCustom gui, int x, int y, int button) {
-        if (inRect(gui, x, y) && display) {
-            if (!isVertical) setCursorPos(x - gui.getLeft() - getX());
-            else if (isVertical) setCursorPos(y - gui.getTop() - getY());
+    @Override
+    public boolean hasMouseClicked (int x, int y, int button) {
+        if (inRect(x, y) && display) {
+            if (!isVertical) setCursorPos(x - parent.getLeft() - getX());
+            else if (isVertical) setCursorPos(y - parent.getTop() - getY());
             this.started = true;
+            return true;
         }
+		return false;
 
     }
-
-    public void mouseClickMove (GuiCustom gui, int mouseX, int mouseY) {
+    @Override
+    public boolean hasMouseClickMove (int mouseX, int mouseY, int par3, long par4) {
         if (started && this.shouldDisplay()) {
-            if (!isVertical) setCursorPos(mouseX - gui.getLeft() - getX());
-            else if (isVertical) setCursorPos(mouseY - gui.getTop() - getY());
+            if (!isVertical) setCursorPos(mouseX - parent.getLeft() - getX());
+            else if (isVertical) setCursorPos(mouseY - parent.getTop() - getY());
         }
+		return false;
     }
-
-    public void mouseMovedOrUp (GuiCustom gui, int par1, int par2, int type) {
+    @Override
+    public boolean hasMouseMovedOrUp (int par1, int par2, int type) {
         if (type == 0 && this.shouldDisplay()) {
             started = false;
-            if (!isClientOnly) return;
-//                PacketHandler.sendInterfaceSliderPacket((byte) gui.id, (byte) this.sliderId, getRatio());
-        }
+            if (!isClientOnly) return true;
+        }return false;
     }
 
-    public void wheel (GuiCustom gui, int x, int y) { // TODO
+    public void wheel (int x, int y) { // TODO
         int dx = Mouse.getDWheel();
-        if (inRect(gui, x, y) && this.shouldDisplay()) setCursorPos(cursorPos + dx);
+        if(dx > 0) actionPerformed((GuiButton) this.buttonList.get(0));
+        if(dx < 0) actionPerformed((GuiButton) this.buttonList.get(1));
     }
 
     public int getRatio () {
-        return (int) (100 * ((float) cursorPos / (float) (this.size - 2)));
+        return (int) ((float)(100 * cursorPos / (this.size-sizeBar - 1)));
     }
+    
+    public void init() {
+    	this.buttonList.clear();
+    	this.buttonList.add(new GuiButton(0, 0, 0, 0, 0, ""));
+    	this.buttonList.add(new GuiButton(1, 0, 0, 0, 0, ""));
+    }
+    
+    @Override
+    protected void actionPerformed(GuiButton butt) {
+    	switch(butt.id) {
+    	case 0 : incCursorPos();
+    	break;
+    	case 1 : decCursorpos();
+    	break;	
+    	}
+    }
+
+	public int getSizeBar() {
+		return this.sizeBar;
+	}
+
+	public int getSize() {
+		return this.size;
+	}
+
 }

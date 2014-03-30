@@ -6,6 +6,7 @@ import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
+import mak.dc.client.gui.util.GuiRectangleList;
 import mak.dc.client.gui.util.GuiSlider;
 import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
@@ -23,20 +24,18 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiDeadCraftBlockMain extends GuiCustom {
 
-    private GuiRectangle            names;
+    private GuiRectangleList            names;
     private GuiSwitch               lock;
     private GuiTextField            entername;
-    private GuiSlider               scrollSlider;
     private TileEntityDeadCraft     te;
     private String                  user;
     private ArrayList               allowed;
-    private boolean hasChanged;
     private boolean hasToSend;
     private String s;
     private boolean hasInit = false;
 	private boolean isLocked;
 
-    private static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
+    private final  static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
 
     public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te, int iD) {
         super(new ContainerDeadCraft(invPlayer, te, false), iD);
@@ -51,11 +50,9 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         
         this.s = "";
 
-        names = new GuiRectangle(7, 10, 120, 100);
-        scrollSlider = new GuiSlider(108, 25, 49, 0, true);
-        scrollSlider.hide();
-        lock = new GuiSwitch(123, 57, 0, this.isLocked, true); //TODO BUG
-        
+        names = new GuiRectangleList(this, 7, 23, 113,55, allowed, 0, true); //TODO finish
+       
+        lock = new GuiSwitch(this,123, 57, 0, this.isLocked, true); //TODO BUG
         System.out.println("init");
         
 
@@ -64,9 +61,9 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void drawGuiContainerBackgroundLayer (float f, int mouseX, int mouseY) {
         if(!hasInit ) initGui();
-        if(hasChanged) {
+        if(haschange) {
             allowed = te.getAllowedUser();
-            hasChanged = false;
+            haschange = false;
         }
         GL11.glColor4f(1, 1, 1, 1);
 
@@ -74,7 +71,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);   
         
 
-        scrollSlider.draw(this);
+
         lock.draw(this);
         
         
@@ -85,9 +82,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.drawString(this, "lock :", 134 ,58,50, "gray");
         lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
         this.entername.drawTextBox();
-        for (int i = 0; i < allowed.size(); i++) {
-            names.drawString(this, allowed.get(i).toString(), 9, 25 + 10 * i, 110);
-         }
+        names.draw(0, 0);
     }
     
     @Override
@@ -100,40 +95,42 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     public void updateScreen () {
         super.updateScreen();
         this.entername.updateCursorCounter();
-        scrollSlider.updateScreen();
         if(hasToSend) sendPacket();
+        //this.names.updateScreen();
     }
 
 
     @Override
     protected void mouseClicked (int par1, int par2, int par3) {
         super.mouseClicked(par1, par2, par3);
-        scrollSlider.mouseClicked(this,par1,par2,par3);
-        lock.mouseClicked(this, par1, par2,par3);
+        boolean state;
+        state = lock.hasMouseClicked(par1, par2,par3) || names.hasMouseClicked(par1, par2, par3);
         this.isLocked = lock.isActive();
-        this.hasToSend = true;
+        this.hasToSend = state;
   
     }
 
-
-    private void sendPacket() {
+    @Override
+	protected void sendPacket() {
     	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te.xCoord, te.yCoord, te.zCoord, this.allowed, this.isLocked);
     	System.out.println(pkt.toString());
     	DeadCraft.packetPipeline.sendToServer(pkt);
-        this.hasChanged = true;
+        this.haschange = true;
         this.hasToSend = false;
 	}
 
 	@Override
     protected void mouseClickMove (int par1, int par2, int par3, long par4) {
         super.mouseClickMove(par1, par2, par3, par4);
-        scrollSlider.mouseClickMove(this, par1, par2);
+        if( names.hasMouseClickMove(par1, par2, par3, par4)) this.hasToSend = true;
+        
     }
 
     @Override
     protected void mouseMovedOrUp (int par1, int par2, int par3) {
-        super.mouseMovedOrUp(par1, par2, par3);
-        scrollSlider.mouseMovedOrUp(this,par1,par2,par3);
+    	super.mouseMovedOrUp(par1, par2, par3);
+    	if( names.hasMouseMovedOrUp(par1, par2, par3)) this.hasToSend =  true;
+
     }
 
 
@@ -188,7 +185,9 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         	if(!allowed.contains(s)) return;
         	allowed.remove(s);
         }
+        this.haschange = true;
         this.hasToSend = true;
+        
         
     }
 

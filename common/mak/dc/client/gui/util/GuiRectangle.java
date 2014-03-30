@@ -11,19 +11,21 @@ public class GuiRectangle extends GuiScreen{
 	protected int w;
 	protected int h;
 	protected boolean display = true;
+	protected GuiCustom parent;
 		
-	public GuiRectangle(int x, int y, int width, int height) {
+	public GuiRectangle(GuiCustom gui,int x, int y, int width, int height) {
 			
 			this.setX(x);
 			this.setY(y);
 			this.w = width;
 			this.h = height;
+			this.parent = gui;
 	}
 	
 			
-	public boolean inRect(GuiCustom gui, int mouseX, int mouseY) {
-		mouseX -= gui.getLeft();
-		mouseY -= gui.getTop();
+	public boolean inRect(int mouseX, int mouseY) {
+		mouseX -= parent.getLeft();
+		mouseY -= parent.getTop();
 		
 		return getX() <= mouseX && mouseX <= getX() + w && getY() <= mouseY && mouseY <= getY() + h;
 	}
@@ -53,13 +55,11 @@ public class GuiRectangle extends GuiScreen{
 	}
 	
 	
-	public void draw(GuiCustom gui, int srcX, int srcY) {
-		gui.drawTexturedModalRect(gui.getLeft() + getX(), gui.getTop() + getY(), srcX, srcY, w, h);
-	}
+	public void draw(int srcX, int srcY) {}
 	
-	public void drawHoverString(GuiCustom gui, int mouseX, int mouseY, String str) {
-		if (inRect(gui, mouseX, mouseY)) {
-			gui.drawHoverString(Arrays.asList(str.split("\n")), mouseX - gui.getLeft(), mouseY - gui.getTop());
+	public void drawHoverString(int mouseX, int mouseY, String str) {
+		if (inRect(mouseX, mouseY)) {
+			parent.drawHoverString(Arrays.asList(str.split("\n")), mouseX - parent.getLeft(), mouseY - parent.getTop());
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class GuiRectangle extends GuiScreen{
 			re = 0x00FFFF;
 			break;
 		case "blueviolet" :
-		re = 0x8A2BE2;
+			re = 0x8A2BE2;
 			break;
 		case "green" :
 			re = 0x00FF00;
@@ -143,7 +143,22 @@ public class GuiRectangle extends GuiScreen{
 	}
 
 
-	public void mouseClicked(GuiCustom gui, int x, int y, int id) {}
+	public boolean hasMouseClicked(int x, int y, int id) {
+		this.mouseClicked(x, y, id);
+		return false;
+		
+	}
+	public boolean hasMouseMovedOrUp(int par1, int par2, int par3) {
+		this.mouseMovedOrUp(par1, par2, par3);
+		return false;
+	}
+	public boolean hasMouseClickMove(int par1, int par2, int par3, long par4) {
+		this.mouseClickMove(par1, par2, par3, par4);
+		return false;
+	}
+	
+	@Override
+	public void updateScreen() {}
 
 
    
