@@ -14,6 +14,7 @@ public class DeadCraftItems {
 	public static Item mindController;
 	public static Item controller; //TODO finish
 	public static Item superChargedNetherStar; //TODO craft usage
+	public static Item godCan;
 	public static CreativeTabs tabDeadCraft;
 	
 	public static void init() {
@@ -22,11 +23,13 @@ public class DeadCraftItems {
 		lifeCrystal = new ItemLifeCrystal();
 		mindController = new ItemMindController();
 		controller = new ItemController();
+		godCan = new ItemGodCan();
 		
 		GameRegistry.registerItem(deadWand, ItemInfo.DEADWAND_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(lifeCrystal, ItemInfo.LIFECRYSTAL_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(mindController, ItemInfo.MINDCONTROLLER_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(controller, ItemInfo.CONTROLLER_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(godCan, ItemInfo.GODCAN_KEY, Lib.MOD_ID);
 	}
 	
 	public static void postInit() {
@@ -41,6 +44,7 @@ public class DeadCraftItems {
 		lifeCrystal.setCreativeTab(tabDeadCraft);
 		mindController.setCreativeTab(tabDeadCraft);
 		controller.setCreativeTab(tabDeadCraft);
+		godCan.setCreativeTab(tabDeadCraft);
 
 		
 		DeadCraftBlocks.eggSpawner.setCreativeTab(tabDeadCraft);

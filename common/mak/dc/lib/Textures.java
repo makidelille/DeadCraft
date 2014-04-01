@@ -17,6 +17,7 @@ public class Textures {
 	public static final String[] LIFECRYSTAL_TEXT_LOC = { _TEXT_LOC + "lifecrystal",_TEXT_LOC + "lifecrystal_charged"};
 	public static final String[] MINDCONTROLLER_TEXT_LOC = { _TEXT_LOC + "mindcontroller_passive", _TEXT_LOC + "mindcontroller_active",_TEXT_LOC + "mindcontroller_creative" };
 	public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base",_TEXT_LOC + "controller_lock",_TEXT_LOC + "controller_info" };
+	public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
     
 	/** models Textures loac */
 	public static final String[] MINDCONTROLLER_MODEL_TEXT_LOC = {PATH_MODEL + "mindcontrollermodeltexturemap_passive.png",PATH_MODEL + "mindcontrollermodeltexturemap_active.png",PATH_MODEL + "mindcontrollermodeltexturemap_creative.png"};
