@@ -17,6 +17,6 @@ public class ItemInfo {
     public static final String CONTROLLER_UNLOCALIZED_NAME = "controller";
 
 	public static final String GODCAN_KEY = "God-Can";
-	public static final String GODCAN_UNLOCALIZED_NAME = "=godcan";
+	public static final String GODCAN_UNLOCALIZED_NAME = "godcan";
 	
 }

@@ -4,6 +4,8 @@ package mak.dc.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
@@ -64,7 +66,7 @@ public class ItemMindController extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public void addInformation (ItemStack is, EntityPlayer player, List info, boolean par4) {
+    public void addInformation (ItemStack is, EntityPlayer player, List info, boolean par4) { //TODO add more beauty to info panel
         NBTTagCompound tag = is.getTagCompound();
 
         if (tag != null) {
@@ -72,22 +74,22 @@ public class ItemMindController extends Item {
             int charge = tag.getInteger("charge");
             String plrName = tag.getString("player");
 
-            String ListInfo = EnumChatFormatting.AQUA + " creator : " + plrName + EnumChatFormatting.RESET;
-            String listInfo1 = "duarbility : " + dmg + " / " + _maxDamage;
-            String ListInfo2 = "charge : " + charge + "/" + _maxCharge;
-            String ListInfo3 = (is.getItemDamage() == 1 ? EnumChatFormatting.GREEN : EnumChatFormatting.YELLOW)
-                    + "state: " + version[is.getItemDamage()] + "";
+            String ListInfo = EnumChatFormatting.AQUA + "Creator : " +EnumChatFormatting.ITALIC +  plrName + EnumChatFormatting.RESET;
+            String listInfo1 = "duarbility : " + EnumChatFormatting.ITALIC + "" + dmg + " / " + _maxDamage;
+            String ListInfo2 = "charge : " + EnumChatFormatting.ITALIC + "" + charge + "/" + _maxCharge;
+            String ListInfo3 =  (is.getItemDamage() == 1 ? EnumChatFormatting.GREEN : EnumChatFormatting.YELLOW)
+                    + "state: " + EnumChatFormatting.ITALIC + "" + version[is.getItemDamage()] + "";
 
-            info.add(ListInfo);
-            info.add(listInfo1);
-            info.add(ListInfo2);
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo);
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(listInfo1);
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo2);
+            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +" -- Press Shift for more info --");
             info.add(ListInfo3);
 
         } else {
             String listInfo = EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + ""
                     + EnumChatFormatting.UNDERLINE + "right click to activate";
 
-            info.add(EnumChatFormatting.RED + version[is.getItemDamage()]);
             info.add(listInfo);
 
         }

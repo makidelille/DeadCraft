@@ -4,6 +4,8 @@ package mak.dc.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -106,6 +109,12 @@ public class ItemDeadWand extends Item {
             info.add("wand is Charged ! ");
         } else {
             info.add("make " + (stack.getItemDamage()) + " damage to charge !");
+        }
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        	
+        }else{
+        	info.add(EnumChatFormatting.YELLOW + "-- Press " +EnumChatFormatting.ITALIC + "Shift" +EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +  " for more Information --" );
         }
     }
 

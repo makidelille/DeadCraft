@@ -3,6 +3,8 @@ package mak.dc.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.DeadCraft;
 import mak.dc.lib.ItemInfo;
 import mak.dc.lib.Textures;
@@ -42,7 +44,7 @@ public class ItemController extends Item {
         String[] infos = {"","",""};
         infos[0] = EnumChatFormatting.UNDERLINE + "shift right click to change state";
         infos[1] = EnumChatFormatting.RESET + "wrench mode : " +EnumChatFormatting.ITALIC + "" +  (is.getItemDamage() == 0 ? "basic" : (is.getItemDamage() == 1 ? "lock" : (is.getItemDamage() == 2? "infos" : EnumChatFormatting.RED + "should not exist")));
-        infos[2] = getDescription(is.getItemDamage());
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) infos[2] = getDescription(is.getItemDamage());
         
        
         

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockDeadCraft extends Block implements ITileEntityProvider {
+public class BlockDeadCraft extends Block implements ITileEntityProvider { //TODO add ItemBlock with the data of the config
 
     
     protected BlockDeadCraft (Material par2Material) {
