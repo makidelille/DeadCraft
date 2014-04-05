@@ -7,13 +7,17 @@ import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.client.C13PacketPlayerAbilities;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSettings.GameType;
 
 public class ItemGodCan extends Item{
 	
@@ -23,8 +27,7 @@ public class ItemGodCan extends Item{
 		this.setUnlocalizedName(ItemInfo.GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(false);
-		this.setMaxDamage(300);
-		this.setNoRepair();
+		this.setMaxDamage(1200);
 		
 	}
 	
@@ -62,6 +65,13 @@ public class ItemGodCan extends Item{
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
 		if(!world.isRemote) {
 			is.setItemDamage(0);
+			NBTTagCompound tag = is.getTagCompound();
+			if(tag == null) tag = new NBTTagCompound();
+			tag.setString("last user", player.getCommandSenderName());
+			int[] ids = {1};
+			tag.setIntArray("effects ids", ids );
+			System.out.println(tag);
+			is.setTagCompound(tag);
 		}
 		
 		return is;
@@ -71,14 +81,20 @@ public class ItemGodCan extends Item{
 	public void onUpdate(ItemStack is, World world,	Entity ent, int par1, boolean par2) {
 		if(!world.isRemote) {
 			int time = is.getItemDamage();
-			int[] ids = {1};
+			NBTTagCompound tag = is.getTagCompound();
+			if(tag == null) return;
+			int[] ids = {4};
 			if(time < this.getMaxDamage() -1 ) {
+				tag.setBoolean("isActive", true);
 				this.applyEffects(world, ent, ids );
 				is.damageItem(1, (EntityLivingBase) ent);
 			}else{
 				this.removeEffects(world, ent, ids);
-				is.setItemDamage(300);
+				is.setItemDamage(this.getMaxDamage());
+				tag.setBoolean("isActive",false);
+				
 			}
+			is.setTagCompound(tag);
 		}
 	}
 	
@@ -86,20 +102,61 @@ public class ItemGodCan extends Item{
 	public void onCreated(ItemStack is, World world,EntityPlayer player) {
 	}
 	
+	@Override
+	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
+		if(!player.worldObj.isRemote) {
+			NBTTagCompound tag = item.getTagCompound();
+			if(tag != null && tag.getBoolean("isActive"))
+				return false;
+		}
+		
+		return true;
+	}
+	@Override
+	public boolean onEntityItemUpdate(EntityItem entityItem) { //TODO
+		if(!entityItem.worldObj.isRemote) {
+			System.out.println("test");
+			NBTTagCompound tag = entityItem.getEntityData();
+			if(tag!=null){
+				if(tag.getBoolean("isActive")) {
+					String lastUser = tag.getString("last user");
+					EntityPlayer player = entityItem.worldObj.getPlayerEntityByName(lastUser);
+					removeEffects(entityItem.worldObj, player, tag.getIntArray("effects ids"));
+					player.setDead();
+					entityItem.setDead();
+					System.out.println("test2");
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
 	private void applyEffects(World world, Entity ent, int[] effectIds) {
 		if(!world.isRemote) {
 			for (int i=0; i < effectIds.length; i++) {
 				int id = effectIds[i];
+				EntityPlayer player = (EntityPlayer) ent;
 				switch(id) {
-				case 1 : 
-					EntityPlayer player = (EntityPlayer) ent;
+				case 1 :					
 					if(player.capabilities.allowFlying) break;
 					player.capabilities.allowFlying = true;
 					player.sendPlayerAbilities();
 					break;
-				
-				
-				
+				case 2 :
+					player.addPotionEffect(new PotionEffect(1, 20, 5));
+					player.addPotionEffect(new PotionEffect(8, 20, 5));
+					break;
+				case 3:
+					player.addPotionEffect(new PotionEffect(11,20,5));
+					player.addPotionEffect(new PotionEffect(12,20,5));
+					break;
+				case 4:
+					player.addPotionEffect(new PotionEffect(3,20,1000));
+					player.addPotionEffect(new PotionEffect(5,20,100));
+					break;
 				}
 			}
 		}
@@ -110,13 +167,26 @@ public class ItemGodCan extends Item{
 		if(!world.isRemote) {
 			for (int i=0; i < effectIds.length; i++) {
 				int id = effectIds[i];
+				EntityPlayerMP player = (EntityPlayerMP) ent;
 				switch(id) {
 				case 1 : 
-					EntityPlayerMP player = (EntityPlayerMP) ent;
 					if(!player.capabilities.allowFlying) break;
-					player.capabilities.allowFlying = false;
-					player.sendPlayerAbilities();
-					player.setGameType(GameType.SURVIVAL); //TODO i'll have to change the way it works
+					PlayerCapabilities newCap = player.capabilities;
+					newCap.allowFlying = false;
+					player.playerNetServerHandler.processPlayerAbilities(new C13PacketPlayerAbilities(newCap));
+					player.playerNetServerHandler.sendPacket(new net.minecraft.network.play.server.S39PacketPlayerAbilities(newCap));
+					break;
+				case 2 :
+					player.removePotionEffect(1);
+					player.removePotionEffect(8);
+					break;
+				case 3:
+					player.removePotionEffect(11);
+					player.removePotionEffect(12);
+					break;
+				case 4:
+					player.removePotionEffect(3);
+					player.removePotionEffect(5);
 					break;
 				
 				

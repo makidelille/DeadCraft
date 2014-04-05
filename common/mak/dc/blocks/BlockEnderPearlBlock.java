@@ -5,6 +5,7 @@ import java.util.Random;
 import mak.dc.lib.BlockInfo;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,6 +107,13 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
             }
         }
     }
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block,int meta) {
+			
+	}
+
+	
 
 
 
