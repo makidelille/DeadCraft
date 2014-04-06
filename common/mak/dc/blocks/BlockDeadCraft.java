@@ -1,11 +1,12 @@
 package mak.dc.blocks;
 
+import mak.dc.entity.EntityItemDeadCraft;
 import mak.dc.tileEntities.TileEntityDeadCraft;
-import mak.dc.util.NBTTagCompoundDeadCraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
         if(!world.isRemote) {
         	if(is.getTagCompound() != null && world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
 	                TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-	                te.readFromNBT(is.getTagCompound());
+	                te.setFromNBT(is.getTagCompound());
 	                System.out.println("valid");
         	}else if(world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
@@ -50,7 +51,10 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 		            	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
 		            	ItemStack is = new ItemStack(this);
 		            	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
-		            	this.dropBlockAsItem(world, x, y, z, is);
+		            	System.out.println(is.getTagCompound());
+		            	EntityItemDeadCraft entIs = new EntityItemDeadCraft(world, x, y, z, is);       	
+		            	world.spawnEntityInWorld(entIs);
+//		            	this.dropBlockAsItem(world, x, y, z, is);
 		            	world.setBlock(x, y, z, Blocks.air);
 		            	world.removeTileEntity(x, y, z);
 		            	return;

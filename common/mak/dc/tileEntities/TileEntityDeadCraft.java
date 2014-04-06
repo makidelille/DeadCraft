@@ -142,6 +142,17 @@ public class TileEntityDeadCraft extends TileEntity {
 		return nbtTagCompound;
 	}
 
+	public void setFromNBT(NBTTagCompound tagCompound) {
+		this.owner = tagCompound.getString("owner");
+        int nbersAll = tagCompound.getInteger("nbAlllowed");
+        for (int i = 0; i < nbersAll; i++ ) {
+            allowed.add(tagCompound.getString("allowed [" +i+ "]"));
+        }
+        this.locked = tagCompound.getBoolean("locked");
+        this.isManagable = tagCompound.getBoolean("managable");
+		
+	}
+
 
 
 
