@@ -1,8 +1,8 @@
 package mak.dc.blocks;
 
-import mak.dc.lib.BlockInfo;
-import mak.dc.lib.TileEntitiesInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.tileEntities.TileEntityEggSpawner;
+import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,21 +13,26 @@ public class DeadCraftBlocks {
 	
 	public static Block eggSpawner;
 	public static Block enderPearlBlock;
+	public static Block godBottler;
 
 	public static void init() {
 		
 		eggSpawner = new BlockEggSpawner();
 		enderPearlBlock = new BlockEnderPearlBlock();
+		godBottler = new BlockGodBottler();
 		
-		GameRegistry.registerBlock(eggSpawner, BlockInfo.EGGSPAWNER_KEY);
-		GameRegistry.registerBlock(enderPearlBlock, BlockInfo.ENDERPEARLBLOCK_KEY);
+		
+		GameRegistry.registerBlock(eggSpawner, IBTInfos.BLOCK_EGGSPAWNER_KEY);
+		GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
+		GameRegistry.registerBlock(godBottler, IBTInfos.BLOCK_BOTTLER_KEY);
 	}
 	
 	
 	
 	
 	public static void initTileEntity() {
-		GameRegistry.registerTileEntity(TileEntityEggSpawner.class, TileEntitiesInfo.EGGSPANWER_TILE_KEY);
+		GameRegistry.registerTileEntity(TileEntityEggSpawner.class, IBTInfos.TILE_EGGSPANWER_KEY);
+		GameRegistry.registerTileEntity(TileEntityGodBottler.class, IBTInfos.TILE_BOTTLER_KEY);
 	}
 	
 	

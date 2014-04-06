@@ -4,10 +4,8 @@ package mak.dc.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.util.DamageSourceDeadCraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,6 +25,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,7 +44,7 @@ public class ItemMindController extends Item {
 
     public ItemMindController () {
         super();
-        this.setUnlocalizedName(ItemInfo.MINDCONTROLLER_UNLOCALIZED_NAME);
+        this.setUnlocalizedName(IBTInfos.ITEM_MINDCONTROLLER_UNLOCALIZED_NAME);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setNoRepair();
@@ -83,8 +84,8 @@ public class ItemMindController extends Item {
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo);
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(listInfo1);
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo2);
-            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +" -- Press Shift for more info --");
-            info.add(ListInfo3);
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo3);
+            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +" -- Press Shift for info --");
 
         } else {
             String listInfo = EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + ""

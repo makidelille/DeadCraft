@@ -3,10 +3,8 @@ package mak.dc.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import mak.dc.DeadCraft;
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.network.DeadCraftAdminPacket;
 import mak.dc.tileEntities.TileEntityDeadCraft;
@@ -17,9 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +31,7 @@ public class ItemController extends Item {
 
     public ItemController () {
         super();
-        this.setUnlocalizedName(ItemInfo.CONTROLLER_KEY);
+        this.setUnlocalizedName(IBTInfos.ITEM_CONTROLLER_KEY);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
     }

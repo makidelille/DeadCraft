@@ -2,7 +2,7 @@ package mak.dc.blocks;
 
 import java.util.Random;
 
-import mak.dc.lib.BlockInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.Block;
@@ -27,7 +27,7 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
 
     public BlockEnderPearlBlock() {
         super(Material.rock);
-        this.setBlockName(BlockInfo.ENDERPEARLBLOCK_UNLOACLIZED_NAME);
+        this.setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_UNLOACLIZED_NAME);
         this.setHardness(3.0F);
         this.setResistance(1.5F);
         this.setTickRandomly(true);

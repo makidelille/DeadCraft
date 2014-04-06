@@ -2,7 +2,7 @@ package mak.dc.items;
 
 import java.util.List;
 
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -24,7 +24,7 @@ public class ItemGodCan extends Item{
 	
 	public ItemGodCan(){ //TODO
 		super();
-		this.setUnlocalizedName(ItemInfo.GODCAN_UNLOCALIZED_NAME);
+		this.setUnlocalizedName(IBTInfos.ITEM_GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(false);
 		this.setMaxDamage(1200);
@@ -68,10 +68,13 @@ public class ItemGodCan extends Item{
 			NBTTagCompound tag = is.getTagCompound();
 			if(tag == null) tag = new NBTTagCompound();
 			tag.setString("last user", player.getCommandSenderName());
-			int[] ids = {1};
+			int[] ids = {1,2,3,4};
 			tag.setIntArray("effects ids", ids );
-			System.out.println(tag);
 			is.setTagCompound(tag);
+			if(player.isSneaking()) {
+				removeEffects(world, player, ids);
+				is.setItemDamage(getMaxDamage());
+			}
 		}
 		
 		return is;
@@ -83,16 +86,15 @@ public class ItemGodCan extends Item{
 			int time = is.getItemDamage();
 			NBTTagCompound tag = is.getTagCompound();
 			if(tag == null) return;
-			int[] ids = {4};
+			int[] ids = tag.getIntArray("effects ids");
 			if(time < this.getMaxDamage() -1 ) {
 				tag.setBoolean("isActive", true);
 				this.applyEffects(world, ent, ids );
 				is.damageItem(1, (EntityLivingBase) ent);
-			}else{
+			}else if(time == this.getMaxDamage()){
 				this.removeEffects(world, ent, ids);
 				is.setItemDamage(this.getMaxDamage());
 				tag.setBoolean("isActive",false);
-				
 			}
 			is.setTagCompound(tag);
 		}

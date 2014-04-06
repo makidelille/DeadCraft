@@ -2,7 +2,7 @@ package mak.dc.tileEntities;
 
 import mak.dc.items.DeadCraftItems;
 import mak.dc.items.ItemLifeCrystal;
-import mak.dc.lib.TileEntitiesInfo;
+import mak.dc.lib.IBTInfos;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -420,7 +420,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public String getInventoryName() {
-		return TileEntitiesInfo.EGGSPAWNER_TILE_NAME;
+		return IBTInfos.TILE_EGGSPAWNER_NAME;
 	}
 
 	@Override

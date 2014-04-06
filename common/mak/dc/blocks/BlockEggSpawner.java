@@ -3,7 +3,7 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
-import mak.dc.lib.BlockInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.block.Block;
@@ -29,7 +29,7 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		this.setResistance(10F);
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.5F);
-		this.setBlockName(BlockInfo.EGGSPAWNER_UNLOCALIZED_NAME);
+		this.setBlockName(IBTInfos.BLOCK_EGGSPAWNER_UNLOCALIZED_NAME);
 		}
 
 	@Override

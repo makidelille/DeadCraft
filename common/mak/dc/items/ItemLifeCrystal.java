@@ -3,7 +3,7 @@ package mak.dc.items;
 // TODO add the func to change the charge of crystal here and not in the other
 // files /D
 
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +29,7 @@ public class ItemLifeCrystal extends ItemFood {
     public ItemLifeCrystal () {
         super( 0, false);
         this.setMaxDamage(_maxValue);
-        this.setUnlocalizedName(ItemInfo.LIFECRYSTAL_UNLOCALIZED_NAME);
+        this.setUnlocalizedName(IBTInfos.ITEM_LIFECRYSTAL_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
         this.setMaxStackSize(1);
         this.setAlwaysEdible();

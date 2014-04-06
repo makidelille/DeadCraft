@@ -4,9 +4,7 @@ package mak.dc.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -20,6 +18,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,7 +32,7 @@ public class ItemDeadWand extends Item {
     public ItemDeadWand () {
         super();
         this.setMaxStackSize(1);
-        this.setUnlocalizedName(ItemInfo.DEADWAND_UNLOCALIZED_NAME);
+        this.setUnlocalizedName(IBTInfos.ITEM_DEADWAND_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
         this.setMaxDamage(1000);
 

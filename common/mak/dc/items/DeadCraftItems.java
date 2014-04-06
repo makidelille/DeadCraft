@@ -1,7 +1,7 @@
 package mak.dc.items;
 
 import mak.dc.blocks.DeadCraftBlocks;
-import mak.dc.lib.ItemInfo;
+import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Lib;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -25,11 +25,11 @@ public class DeadCraftItems {
 		controller = new ItemController();
 		godCan = new ItemGodCan();
 		
-		GameRegistry.registerItem(deadWand, ItemInfo.DEADWAND_KEY, Lib.MOD_ID);
-		GameRegistry.registerItem(lifeCrystal, ItemInfo.LIFECRYSTAL_KEY, Lib.MOD_ID);
-		GameRegistry.registerItem(mindController, ItemInfo.MINDCONTROLLER_KEY, Lib.MOD_ID);
-		GameRegistry.registerItem(controller, ItemInfo.CONTROLLER_KEY, Lib.MOD_ID);
-		GameRegistry.registerItem(godCan, ItemInfo.GODCAN_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(deadWand, IBTInfos.ITEM_DEADWAND_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(lifeCrystal, IBTInfos.ITEM_LIFECRYSTAL_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(mindController, IBTInfos.ITEM_MINDCONTROLLER_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(controller, IBTInfos.ITEM_CONTROLLER_KEY, Lib.MOD_ID);
+		GameRegistry.registerItem(godCan, IBTInfos.ITEM_GODCAN_KEY, Lib.MOD_ID);
 	}
 	
 	public static void postInit() {
@@ -49,6 +49,7 @@ public class DeadCraftItems {
 		
 		DeadCraftBlocks.eggSpawner.setCreativeTab(tabDeadCraft);
 		DeadCraftBlocks.enderPearlBlock.setCreativeTab(tabDeadCraft);
+		DeadCraftBlocks.godBottler.setCreativeTab(tabDeadCraft);
 	}
 
 	public static void registerCraftRecipe() {
