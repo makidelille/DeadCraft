@@ -1,5 +1,6 @@
 package mak.dc.blocks;
 
+import mak.dc.items.itemBlock.ItemBlockDeadCraft;
 import mak.dc.lib.IBTInfos;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
@@ -22,9 +23,10 @@ public class DeadCraftBlocks {
 		godBottler = new BlockGodBottler();
 		
 		
-		GameRegistry.registerBlock(eggSpawner, IBTInfos.BLOCK_EGGSPAWNER_KEY);
+		GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
 		GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
 		GameRegistry.registerBlock(godBottler, IBTInfos.BLOCK_BOTTLER_KEY);
+
 	}
 	
 	

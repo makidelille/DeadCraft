@@ -83,6 +83,21 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileEntityDeadCraft();
 	}
+
+
+	public boolean canBePlaced(int x, int y, int z) {
+		return true;
+	}
+
+
+	public void place(World world, int x, int y, int z, ItemStack is) {
+		if(!world.isRemote) {
+			world.setBlock(x, y, z, this);
+			if(world.getTileEntity(x, y, z)!=null && is.getTagCompound() != null)
+				world.getTileEntity(x, y, z).readFromNBT(is.getTagCompound());
+		}
+		
+	}
 	
 	
 
