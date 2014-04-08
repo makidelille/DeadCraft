@@ -96,7 +96,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         this.names.updateScreen();
         if(haschange) {
             allowed = te.getAllowedUser();
-            names.updateList(allowed);
+   //         names.updateList(allowed);
             haschange = false;
         }
     }
@@ -116,7 +116,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 	protected void sendPacket() {
     	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te.xCoord, te.yCoord, te.zCoord, this.allowed, this.isLocked);
     	System.out.println(pkt.toString());
-    	DeadCraft.packetPipeline.sendToServer(pkt);
+    	DeadCraft.packetPipeline.sendToServer(pkt); //XXX
         this.haschange = true;
         this.hasToSend = false;
 	}

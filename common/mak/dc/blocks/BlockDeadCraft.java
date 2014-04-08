@@ -52,11 +52,9 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 		            	ItemStack is = new ItemStack(this);
 		            	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
 		            	System.out.println(is.getTagCompound());
-		            	EntityItemDeadCraft entIs = new EntityItemDeadCraft(world, x, y, z, is);       	
-		            	world.spawnEntityInWorld(entIs);
-//		            	this.dropBlockAsItem(world, x, y, z, is);
-		            	world.setBlock(x, y, z, Blocks.air);
+		            	this.dropBlockAsItem(world, x, y, z, is);       	
 		            	world.removeTileEntity(x, y, z);
+		            	world.setBlock(x, y, z, Blocks.air);
 		            	return;
 		            	}
 		    }}
@@ -72,11 +70,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 	        }
         return false;
     }
-    
-   @Override
-	protected void dropBlockAsItem(World world, int x,	int y, int z, ItemStack is) {
-   }
-    
+  
     
 
 	@Override
@@ -89,16 +83,6 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 		return true;
 	}
 
-
-	public void place(World world, int x, int y, int z, ItemStack is) {
-		if(!world.isRemote) {
-			world.setBlock(x, y, z, this);
-			if(world.getTileEntity(x, y, z)!=null && is.getTagCompound() != null)
-				world.getTileEntity(x, y, z).readFromNBT(is.getTagCompound());
-		}
-		
-	}
-	
 	
 
 	

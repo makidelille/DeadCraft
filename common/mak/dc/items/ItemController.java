@@ -93,6 +93,7 @@ public class ItemController extends Item {
                 && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
+            showData(te,player);
             if (te.isUserCreator(username) && !player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:

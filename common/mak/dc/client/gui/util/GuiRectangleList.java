@@ -31,7 +31,6 @@ public class GuiRectangleList extends GuiRectangle {
 		 scrollSlider = new GuiSlider(gui, x + width - 12, y + 2, height - 5 ,15, sliderId, isSliderVertical);  
 	     this.list = list;
 	     this._MAXSIZE =  (int) (-1 + (int) (width /5));
-	     System.out.println(_MAXSIZE);
 	
 	}
 	
@@ -60,7 +59,7 @@ public class GuiRectangleList extends GuiRectangle {
 		
 		
 		for(int index =0 ; index < list.size(); index++) {
-			System.out.println(index);
+	//		System.out.println(index);
 			String str = getStringToDisplay(index);
 			int size = (1+str.length() / _MAXSIZE) * 9;
 			for(int i =0; i < this.w - 15; i++) 
