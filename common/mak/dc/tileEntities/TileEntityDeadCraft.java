@@ -96,7 +96,7 @@ public class TileEntityDeadCraft extends TileEntity {
                 if(allowed.size() != 0) {       
                     for (int i = 0; i < nbersAll; i++ ) 
                         nbtTagCompound.setString("allowed [" +i+ "]" , allowed.get(i).toString());
-                    nbtTagCompound.setInteger("nbAlllowed", nbersAll);
+                    nbtTagCompound.setInteger("nbAllowed", nbersAll);
                 }
         nbtTagCompound.setBoolean("locked", locked);
         nbtTagCompound.setBoolean("managable", isManagable);
@@ -108,7 +108,7 @@ public class TileEntityDeadCraft extends TileEntity {
         super.readFromNBT(nbtTagCompound);
         
         this.owner = nbtTagCompound.getString("owner");
-        int nbersAll = nbtTagCompound.getInteger("nbAlllowed");
+        int nbersAll = nbtTagCompound.getInteger("nbAllowed");
         for (int i = 0; i < nbersAll; i++ ) {
             allowed.add(nbtTagCompound.getString("allowed [" +i+ "]"));
         }
@@ -135,7 +135,7 @@ public class TileEntityDeadCraft extends TileEntity {
                 if(allowed.size() != 0) {       
                     for (int i = 0; i < nbersAll; i++ ) 
                         nbtTagCompound.setString("allowed [" +i+ "]" , allowed.get(i).toString());
-                    nbtTagCompound.setInteger("nbAlllowed", nbersAll);
+                    nbtTagCompound.setInteger("nbAllowed", nbersAll);
                 }
         nbtTagCompound.setBoolean("locked", locked);
         nbtTagCompound.setBoolean("managable", isManagable);
@@ -144,7 +144,7 @@ public class TileEntityDeadCraft extends TileEntity {
 
 	public void setFromNBT(NBTTagCompound tagCompound) {
 		this.owner = tagCompound.getString("owner");
-        int nbersAll = tagCompound.getInteger("nbAlllowed");
+        int nbersAll = tagCompound.getInteger("nbAllowed");
         for (int i = 0; i < nbersAll; i++ ) {
             allowed.add(tagCompound.getString("allowed [" +i+ "]"));
         }

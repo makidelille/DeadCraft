@@ -21,9 +21,13 @@ public class CommonProxy {
 
 	public void init() {
 		registerRender();
+		registerTileEntityRender();
 		registerSounds();
 		new GuiHandler();
 		
+	}
+
+	public void registerTileEntityRender() {		
 	}
 
 }

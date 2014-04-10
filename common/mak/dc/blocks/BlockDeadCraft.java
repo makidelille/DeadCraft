@@ -79,8 +79,8 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 	}
 
 
-	public boolean canBePlaced(int x, int y, int z) {
-		return true;
+	public boolean canBePlaced(World world,int x, int y, int z) {
+		return world.isAirBlock(x, y, z);
 	}
 
 	

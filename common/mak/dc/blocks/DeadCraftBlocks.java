@@ -15,17 +15,20 @@ public class DeadCraftBlocks {
 	public static Block eggSpawner;
 	public static Block enderPearlBlock;
 	public static Block godBottler;
+	public static Block fakeBlock;
 
 	public static void init() {
 		
 		eggSpawner = new BlockEggSpawner();
 		enderPearlBlock = new BlockEnderPearlBlock();
 		godBottler = new BlockGodBottler();
+		fakeBlock = new BlockFake();
 		
 		
 		GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
 		GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
-		GameRegistry.registerBlock(godBottler, IBTInfos.BLOCK_BOTTLER_KEY);
+		GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);
+		GameRegistry.registerBlock(fakeBlock, "fake");
 
 	}
 	

@@ -89,8 +89,7 @@ public class ItemMindController extends Item {
 
         } else {
             String listInfo = EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + ""
-                    + EnumChatFormatting.UNDERLINE + "right click to activate";
-
+                    + EnumChatFormatting.UNDERLINE + "Right click to activate";
             info.add(listInfo);
 
         }

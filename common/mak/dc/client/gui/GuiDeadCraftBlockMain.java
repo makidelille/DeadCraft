@@ -183,12 +183,13 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         if(button.id == 0){
         	if(allowed.contains(s)) return;        	
         	allowed.add(s);
+        	sendPacket();
         }else if(button.id == 1 ) {
         	if(!allowed.contains(s)) return;
         	allowed.remove(s);
+        	sendPacket();
         }
         this.haschange = true;
-        this.hasToSend = true;
         
         
     }
