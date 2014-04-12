@@ -53,8 +53,7 @@ public class DeadCraftItems {
 	}
 
 	public static void registerCraftRecipe() {
-		// TODO Auto-generated method stub
-		
+		//TODO add craft recipe	
 	}
 
 }

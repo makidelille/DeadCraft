@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class ItemGodCan extends Item{
 	
 	
-	public ItemGodCan(){ //TODO
+	public ItemGodCan(){ //TODO finish
 		super();
 		this.setUnlocalizedName(IBTInfos.ITEM_GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
@@ -35,7 +35,7 @@ public class ItemGodCan extends Item{
 	@Override
 	public void addInformation(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		// TODO Auto-generated method stub
+		// TODO add infos
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 	}
 	
@@ -56,7 +56,6 @@ public class ItemGodCan extends Item{
 //	
 //	@Override
 //	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
-//		// TODO Auto-generated method stub
 //		return super.getIconFromDamageForRenderPass(par1, par2);
 //	}
 	
@@ -115,7 +114,7 @@ public class ItemGodCan extends Item{
 		return true;
 	}
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) { //TODO
+	public boolean onEntityItemUpdate(EntityItem entityItem) { //TODO almost finish
 		if(!entityItem.worldObj.isRemote) {
 			System.out.println("test");
 			NBTTagCompound tag = entityItem.getEntityData();

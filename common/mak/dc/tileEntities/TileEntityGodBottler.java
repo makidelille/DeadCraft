@@ -11,17 +11,23 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	private int time;
 	private int starsInStock;
 	private boolean hasStated;
+	private boolean isTop;
 	private ItemStack[] inventory ;
 	
 	
 	
-	public TileEntityGodBottler() {
+	public TileEntityGodBottler(boolean top) {
 		super(true);
+		this.isTop = top;
 	}
-
-
-
 	
+	public boolean isTop() {
+		return this.isTop;
+	}
+	
+	public void setTop() {
+		this.isTop = true;
+	}	
 
 
 
@@ -34,47 +40,46 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public String getInventoryName() {
-		return null;
+		return isTop ? null : "GodBottler";
 	}
 
 
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 0;
+		return isTop ? 0 : 1;
 	}
 
 
 
 	@Override
 	public int getSizeInventory() {
-		return 0;
+		return isTop ? 0 : inventory.length;
 	}
 
 
 
 	@Override
 	public ItemStack getStackInSlot(int var1) {
-		return null;
+		return isTop ? null : inventory[var1];
 	}
 
 
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
-		return this.inventory[var1];
+		return isTop? null :this.inventory[var1];
 	}
 	
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2) {
-		
+		if (isTop) return;
 	}
 
 
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -82,16 +87,16 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
-		// TODO Auto-generated method stub
-		return false;
+		if (isTop) return false;
+		return true;
 	}
 
 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		// TODO Auto-generated method stub
-		return false;
+		if (isTop) return false;
+		return true;
 	}
 
 

@@ -27,6 +27,8 @@ public class Textures {
 	public static final String UTIL_GUI_TEXT_LOC = PATH_GUI +  "util.png";
     public static final String DEADCRAFTMAIN_GUI_TEXT_LOC = PATH_GUI + "deadcraftmain.png";
 
+	public static final String GODBOTTLER_MODEL_TEXT_LOC = "godcan";
+
  
 
 	

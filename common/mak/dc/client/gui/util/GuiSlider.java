@@ -125,7 +125,7 @@ public class GuiSlider extends GuiRectangle {
         }return false;
     }
 
-    public void wheel (int x, int y) { // TODO
+    public void wheel (int x, int y) { // TODO later
         int dx = Mouse.getDWheel();
         if(dx > 0) actionPerformed((GuiButton) this.buttonList.get(0));
         if(dx < 0) actionPerformed((GuiButton) this.buttonList.get(1));

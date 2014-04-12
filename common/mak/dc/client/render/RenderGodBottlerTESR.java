@@ -57,6 +57,7 @@ public class RenderGodBottlerTESR implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		if(world.getBlockMetadata(x, y, z) == 1) return false;
 		return true;
 	}
 

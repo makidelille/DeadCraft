@@ -13,8 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer implements IInventoryRenderer {
 
 	private final ModelGodBottler model = new ModelGodBottler();
-	public static final ResourceLocation textLocTB = new ResourceLocation("");
-	public static final ResourceLocation textLocLR = new ResourceLocation("");
+	public static final ResourceLocation textLoc = new ResourceLocation("");
 	
 	public SpecialRenderTileEntityGodBottler() {	
 		this.func_147497_a(TileEntityRendererDispatcher.instance);
@@ -36,7 +35,7 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
-		this.bindTexture(textLocLR);
+		this.bindTexture(textLoc);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		this.model.render(0.0625F);
 		GL11.glPopMatrix();
