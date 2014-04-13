@@ -27,7 +27,7 @@ public class IBTInfos {
 	public static final String BLOCK_ENDERPEARLBLOCK_UNLOACLIZED_NAME = "Enderpearlblock";
 	
 	public static final String BLOCK_BOTTLER_KEY = "godBottler";
-	public static final String BLOCK_BOTLLER_UNLOCALIZED_NAME = "God Bottler";
+	public static final String BLOCK_BOTTLER_UNLOCALIZED_NAME = "God Bottler";
 	
 	public static final String TILE_EGGSPANWER_KEY = "eggspawnertileentity";
 	public static final String TILE_EGGSPAWNER_NAME = "Dragon Egg Spawner Tile Entity";

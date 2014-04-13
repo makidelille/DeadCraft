@@ -1,8 +1,5 @@
 package mak.dc.proxy;
 
-import mak.dc.blocks.DeadCraftBlocks;
-import mak.dc.client.render.RenderGodBottlerTESR;
-import mak.dc.client.render.RenderGodBottlerTESR.TESRIndex;
 import mak.dc.client.render.RendererMindController;
 import mak.dc.client.render.SpecialRenderTileEntityGodBottler;
 import mak.dc.items.DeadCraftItems;
@@ -27,13 +24,11 @@ public class ClientProxy extends CommonProxy{
 	public void registerRender() {
 		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.mindController, new RendererMindController());
 		renderGodBottlerTESRId = RenderingRegistry.getNextAvailableRenderId();
-		RenderingRegistry.registerBlockHandler(new RenderGodBottlerTESR());
 	}
 	
 	@Override
 	public void registerTileEntityRender() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGodBottler.class, new SpecialRenderTileEntityGodBottler());
-		RenderGodBottlerTESR.blockByTESR.put(new TESRIndex(DeadCraftBlocks.godBottler,0), new SpecialRenderTileEntityGodBottler());
 	}
 	
 	@Override
