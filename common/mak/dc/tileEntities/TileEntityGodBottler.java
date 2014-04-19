@@ -14,10 +14,12 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	private int time;
 	private int starsInStock;
-	private byte facing;
+	public int facing;
 	private boolean hasStated;
 	private boolean isTop;
 	private ItemStack[] inventory ;
+
+	private int tick;
 	
 	
 	
@@ -39,6 +41,14 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		this.isTop = true;
 	}
 	
+	public void setPair(TileEntityGodBottler te) {
+		this.pair = te;
+	}
+	
+	@Override
+	public void updateEntity() {
+		this.setTick(this.getTick() + 1);
+	}
 
 
 
@@ -114,14 +124,14 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		this.isTop = nbtTagCompound.getBoolean("top");
-		this.facing = nbtTagCompound.getByte("face");
+		this.facing = nbtTagCompound.getInteger("face");
 		
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setByte("face", this.facing);
+		nbtTagCompound.setInteger("face", this.facing);
 		nbtTagCompound.setBoolean("top", this.isTop);
 	}
 
@@ -133,13 +143,32 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	@Override
 	public void closeInventory() {}
 
-	public byte getFacing() {
+	public int getFacing() {
 		return facing;
 	}
 
-	public void setFacing(byte facing) {
-		this.facing = facing;
+	public void setFacing(int i) {
+		this.facing = i;
 	}
+
+	public int getTick() {
+		return tick / 10000;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public void setup(TileEntityGodBottler te) {
+		this.facing = te.getFacing();
+		this.pair = te;
+		this.allowed = te.allowed;
+		this.owner = te.owner;
+		this.isManagable = te.isManagable;
+		this.locked = te.locked;
+		this.setTop();
+	}
+
 
 
 	

@@ -23,6 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockEggSpawner extends BlockDeadCraft {
 
+	public final static int DeadCraftId = 1;
 	
 	public BlockEggSpawner() {
 		super(Material.iron);

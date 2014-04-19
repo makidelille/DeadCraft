@@ -17,12 +17,31 @@ import net.minecraft.world.World;
 public abstract class BlockDeadCraft extends Block implements ITileEntityProvider { //TODO add ItemBlock with the data of the config
 
     
+	private static int DeadCraftId;
+	
+	public static void init() {
+		DeadCraftId = 0;
+	}
+	
+	public static void setid(int id) {
+		DeadCraftId = id;
+	}
+	
+	public static int getId() {
+		return DeadCraftId;
+	}
+	
+	public static int getNextId() {
+		return DeadCraftId++;
+	}
+	
     protected BlockDeadCraft (Material par2Material) {
         super(par2Material);
         this.setBlockUnbreakable();
         this.setResistance(-1F);
+       
     }
-
+    
       
     @Override
     public void onBlockPlacedBy (World world, int x, int y, int z, EntityLivingBase ent,  ItemStack is) {
@@ -75,7 +94,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileEntityDeadCraft();
+		return new TileEntityDeadCraft(true);
 	}
 
 

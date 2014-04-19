@@ -1,4 +1,4 @@
-package mak.dc.client.render;
+package mak.dc.client.render.item;
 
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
@@ -11,13 +11,13 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-public class RendererMindController implements IItemRenderer {
+public class RendererItemMindController implements IItemRenderer {
 
 	protected ModelMindController model;
 	protected static final ResourceLocation[] texture = {new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[0]),new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[1]),new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[2])};
 	
 	
-	public RendererMindController () {
+	public RendererItemMindController () {
 		model = new ModelMindController();
 	}
 	

@@ -1,10 +1,10 @@
 package mak.dc.items.itemBlock;
 
-import mak.dc.blocks.BlockDeadCraft;
+import net.minecraft.block.Block;
 
 public class ItemBlockEggSpawner extends ItemBlockDeadCraft {
 
-	public ItemBlockEggSpawner(BlockDeadCraft block) {
+	public ItemBlockEggSpawner(Block block) {
 		super(block);
 	}
 

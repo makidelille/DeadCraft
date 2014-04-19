@@ -9,13 +9,12 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     private static final byte deadcraftId = 0;
+    
 	protected String owner;
     protected ArrayList<String> allowed;
     protected boolean locked;
     protected boolean isManagable;
-    
-    public TileEntityDeadCraft() {}
-    
+       
     public TileEntityDeadCraft(boolean isManagable) {
         this.locked = false;
         this.owner = "null";
@@ -123,10 +122,6 @@ public class TileEntityDeadCraft extends TileEntity {
 
 	public byte getID() {
 		return this.deadcraftId;
-	}
-
-	public int[] getData() {
-		return null;
 	}
 
 	public NBTTagCompound writeNBTData(NBTTagCompound nbtTagCompound) {

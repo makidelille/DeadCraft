@@ -6,6 +6,7 @@ public class Textures {
 	
 	private static final String PATH_MODEL = "textures/models/";
 	public static final String PATH_GUI = "textures/gui/";
+	public static final String NULL_BI = _TEXT_LOC + "texture_null.png";
 	
 	
 	/** Blocks textures localization*/
@@ -19,15 +20,16 @@ public class Textures {
 	public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base",_TEXT_LOC + "controller_lock",_TEXT_LOC + "controller_info" };
 	public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
     
-	/** models Textures loac */
+	/** Models Textures localization */
 	public static final String[] MINDCONTROLLER_MODEL_TEXT_LOC = {PATH_MODEL + "mindcontrollermodeltexturemap_passive.png",PATH_MODEL + "mindcontrollermodeltexturemap_active.png",PATH_MODEL + "mindcontrollermodeltexturemap_creative.png"};
+	public static final String GODBOTTLER_MODEL_TEXT_LOC = PATH_MODEL + "godbottlertexturemap.png";
 	
-	/**gui*/
+	/**Gui*/
 	public static final String EGGSPAWNER_GUI_TEXT_LOC = PATH_GUI + "eggspawner.png";
 	public static final String UTIL_GUI_TEXT_LOC = PATH_GUI +  "util.png";
     public static final String DEADCRAFTMAIN_GUI_TEXT_LOC = PATH_GUI + "deadcraftmain.png";
 
-	public static final String GODBOTTLER_MODEL_TEXT_LOC = "godcan";
+
 
  
 

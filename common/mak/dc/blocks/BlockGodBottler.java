@@ -1,6 +1,9 @@
 package mak.dc.blocks;
 
+import java.util.Random;
+
 import mak.dc.lib.IBTInfos;
+import mak.dc.lib.Textures;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
@@ -8,6 +11,7 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -16,9 +20,11 @@ import net.minecraft.world.World;
 public class BlockGodBottler extends BlockDeadCraft {
 
 	
+	
 	public BlockGodBottler() {
 		super(Material.iron);
 		this.setBlockName(IBTInfos.BLOCK_BOTTLER_UNLOCALIZED_NAME);
+		this.setBlockTextureName(Textures.NULL_BI);
 		
 	}
 	
@@ -45,28 +51,18 @@ public class BlockGodBottler extends BlockDeadCraft {
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
-		if(!world.isRemote) {
-			System.out.println("test");
-			if(world.getBlockMetadata(x, y, z) == 0) {
-				world.setBlock(x, y+1, z, this,1 ,3);
-			}
-			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
+		if(!(world.isRemote))	{
+			world.setBlock(x, y+1, z, this,5,3);
+			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 			if(te instanceof TileEntityGodBottler) {
-				te.setTop();
+					byte face = (byte) (MathHelper.floor_double((double)(ent.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
+					te.setFacing(face);
 			}
-			te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-			if(te instanceof TileEntityGodBottler) {
-				byte face = (byte) (MathHelper.floor_double((double)(ent.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-				System.out.println(face);
-	                //0 = +Z
-	                //1 = -X
-	                //2 = -Z
-	                //3 = +X
-				 
-				te.setFacing(face);
-				System.out.println(te.getFacing());
-			}
+			TileEntityGodBottler teTop = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
+			super.onBlockPlacedBy(world, te.xCoord, te.yCoord, te.zCoord, ent, is);
+			teTop.setup(te);
 		}
+
 	}
 	
 //	@Override
@@ -80,30 +76,42 @@ public class BlockGodBottler extends BlockDeadCraft {
 //		}
 //	}
 	
+	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		System.out.println("-----");
 		if(!world.isRemote) {
 			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-			te.setFacing((byte) (MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3));
+			int face = (MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
+			System.out.println(face);
+			te.setFacing(face);
+			System.out.println(te.getFacing());
 		}
+		TileEntityGodBottler teCl = (TileEntityGodBottler) world.getTileEntity(x, y, z);
+		System.out.println(teCl.getFacing());
 		
 		return false;
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World world, int x,int y, int z, Block block) {
-		if(!(block instanceof BlockGodBottler)) return;
-		if((world.getBlock(x, y+1, z) instanceof BlockAir && world.getBlockMetadata(x, y, z) == 0)) {
-			this.breakBlock(world, x, y, z, this, world.getBlockMetadata(x, y, z));
-			return;
+	public void breakBlock(World world, int x, int y,	int z, Block block, int meta) {
+		if(!world.isRemote) {
+			TileEntityGodBottler teTop;
+			TileEntityGodBottler teBot = (TileEntityGodBottler) world.getTileEntity(x, y, z);
+			if(teBot.isTop()) {
+				teTop = teBot;
+				teBot =  (TileEntityGodBottler) world.getTileEntity(x, y-1, z);
+			}
+			else teTop = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
+			if(teTop != null) {
+				this.dropBlockAsItem(world, teTop.xCoord,teTop.yCoord, teTop.zCoord, new ItemStack(block,0,0));
+				world.setBlockToAir(teTop.xCoord,teTop.yCoord, teTop.zCoord);
+			}
+			if(teBot != null) {
+				this.dropBlockAsItem(world, teBot.xCoord,teBot.yCoord, teBot.zCoord, new ItemStack(block));
+			}
+			
 		}
-		if((world.getBlock(x, y-1, z) instanceof BlockAir) && world.getBlockMetadata(x, y, z) == 1) {
-			world.setBlockToAir(x, y, z);
-			return;
-		}
-		if (!(world.getBlock(x, y+1, z) instanceof BlockGodBottler)) return;
-		TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
-		
 	}
 	
 
@@ -112,7 +120,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+		
 	@Override
 	public int getRenderType() {
 		return ClientProxy.renderGodBottlerTESRId;

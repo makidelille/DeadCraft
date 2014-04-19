@@ -1,7 +1,7 @@
 package mak.dc.proxy;
 
-import mak.dc.client.render.RendererMindController;
-import mak.dc.client.render.SpecialRenderTileEntityGodBottler;
+import mak.dc.client.render.block.SpecialRenderTileEntityGodBottler;
+import mak.dc.client.render.item.RendererItemMindController;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.world.World;
@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy{
 	
 	@Override
 	public void registerRender() {
-		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.mindController, new RendererMindController());
+		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.mindController, new RendererItemMindController());
 		renderGodBottlerTESRId = RenderingRegistry.getNextAvailableRenderId();
 	}
 	
