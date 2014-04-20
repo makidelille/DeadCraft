@@ -100,6 +100,7 @@ public class PacketPipeline extends
     private void registerPackets() {
 		registerPacket(DeadCraftAdminPacket.class);
 		registerPacket(DeadCraftEggSpawnerPacket.class);
+		registerPacket(DeadCraftGodBottlerPacket.class);
 		
 	}
 

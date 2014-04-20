@@ -51,8 +51,7 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 	public void handleServerSide(EntityPlayer player) {
 	
 		World worldObj = player.worldObj;
-		TileEntityEggSpawner te = (TileEntityEggSpawner) worldObj
-				.getTileEntity(x, y, z);
+		TileEntityEggSpawner te = (TileEntityEggSpawner) worldObj.getTileEntity(x, y, z);
 
 		if (!worldObj.isRemote) {
 			switch (buttonId) {

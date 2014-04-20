@@ -76,8 +76,8 @@ public class ItemMindController extends Item {
             String plrName = tag.getString("player");
 
             String ListInfo = EnumChatFormatting.AQUA + "Creator : " +EnumChatFormatting.ITALIC +  plrName + EnumChatFormatting.RESET;
-            String listInfo1 = "duarbility : " + EnumChatFormatting.ITALIC + "" + dmg + " / " + _maxDamage;
-            String ListInfo2 = "charge : " + EnumChatFormatting.ITALIC + "" + charge + "/" + _maxCharge;
+            String listInfo1 = "duarbility : " + EnumChatFormatting.ITALIC + "" + (is.getItemDamage() == 1 ? dmg + " / " + _maxDamage : "creative ") ;
+            String ListInfo2 = "charge : " + EnumChatFormatting.ITALIC + "" + (is.getItemDamage() == 1 ? charge + "/" + _maxCharge : "creative ") ;
             String ListInfo3 =  (is.getItemDamage() == 1 ? EnumChatFormatting.GREEN : EnumChatFormatting.YELLOW)
                     + "state: " + EnumChatFormatting.ITALIC + "" + version[is.getItemDamage()] + "";
 
@@ -163,7 +163,11 @@ public class ItemMindController extends Item {
             if (!(ent instanceof EntityPlayer) && isUserCreator(stack, player)) {
                 EntityLiving entLive = (EntityLiving) ent;
                 if (entLive.isCreatureType(EnumCreatureType.creature, true)) {
-                    entLive.tasks.addTask(0, new EntityAITempt((EntityCreature) entLive, 2D, this, false));
+                	EntityAITempt ai = new EntityAITempt((EntityCreature) entLive, 2D, this, false);
+                    entLive.tasks.addTask(0, ai);
+                    System.out.println(entLive.tasks.taskEntries.contains(ai));
+                    if(entLive.tasks.taskEntries.contains(ai))
+                    	entLive.tasks.removeTask(ai);
                     return true;
                 }
                 if (stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack, costEntity(entLive))) {

@@ -10,6 +10,7 @@ import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -18,7 +19,7 @@ public class DeadCraftBlocks {
 	public static BlockDeadCraft eggSpawner;
 	public static BlockDeadCraft enderPearlBlock;
 	public static BlockDeadCraft godBottler;
-	public static ArrayList itemBlocks;
+	public static ArrayList<ItemBlock> itemBlocks;
 
 	public static void init() {
 		

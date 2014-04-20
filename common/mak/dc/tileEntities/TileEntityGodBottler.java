@@ -1,5 +1,7 @@
 package mak.dc.tileEntities;
 
+import mak.dc.DeadCraft;
+import mak.dc.network.DeadCraftGodBottlerPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,23 +12,30 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	private static final byte deadcraftId = 2;
 
+	public static final float cycleTime = 20;
+
 	private TileEntityGodBottler pair;
 	
 	private int time;
 	private int starsInStock;
-	public int facing;
+	public int direction;
 	private boolean hasStated;
 	private boolean isTop;
 	private ItemStack[] inventory ;
 
-	private int tick;
+	private int clientTick = 0;
+
+	private boolean isPowered = false;
 	
+	public TileEntityGodBottler() {
+		this(false);
+	}
 	
 	
 	public TileEntityGodBottler(boolean top, byte facing) {
 		super(true);
 		this.isTop = top;
-		this.facing = facing;
+		this.direction = facing;
 	}
 	
 	public TileEntityGodBottler(boolean top) {
@@ -46,12 +55,18 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	
 	@Override
+	public boolean canUpdate() {
+		return true;
+	}	
+	
+	@Override
 	public void updateEntity() {
-		this.setTick(this.getTick() + 1);
+		if(worldObj.isRemote) {
+			if(this.isPowered ) this.setClientTick(this.getClientTick() + 1);
+			else if(!this.isPowered) this.setClientTick(this.getClientTick() - 1);
+		}
 	}
-
-
-
+	
 	@Override
 	public ItemStack decrStackSize(int var1, int var2) {
 		return null;
@@ -122,18 +137,19 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readFromNBT(nbtTagCompound);
+		super.readFromNBT(nbtTagCompound);		
 		this.isTop = nbtTagCompound.getBoolean("top");
-		this.facing = nbtTagCompound.getInteger("face");
-		
+		this.direction = nbtTagCompound.getInteger("direction");
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), worldObj.getWorldInfo().getVanillaDimension());
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setInteger("face", this.facing);
+		nbtTagCompound.setInteger("direction", this.direction);
 		nbtTagCompound.setBoolean("top", this.isTop);
 	}
+
 
 
 
@@ -143,31 +159,72 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	@Override
 	public void closeInventory() {}
 
-	public int getFacing() {
-		return facing;
+	public int getDirection() {
+		return direction;
 	}
 
-	public void setFacing(int i) {
-		this.facing = i;
+	public void setDirection(int i) {
+		this.direction = i;
 	}
 
-	public int getTick() {
-		return tick / 10000;
+	public int getClientTick() {
+		return clientTick;
 	}
 
-	public void setTick(int tick) {
-		this.tick = tick;
+	public void setClientTick(int tick) {
+		if(tick <= cycleTime && tick >= 0) this.clientTick = tick;
+
+	}
+	
+	public void clientSetup(TileEntityGodBottler te) {
+		this.direction = te.getDirection();
+		this.clientTick = 0;
+		this.setTop();
 	}
 
 	public void setup(TileEntityGodBottler te) {
-		this.facing = te.getFacing();
-		this.pair = te;
+		this.pair = te;		
 		this.allowed = te.allowed;
 		this.owner = te.owner;
 		this.isManagable = te.isManagable;
 		this.locked = te.locked;
-		this.setTop();
 	}
+	
+	private void readPairData(NBTTagCompound tag) {
+		this.owner = tag.getString("owner");
+        int nbersAll = tag.getInteger("nbAllowed");
+        for (int i = 0; i < nbersAll; i++ ) {
+            allowed.add(tag.getString("allowed [" +i+ "]"));
+        }
+        this.locked = tag.getBoolean("locked");
+        this.isManagable = tag.getBoolean("managable");
+	}
+
+	private void writePairData(TileEntityGodBottler pair, NBTTagCompound nbtTagCompound) {
+		nbtTagCompound.setString("owner", pair.owner);
+        int nbersAll = pair.allowed.size();
+                if(pair.allowed.size() != 0) {       
+                    for (int i = 0; i < nbersAll; i++ ) 
+                        nbtTagCompound.setString("allowed [" +i+ "]" , pair.allowed.get(i).toString());
+                    nbtTagCompound.setInteger("nbAllowed", nbersAll);
+                }
+        nbtTagCompound.setBoolean("locked", pair.locked);
+        nbtTagCompound.setBoolean("managable", pair.isManagable);
+		
+	}
+
+	public boolean isPowered() {
+		return this.isPowered;
+	}
+	public void setPowered(boolean isPowered2) {
+		this.isPowered = isPowered2;		
+	}
+
+
+	public TileEntityGodBottler getPair() {
+		return this.pair;
+	}
+
 
 
 

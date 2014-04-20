@@ -8,13 +8,16 @@ import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.network.DeadCraftAdminPacket;
 import mak.dc.tileEntities.TileEntityDeadCraft;
+import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -24,12 +27,12 @@ import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemController extends Item {
+public class ItemWrench extends Item {
 
     private static final String[] version = {"base","lock","info"};
     private IIcon[] icons = {null,null,null};
 
-    public ItemController () {
+    public ItemWrench () {
         super();
         this.setUnlocalizedName(IBTInfos.ITEM_CONTROLLER_KEY);
         this.setHasSubtypes(true);
@@ -87,14 +90,11 @@ public class ItemController extends Item {
 
 
     @Override
-    public boolean onItemUseFirst (ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
-            float hitX, float hitY, float hitZ) {
-        if (!world.isRemote && world.getTileEntity(x, y, z) != null
-                && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
+    public boolean onItemUseFirst (ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote && world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
-            showData(te,player);
-            if (te.isUserCreator(username) && !player.isSneaking()) {
+             if (te.isUserCreator(username) && !player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
@@ -121,9 +121,14 @@ public class ItemController extends Item {
     }
 
     private void showData (TileEntityDeadCraft te, EntityPlayer player) {
-        System.out.println("owner : " + te.getowner());
-        System.out.println("state "  + (te.isLocked()  ? "private"  :"public"));
-        System.out.println("allowed users : "  + te.getAllowedUser());
+    	player.addChatComponentMessage(new ChatComponentText("owner : " + te.getowner()));
+    	player.addChatComponentMessage(new ChatComponentText("state "  + (te.isLocked()  ? "private"  :"public")));
+    	player.addChatComponentMessage(new ChatComponentText("allowed users : "  + te.getAllowedUser()));
+    	if(te instanceof TileEntityGodBottler) {
+    		player.addChatComponentMessage(new ChatComponentText("isTop ? " + ((TileEntityGodBottler) te).isTop()));
+    		player.addChatComponentMessage(new ChatComponentText("face : " + ((TileEntityGodBottler) te).direction));
+
+    	}
     }
 
 

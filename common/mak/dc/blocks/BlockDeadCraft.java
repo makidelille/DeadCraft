@@ -48,13 +48,11 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
         super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote) {
         	if(is.getTagCompound() != null && world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
-	                TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-	                te.setFromNBT(is.getTagCompound());
-	                System.out.println("valid");
+                TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+                te.setFromNBT(is.getTagCompound());
         	}else if(world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
                 te.setOwner(((EntityPlayer)ent).getCommandSenderName());
-                System.out.println("valid");
             }
         }
        
@@ -67,19 +65,23 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 		    	if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
 		            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return ;
 		            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName())) {
-		            	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-		            	ItemStack is = new ItemStack(this);
-		            	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
-		            	System.out.println(is.getTagCompound());
-		            	this.dropBlockAsItem(world, x, y, z, is);       	
-		            	world.removeTileEntity(x, y, z);
-		            	world.setBlock(x, y, z, Blocks.air);
+		            	this.breakBlock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 		            	return;
 		            	}
 		    }}
 	        return ;
     	}
   
+    
+    @Override
+    	public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
+	    	ItemStack is = new ItemStack(this);
+        	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+	    	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
+	    	this.dropBlockAsItem(world, x, y, z, is);       	
+	    	world.removeTileEntity(x, y, z);
+	    	world.setBlock(x, y, z, Blocks.air);
+    	}
     
     @Override
     public boolean onBlockActivated(World world,int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ ) {

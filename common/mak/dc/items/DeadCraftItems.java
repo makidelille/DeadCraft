@@ -22,7 +22,7 @@ public class DeadCraftItems {
 		deadWand = new ItemDeadWand();
 		lifeCrystal = new ItemLifeCrystal();
 		mindController = new ItemMindController();
-		controller = new ItemController();
+		controller = new ItemWrench();
 		godCan = new ItemGodCan();
 		
 		GameRegistry.registerItem(deadWand, IBTInfos.ITEM_DEADWAND_KEY, Lib.MOD_ID);

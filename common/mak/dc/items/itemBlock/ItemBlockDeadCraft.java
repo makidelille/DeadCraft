@@ -49,49 +49,34 @@ public class ItemBlockDeadCraft extends ItemBlock{
 	
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if(!world.isRemote) {
+			int dx = 0,dy = 0,dz = 0;
 			
-				NBTTagCompound tag = is.getTagCompound();
-				if(!player.capabilities.isCreativeMode)player.inventory.decrStackSize(player.inventory.currentItem, 1);
-				switch (side) {
-				case 0:
-					if(this.blockDC.canBePlaced(world, x,y-1,z)) {
-						world.setBlock(x, y-1, z, blockDC);
-						blockDC.onBlockPlacedBy(world, x, y-1, z, player, is);
-						return true;
-					}
-				case 1:	
-					if(this.blockDC.canBePlaced(world, x,y+1,z)) {
-						world.setBlock(x, y+1, z, blockDC);
-						blockDC.onBlockPlacedBy(world, x, y+1, z, player, is);
-						return true;
-					}
-				case 2:
-					if(this.blockDC.canBePlaced(world, x,y,z-1)) {
-						world.setBlock(x, y, z-1, blockDC);
-						blockDC.onBlockPlacedBy(world, x, y, z-1, player, is);
-						return true;
-					}
-				case 3:
-					if(this.blockDC.canBePlaced(world,x,y,z+1)) {
-						world.setBlock(x, y, z+1, blockDC);
-						blockDC.onBlockPlacedBy(world, x, y, z+1, player, is);
-						return true;
-					}
-				case 4:
-					if(this.blockDC.canBePlaced(world,x-1,y,z)) {
-						world.setBlock(x-1, y, z, blockDC);
-						blockDC.onBlockPlacedBy(world, x-1, y, z, player, is);
-						return true;
-					}
-				case 5 :
-					if(this.blockDC.canBePlaced(world,x+1,y,z)) {
-						world.setBlock(x+1, y, z, blockDC);
-						blockDC.onBlockPlacedBy(world, x+1, y, z, player, is);
-						return true;
-					}
-				}
-		}
+			switch(side) {
+			case 0:
+				dy = -1;
+				break;
+			case 1:
+				dy = +1;
+				break;
+			case 2:
+				dz = -1;
+				break;
+			case 3:
+				dz = +1;
+				break;
+			case 4:
+				dx = -1;
+				break;
+			case 5:
+				dx = +1;
+				break;
+			}
+			if(this.blockDC.canBePlaced(world, x+dx, y+dy, z+dz)){
+				world.setBlock(x+dx, y+dy, z+dz, blockDC);
+				blockDC.onBlockPlacedBy(world, x+dx, y+dy, z+dz, player, is);
+				if(!world.isRemote && !player.capabilities.isCreativeMode) player.inventory.decrStackSize(player.inventory.currentItem, 1);
+				return true;
+			}
 		
 		
 		return false;

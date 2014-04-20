@@ -7,19 +7,20 @@ import net.minecraft.entity.Entity;
 public class ModelGodBottler extends ModelBase
 {
   //fields
-    ModelRenderer BBot;
-    ModelRenderer BTop;
-    ModelRenderer BBack;
-    ModelRenderer BLeft;
-    ModelRenderer BRight;
-    ModelRenderer Plateau;
-    ModelRenderer Support;
-    ModelRenderer Brastop;
-    ModelRenderer Brasmid;
-    ModelRenderer BrasBot;
-    ModelRenderer PanelBot;
-    ModelRenderer PanelTop;
+    private ModelRenderer BBot;
+    private ModelRenderer BTop;
+    private ModelRenderer BBack;
+    private ModelRenderer BLeft;
+    private ModelRenderer BRight;
+    private ModelRenderer Support;
+    private ModelRenderer Brastop;
+    private ModelRenderer PanelBot;
+    private ModelRenderer PanelTop;
   
+    public ModelRenderer Plateau;
+    public ModelRenderer BrasMid;
+    public ModelRenderer BrasBot;
+    
   public ModelGodBottler()
   {
     textureWidth = 128;
@@ -57,7 +58,7 @@ public class ModelGodBottler extends ModelBase
       setRotation(BRight, 0F, -1.570796F, 0F);
       Plateau = new ModelRenderer(this, 26, 26);
       Plateau.addBox(-5F, 0F, -5F, 10, 1, 10);
-      Plateau.setRotationPoint(0F, 13F, 0F);
+      Plateau.setRotationPoint(0F, 14F, 0F);
       Plateau.setTextureSize(128, 128);
       Plateau.mirror = true;
       setRotation(Plateau, 0F, 0F, 0F);
@@ -73,12 +74,12 @@ public class ModelGodBottler extends ModelBase
       Brastop.setTextureSize(128, 128);
       Brastop.mirror = true;
       setRotation(Brastop, 0F, 0F, 0F);
-      Brasmid = new ModelRenderer(this, 56, 26);
-      Brasmid.addBox(-1F, -3F, -1F, 2, 6, 2);
-      Brasmid.setRotationPoint(0F, 7F, 0F);
-      Brasmid.setTextureSize(128, 128);
-      Brasmid.mirror = true;
-      setRotation(Brasmid, 0F, 0F, 0F);
+      BrasMid = new ModelRenderer(this, 56, 26);
+      BrasMid.addBox(-1F, -3F, -1F, 2, 6, 2);
+      BrasMid.setRotationPoint(0F, 7F, 0F);
+      BrasMid.setTextureSize(128, 128);
+      BrasMid.mirror = true;
+      setRotation(BrasMid, 0F, 0F, 0F);
       BrasBot = new ModelRenderer(this, 108, 12);
       BrasBot.addBox(-0.5F, 0F, -0.5F, 1, 1, 1);
       BrasBot.setRotationPoint(0F, 10F, 0F);
@@ -101,18 +102,20 @@ public class ModelGodBottler extends ModelBase
   
   public void render(float f)
   {
-    BBot.render(f);
-    BTop.render(f);
-    BBack.render(f);
-    BLeft.render(f);
-    BRight.render(f);
-    Plateau.render(f);
-    Support.render(f);
-    Brastop.render(f);
-    Brasmid.render(f);
-    BrasBot.render(f);
-    PanelBot.render(f);
-    PanelTop.render(f);
+	    BBot.render(f);
+	    BTop.render(f);
+	    BBack.render(f);
+	    BLeft.render(f);
+	    BRight.render(f);
+	    Support.render(f);
+	    Brastop.render(f);
+	    PanelBot.render(f);
+	    PanelTop.render(f);
+	    
+	    Plateau.render(f); //animer
+	    BrasMid.render(f); //animer
+	    BrasBot.render(f); //animer
+	  
   }
   
   private void setRotation(ModelRenderer model, float x, float y, float z)

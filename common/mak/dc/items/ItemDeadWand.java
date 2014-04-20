@@ -26,7 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDeadWand extends Item {
 
-    @SideOnly (Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     private IIcon[] icons = { null, null };
 
     public ItemDeadWand () {

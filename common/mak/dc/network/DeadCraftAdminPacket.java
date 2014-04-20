@@ -64,7 +64,7 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	}
 	@Override
 	public void handleClientSide(EntityPlayer player) {
-		return; //packet come from client interface		
+		return;
 	}
 	@Override
 	public void handleServerSide(EntityPlayer player) {
