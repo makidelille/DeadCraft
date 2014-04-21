@@ -1,8 +1,8 @@
 package mak.dc.client.render.item;
 
+import mak.dc.client.model.ModelMindController;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.model.ModelMindController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;

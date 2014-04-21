@@ -1,6 +1,6 @@
 package mak.dc.items;
 
-// TODO add the func to change the charge of crystal here and not in the other
+// TODO add the func to change the charge of crystal here and not in the other //XXX bug here
 // files /D
 
 import mak.dc.lib.IBTInfos;

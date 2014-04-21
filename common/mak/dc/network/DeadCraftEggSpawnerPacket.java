@@ -15,14 +15,12 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 
 	private byte buttonId;
 	
-	public DeadCraftEggSpawnerPacket() {
-		
-	}
+	public DeadCraftEggSpawnerPacket() {}
 	
-	public DeadCraftEggSpawnerPacket(int x, int y, int z, byte id) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public DeadCraftEggSpawnerPacket(TileEntityEggSpawner te, byte id) {
+		this.x = te.xCoord;
+		this.y = te.yCoord;
+		this.z = te.zCoord;
 		this.buttonId = id;
 	}
 

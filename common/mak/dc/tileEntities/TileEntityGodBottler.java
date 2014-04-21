@@ -12,20 +12,22 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	private static final byte deadcraftId = 2;
 
-	public static final float cycleTime = 20;
+	public static final int animationTime = 20;
 
 	private TileEntityGodBottler pair;
 	
 	private int time;
 	private int starsInStock;
 	public int direction;
-	private boolean hasStated;
+	private boolean hasStarted;
 	private boolean isTop;
 	private ItemStack[] inventory ;
 
 	private int clientTick = 0;
 
 	private boolean isPowered = false;
+
+	private boolean isSync;
 	
 	public TileEntityGodBottler() {
 		this(false);
@@ -65,8 +67,21 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			if(this.isPowered ) this.setClientTick(this.getClientTick() + 1);
 			else if(!this.isPowered) this.setClientTick(this.getClientTick() - 1);
 		}
+		if(!worldObj.isRemote) {
+			if(!isSync) sync();
+		}
 	}
 	
+	private void sync() {
+		pair.allowed = this.allowed;
+		pair.owner = this.owner;
+		pair.locked = this.locked;
+		
+		
+		isSync = true;
+	}
+
+
 	@Override
 	public ItemStack decrStackSize(int var1, int var2) {
 		return null;
@@ -137,9 +152,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readFromNBT(nbtTagCompound);		
+		super.readFromNBT(nbtTagCompound);	
 		this.isTop = nbtTagCompound.getBoolean("top");
 		this.direction = nbtTagCompound.getInteger("direction");
+		if(this.isTop) readPairData(nbtTagCompound);
 		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), worldObj.getWorldInfo().getVanillaDimension());
 	}
 	
@@ -148,6 +164,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("direction", this.direction);
 		nbtTagCompound.setBoolean("top", this.isTop);
+		if(this.isTop) writePairData(pair, nbtTagCompound);
 	}
 
 
@@ -172,21 +189,21 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 
 	public void setClientTick(int tick) {
-		if(tick <= cycleTime && tick >= 0) this.clientTick = tick;
+		if(tick <= animationTime && tick >= 0) this.clientTick = tick;
 
 	}
 	
 	public void clientSetup(TileEntityGodBottler te) {
 		this.direction = te.getDirection();
-		this.clientTick = 0;
+		this.clientTick = (int) animationTime;
 		this.setTop();
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(te), worldObj.getWorldInfo().getVanillaDimension());
 	}
 
 	public void setup(TileEntityGodBottler te) {
 		this.pair = te;		
 		this.allowed = te.allowed;
 		this.owner = te.owner;
-		this.isManagable = te.isManagable;
 		this.locked = te.locked;
 	}
 	
@@ -197,7 +214,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
             allowed.add(tag.getString("allowed [" +i+ "]"));
         }
         this.locked = tag.getBoolean("locked");
-        this.isManagable = tag.getBoolean("managable");
 	}
 
 	private void writePairData(TileEntityGodBottler pair, NBTTagCompound nbtTagCompound) {
@@ -209,9 +225,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
                     nbtTagCompound.setInteger("nbAllowed", nbersAll);
                 }
         nbtTagCompound.setBoolean("locked", pair.locked);
-        nbtTagCompound.setBoolean("managable", pair.isManagable);
 		
 	}
+	
+	
 
 	public boolean isPowered() {
 		return this.isPowered;
@@ -223,6 +240,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	public TileEntityGodBottler getPair() {
 		return this.pair;
+	}
+
+
+	public boolean isHasStarted() {
+		return this.hasStarted;
 	}
 
 

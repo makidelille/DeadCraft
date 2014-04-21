@@ -4,16 +4,17 @@ import java.util.Random;
 
 import mak.dc.DeadCraft;
 import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
 import mak.dc.network.DeadCraftGodBottlerPacket;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,8 +23,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class BlockGodBottler extends BlockDeadCraft {
 
@@ -66,6 +65,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 		TileEntityGodBottler teTop = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
 		super.onBlockPlacedBy(world, teBot.xCoord, teBot.yCoord, teBot.zCoord, ent, is);
 		teTop.setup(teBot);
+		teBot.setPair(teTop);
 		
 		
 		//TODO Client part
@@ -144,6 +144,30 @@ public class BlockGodBottler extends BlockDeadCraft {
 	@Override
 	public int quantityDropped(Random random) {
 		return 0;
+	}
+	
+	@Override
+	public void randomDisplayTick(World world, int x,int y, int z, Random ran) {
+		if(((TileEntityGodBottler) world.getTileEntity(x, y, z)).isHasStarted()) {
+			boolean flag = (((TileEntityGodBottler) world.getTileEntity(x, y, z)).isTop());
+			for (int i = 0; i < 50; i++) {
+				float coef = ran.nextFloat() / 10;
+				float scale = ran.nextFloat();
+				
+				int a = ran.nextInt(90);
+				int b = ran.nextInt(360);
+				
+				float vx = (float) (Math.cos(a /(2 * Math.PI)) * Math.cos(b / (2 * Math.PI)) * coef);
+				float vy = (float) (Math.sin(a /(2 * Math.PI)) * coef);
+				float vz = (float) (Math.cos(a /(2 * Math.PI)) *  Math.sin(b /(2 * Math.PI)) * coef);
+				float dx = 0.5f, dy = flag ?-0.35f : 0.65f, dz = 0.5f;
+				
+				EntityReddustFX fx = new EntityReddustFX(world, x+dx, y+dy + ran.nextFloat() / 10, z+dz, vx, vy, vz);
+				fx.setRBGColorF(0.65f + ran.nextFloat() / 10, 0.65f + ran.nextFloat() /10, 1f);
+				fx.setVelocity(vx, vy, vz);
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);		
+			}
+		}
 	}
 	
 	@Override

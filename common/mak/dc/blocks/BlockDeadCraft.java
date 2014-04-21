@@ -49,7 +49,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
         if(!world.isRemote) {
         	if(is.getTagCompound() != null && world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-                te.setFromNBT(is.getTagCompound());
+                te.readNBTData(is.getTagCompound());
         	}else if(world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
                 te.setOwner(((EntityPlayer)ent).getCommandSenderName());

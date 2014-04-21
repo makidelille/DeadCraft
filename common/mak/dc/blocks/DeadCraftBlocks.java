@@ -1,29 +1,25 @@
 package mak.dc.blocks;
 
-import java.util.ArrayList;
-
-import mak.dc.items.itemBlock.ItemBlockEggSpawner;
-import mak.dc.items.itemBlock.ItemBlockGodBottler;
+import mak.dc.items.itemBlock.ItemBlockDeadCraft;
 import mak.dc.lib.IBTInfos;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class DeadCraftBlocks {
-	
+	/** tileEntities block */
 	public static BlockDeadCraft eggSpawner;
-	public static BlockDeadCraft enderPearlBlock;
 	public static BlockDeadCraft godBottler;
-	public static ArrayList<ItemBlock> itemBlocks;
+	
+	/** w/ tileEntities Blocks */
+	public static Block enderPearlBlock;
 
 	public static void init() {
 		
-		itemBlocks = new ArrayList<>();
 		
 		BlockDeadCraft.init();
 		
@@ -35,12 +31,12 @@ public class DeadCraftBlocks {
 		godBottler.setid(BlockDeadCraft.getNextId());
 		
 		
-		GameRegistry.registerBlock(eggSpawner, ItemBlockEggSpawner.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
-		GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
-		GameRegistry.registerBlock(godBottler, ItemBlockGodBottler.class, IBTInfos.BLOCK_BOTTLER_KEY);
+		GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
+		GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);
 		
-		itemBlocks.add(eggSpawner.getId(),new ItemBlockEggSpawner(eggSpawner));
-		itemBlocks.add(godBottler.getId(),new ItemBlockGodBottler(godBottler));
+		GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
+		
+
 
 	}
 	

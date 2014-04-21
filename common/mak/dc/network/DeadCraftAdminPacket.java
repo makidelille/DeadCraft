@@ -17,18 +17,16 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 	boolean locked;
 	ArrayList<String> allowed;
 	
-	public DeadCraftAdminPacket() {
-		
-	}
+	public DeadCraftAdminPacket() {}
 	
 	
-	public DeadCraftAdminPacket(int x, int y, int z, ArrayList<String> allowed,  boolean isLocked) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public DeadCraftAdminPacket(TileEntityDeadCraft te) {
+		this.x = te.xCoord;
+		this.y = te.yCoord;
+		this.z = te.zCoord;
 		
-		this.locked = isLocked;		
-		this.allowed = allowed;
+		this.locked = te.isLocked();		
+		this.allowed = te.getAllowedUser();
 	}
 	
 	@Override
@@ -72,7 +70,6 @@ public class DeadCraftAdminPacket extends AbstractPacket {
 		if(!world.isRemote) {
 			TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
 			if(te == null || !(te instanceof TileEntityDeadCraft)) return;
-			if(!te.isManagable()) return;
 			te.setAllowedUser(allowed);
 			te.setLocked(locked);
 		}

@@ -114,7 +114,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     @Override
 	protected void sendPacket() {
-    	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te.xCoord, te.yCoord, te.zCoord, this.allowed, this.isLocked);
+    	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te);
     	System.out.println(pkt.toString());
     	DeadCraft.packetPipeline.sendToServer(pkt); //XXX
         this.haschange = true;

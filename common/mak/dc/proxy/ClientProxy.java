@@ -4,6 +4,7 @@ import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.client.render.TESRInventoryRenderer;
 import mak.dc.client.render.TESRInventoryRenderer.TESRIndex;
 import mak.dc.client.render.block.SpecialRenderTileEntityGodBottler;
+import mak.dc.client.render.item.RendererItemGodCan;
 import mak.dc.client.render.item.RendererItemMindController;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.tileEntities.TileEntityGodBottler;
@@ -26,6 +27,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void registerRender() {
 		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.mindController, new RendererItemMindController());
+		MinecraftForgeClient.registerItemRenderer(DeadCraftItems.godCan, new RendererItemGodCan());
 		renderInventoryTESRId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new TESRInventoryRenderer());
 	}

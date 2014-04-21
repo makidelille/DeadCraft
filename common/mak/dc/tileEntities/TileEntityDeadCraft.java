@@ -13,13 +13,11 @@ public class TileEntityDeadCraft extends TileEntity {
 	protected String owner;
     protected ArrayList<String> allowed;
     protected boolean locked;
-    protected boolean isManagable;
        
     public TileEntityDeadCraft(boolean isManagable) {
         this.locked = false;
         this.owner = "null";
         this.allowed = new ArrayList();
-        this.isManagable = isManagable;
         
 
     }
@@ -43,7 +41,6 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void setAllowedUser (ArrayList users) {
-        if(!isManagable) return;
     	allowed = users;
     }
 
@@ -54,8 +51,7 @@ public class TileEntityDeadCraft extends TileEntity {
 
 
     public boolean isUserAllowed(String name) {
-        if(!isManagable) return false;
-        else if(!this.locked || isUserCreator(name)) return true;
+        if(!this.locked || isUserCreator(name)) return true;
         else if(allowed.contains(name.toLowerCase())) return true;
         else if(this.isLocked()) return false;
         else return false;
@@ -67,7 +63,6 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void invertlock() {
-        if(!isManagable) return ;
         setLocked(!locked);
     }
 
@@ -76,17 +71,10 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void setLocked(boolean par) {
-        if(!isManagable) return ;
         this.locked = par;
     }
     
-    public void setUnManagable() {
-        this.isManagable = false;
-    }
-
-
-
-    @Override
+     @Override
     public void writeToNBT (NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
                 
@@ -98,7 +86,6 @@ public class TileEntityDeadCraft extends TileEntity {
                     nbtTagCompound.setInteger("nbAllowed", nbersAll);
                 }
         nbtTagCompound.setBoolean("locked", locked);
-        nbtTagCompound.setBoolean("managable", isManagable);
         
     }
 
@@ -112,14 +99,10 @@ public class TileEntityDeadCraft extends TileEntity {
             allowed.add(nbtTagCompound.getString("allowed [" +i+ "]"));
         }
         this.locked = nbtTagCompound.getBoolean("locked");
-        this.isManagable = nbtTagCompound.getBoolean("managable");
         
     }
 
-	public boolean isManagable() {
-		return this.isManagable;
-	}
-
+	
 	public byte getID() {
 		return this.deadcraftId;
 	}
@@ -133,19 +116,16 @@ public class TileEntityDeadCraft extends TileEntity {
                     nbtTagCompound.setInteger("nbAllowed", nbersAll);
                 }
         nbtTagCompound.setBoolean("locked", locked);
-        nbtTagCompound.setBoolean("managable", isManagable);
 		return nbtTagCompound;
 	}
 
-	public void setFromNBT(NBTTagCompound tagCompound) {
+	public void readNBTData(NBTTagCompound tagCompound) {
 		this.owner = tagCompound.getString("owner");
         int nbersAll = tagCompound.getInteger("nbAllowed");
         for (int i = 0; i < nbersAll; i++ ) {
             allowed.add(tagCompound.getString("allowed [" +i+ "]"));
         }
-        this.locked = tagCompound.getBoolean("locked");
-        this.isManagable = tagCompound.getBoolean("managable");
-		
+        this.locked = tagCompound.getBoolean("locked");		
 	}
 
 

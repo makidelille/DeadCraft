@@ -124,7 +124,7 @@ public class GuiEggSpawner extends GuiCustom{
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		DeadCraft.packetPipeline.sendToServer(new DeadCraftEggSpawnerPacket(te.xCoord, te.yCoord, te.zCoord,(byte) button.id));
+		DeadCraft.packetPipeline.sendToServer(new DeadCraftEggSpawnerPacket(te,(byte) button.id));
 	}
 
 		

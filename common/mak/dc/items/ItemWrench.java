@@ -100,7 +100,7 @@ public class ItemWrench extends Item {
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 1: 
-                    	DeadCraft.packetPipeline.sendToServer(new DeadCraftAdminPacket(x,y,z,te.getAllowedUser(),!te.isLocked()));
+                    	//change things
                         break;
                     case 2: 
                         showData(te,player);

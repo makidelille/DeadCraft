@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.C13PacketPlayerAbilities;
@@ -19,15 +20,17 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemGodCan extends Item{
+public class ItemGodCan extends ItemFood{
 	
 	
 	public ItemGodCan(){ //TODO finish
-		super();
+		super(1, false);
 		this.setUnlocalizedName(IBTInfos.ITEM_GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(false);
 		this.setMaxDamage(1200);
+		this.setFull3D();
+		this.setAlwaysEdible();
 		
 	}
 	
@@ -49,19 +52,8 @@ public class ItemGodCan extends Item{
 		return this.itemIcon;
 	}
 	
-//	@Override
-//	public int getColorFromDamage(int par1) {
-//		return 0;
-//	}
-//	
-//	@Override
-//	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
-//		return super.getIconFromDamageForRenderPass(par1, par2);
-//	}
-	
-	
 	@Override
-	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
+	public ItemStack onEaten(ItemStack is, World world,	EntityPlayer player) {
 		if(!world.isRemote) {
 			is.setItemDamage(0);
 			NBTTagCompound tag = is.getTagCompound();
@@ -88,7 +80,7 @@ public class ItemGodCan extends Item{
 			int[] ids = tag.getIntArray("effects ids");
 			if(time < this.getMaxDamage() -1 ) {
 				tag.setBoolean("isActive", true);
-				this.applyEffects(world, ent, ids );
+//				this.applyEffects(world, ent, ids );
 				is.damageItem(1, (EntityLivingBase) ent);
 			}else if(time == this.getMaxDamage()){
 				this.removeEffects(world, ent, ids);
@@ -98,7 +90,7 @@ public class ItemGodCan extends Item{
 			is.setTagCompound(tag);
 		}
 	}
-	
+		
 	@Override
 	public void onCreated(ItemStack is, World world,EntityPlayer player) {
 	}

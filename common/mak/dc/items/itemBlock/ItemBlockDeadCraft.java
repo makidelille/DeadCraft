@@ -5,6 +5,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import mak.dc.blocks.BlockDeadCraft;
+import mak.dc.blocks.BlockGodBottler;
 import mak.dc.util.NBTTagCompoundDeadCraft;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,6 +81,11 @@ public class ItemBlockDeadCraft extends ItemBlock{
 		
 		
 		return false;
+	}
+	
+	@Override
+	public boolean shouldRotateAroundWhenRendering() {
+		return  (blockDC instanceof BlockGodBottler);
 	}
 	
 	

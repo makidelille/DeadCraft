@@ -1,9 +1,9 @@
 package mak.dc.client.render.block;
 
 import mak.dc.client.IInventoryRenderer;
+import mak.dc.client.model.ModelGodBottler;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.model.ModelGodBottler;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -52,9 +52,9 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 			GL11.glRotatef((te.getDirection() * 90F), 0.0F, 1.0F, 0.0F);  
 			if(te.getClientTick() > 0) {
 				tick = te.getClientTick();
-				this.model.Plateau.offsetY = -(float) (0.1* Math.log((float)(tick/te.cycleTime)));
-				this.model.BrasMid.offsetY = (float) (0.12f * Math.log((float)(tick/te.cycleTime)));
-				this.model.BrasBot.offsetY = (float) (0.135f * Math.log((float)(tick/te.cycleTime)));
+				this.model.Plateau.offsetY = -(float) (0.1* Math.log((float)(tick/te.animationTime)));
+				this.model.BrasMid.offsetY = (float) (0.12f * Math.log((float)(tick/te.animationTime)));
+				this.model.BrasBot.offsetY = (float) (0.135f * Math.log((float)(tick/te.animationTime)));
 			}
 		}		
 		this.model.render(0.0625F);

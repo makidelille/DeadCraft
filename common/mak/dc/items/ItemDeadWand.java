@@ -65,7 +65,7 @@ public class ItemDeadWand extends Item {
                 } else {
 
                     ItemStack crystal = getCrystal(player);
-                    crystal.setItemDamage((int) (crystal.getItemDamage() + pv));
+                    if(crystal != null ) crystal.setItemDamage((int) (crystal.getItemDamage() + pv));
 
                 }
             } else if (isCharged(dmg)) {

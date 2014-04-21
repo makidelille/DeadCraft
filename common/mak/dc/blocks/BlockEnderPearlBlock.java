@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockEnderPearlBlock extends BlockDeadCraft {
+public class BlockEnderPearlBlock extends Block {
 
 
     public static boolean _IS_CREATIVE_MOVED; //if true, creatives players will be moved
@@ -60,10 +60,6 @@ public class BlockEnderPearlBlock extends BlockDeadCraft {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote) {
-
-            ((TileEntityDeadCraft)(world.getTileEntity(x, y, z))).setUnManagable();
-
-
             if(!((EntityPlayer)ent).capabilities.isCreativeMode || (((EntityPlayer)ent).capabilities.isCreativeMode && _IS_CREATIVE_MOVED))
                 teleportEntity(world,x,y,z,ent);
         }
