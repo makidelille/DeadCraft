@@ -3,8 +3,10 @@ package mak.dc.client.gui;
 import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
+import mak.dc.client.gui.container.ContainerGodBottler;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.tileEntities.TileEntityEggSpawner;
+import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -23,14 +25,19 @@ public class GuiHandler implements IGuiHandler {
         switch(ID) {
             case 0 : 
                 te = world.getTileEntity(x, y, z);
-                if(te != null && te instanceof TileEntityDeadCraft) 
-                    return new ContainerDeadCraft(player.inventory , (TileEntityDeadCraft) te, false);
-                break;
+		        if(te != null && te instanceof TileEntityDeadCraft) 
+		            return new ContainerDeadCraft(player.inventory , (TileEntityDeadCraft) te, false);
+		        break;
             case 1 :
                 te = world.getTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEggSpawner)
                     return new ContainerEggSpawner(player.inventory, (TileEntityEggSpawner) te);
                 break;
+            case 2 :
+	        	te = world.getTileEntity(x, y, z);
+	            if (te != null && te instanceof TileEntityGodBottler)
+	                return new ContainerGodBottler(player.inventory, (TileEntityGodBottler) te);
+	            break;
 
         }
 
@@ -50,6 +57,11 @@ public class GuiHandler implements IGuiHandler {
                 if (te1 != null )
                     return new GuiEggSpawner(player.inventory,  te1,ID);
                 break;
+            case 2:
+            	System.out.println("gui");
+            	TileEntityGodBottler te2 = (TileEntityGodBottler) world.getTileEntity(x, y, z);
+            	if(te2 != null && !te2.isTop())
+            		return new GuiGodBottler(player.inventory, te2, ID);
 
         }
 

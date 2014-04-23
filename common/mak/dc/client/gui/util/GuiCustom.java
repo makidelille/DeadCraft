@@ -38,9 +38,8 @@ public abstract class GuiCustom extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		buttonList.clear();
-
-	}
 		
+	}
 	
 
 	public List getButtonList() {

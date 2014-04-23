@@ -45,10 +45,16 @@ public class GuiRectangleInfo extends GuiRectangle {
 	}
 	
 	public void drawSeparatorH(int x, int y, int width) {
+		GL11.glColor4f(1, 1, 1, 1);
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		
 		parent.drawTexturedModalRect(parent.getLeft() + x, parent.getTop() + y, 0, 165, width, 1);
 	
 	}
 	public void drawSeparatorV(int x, int y, int width) {
+		GL11.glColor4f(1, 1, 1, 1);
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		
 		parent.drawTexturedModalRect(parent.getLeft() + x, parent.getTop() + y, 0, 165, 1, width);
 	
 	}

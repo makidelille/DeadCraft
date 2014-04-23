@@ -6,12 +6,17 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IChatComponent;
 
 public class ContainerDeadCraft extends Container {
 
     private TileEntityDeadCraft te;
 
+    public ContainerDeadCraft(InventoryPlayer inv, TileEntityDeadCraft te){
+    	this(inv,te,true);
+    }
+    
     public ContainerDeadCraft (InventoryPlayer invPlayer, TileEntityDeadCraft te , boolean custom) {
         this.te = te;
         if(!custom) {
@@ -27,6 +32,11 @@ public class ContainerDeadCraft extends Container {
         }
 
     }
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    	return null;
+    }
+    
 
     @Override
     public boolean canInteractWith (EntityPlayer entityplayer) {
@@ -46,9 +56,7 @@ public class ContainerDeadCraft extends Container {
    
     }
     
-    
-    
-    public TileEntityDeadCraft getTileEntity() {
+     public TileEntityDeadCraft getTileEntity() {
         return te;
     }
 

@@ -1,12 +1,11 @@
 package mak.dc.blocks;
 
-import mak.dc.entity.EntityItemDeadCraft;
+import mak.dc.items.ItemWrench;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -60,28 +59,28 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
      }
     
     @Override
-    	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-	    	if(!world.isRemote) {
-		    	if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
-		            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return ;
-		            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName())) {
-		            	this.breakBlock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-		            	return;
-		            	}
-		    }}
-	        return ;
-    	}
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+    	if(!world.isRemote) {
+	    	if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
+	            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return ;
+	            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName()) && player.getHeldItem().getItem() instanceof ItemWrench) {
+	            	this.breakBlock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+	            	return;
+	            	}
+	    }}
+        return ;
+	}
   
     
     @Override
-    	public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
-	    	ItemStack is = new ItemStack(this);
-        	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-	    	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
-	    	this.dropBlockAsItem(world, x, y, z, is);       	
-	    	world.removeTileEntity(x, y, z);
-	    	world.setBlock(x, y, z, Blocks.air);
-    	}
+    public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
+    	ItemStack is = new ItemStack(this);
+    	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+    	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
+    	this.dropBlockAsItem(world, x, y, z, is);       	
+    	world.removeTileEntity(x, y, z);
+    	world.setBlock(x, y, z, Blocks.air);
+    }
     
     @Override
     public boolean onBlockActivated(World world,int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ ) {

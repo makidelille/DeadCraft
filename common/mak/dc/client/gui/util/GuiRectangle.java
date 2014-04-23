@@ -2,6 +2,8 @@ package mak.dc.client.gui.util;
 
 import java.util.Arrays;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiScreen;
 
 public class GuiRectangle extends GuiScreen{
@@ -55,7 +57,9 @@ public class GuiRectangle extends GuiScreen{
 	}
 	
 	
-	public void draw(int srcX, int srcY) {}
+	public void draw(int srcX, int srcY) {
+		drawTexturedModalRect(parent.getLeft() + x, parent.getTop() + y, srcX, srcY, this.w, this.h);
+	}
 	
 	public void drawHoverString(int mouseX, int mouseY, String str) {
 		if (inRect(mouseX, mouseY)) {
@@ -74,61 +78,6 @@ public class GuiRectangle extends GuiScreen{
 	
 	
 	
-	private int getColor(String color) {
-		int re = 0x404040;
-		
-		switch(color) {
-		case "red" : 
-			re = 0xFF0000;
-			break;
-		case "brown" :
-			re = 0xA52A2A;
-			break;
-		case "chocolate" :
-			re = 0xD2691E;
-			break;
-		case "blue" :
-			re = 0x0000FF;
-			break;
-		case "aqua" :
-			re = 0x00FFFF;
-			break;
-		case "blueviolet" :
-			re = 0x8A2BE2;
-			break;
-		case "green" :
-			re = 0x00FF00;
-			break;
-		case "white" :
-			re = 0xFFFFFF;
-			break;
-		case "black" :
-			re = 0x000000;
-			break;
-		case "dark golden" :
-			re = 0xB8860B;
-			break;
-		case "dark magenta" :
-			re = 0x8B008B;
-			break;
-		case "dark green" :
-			re = 0x006400;
-			break;
-		case "dark blue" : 
-			re = 0x00008B;
-			break;
-		case "light gray" : 
-			re = 0xD3D3D3;
-			break;
-		case "light blue":
-			break;
-		case "light green" :
-			re = 0x90EE90;
-			break;
-			
-		}
-		return re;
-	}
 	
 	public void hide() {
 	    this.display = false;
@@ -165,5 +114,26 @@ public class GuiRectangle extends GuiScreen{
 
     
 	
+	public static int getColor(String color) {	
+		switch(color) {
+			case "red" : return 0xFF0000;
+			case "brown" : return 0xA52A2A;
+			case "chocolate" : return 0xD2691E;
+			case "blue" : return 0x0000FF;		
+			case "aqua" : return 0x00FFFF;
+			case "blueviolet" :	return 0x8A2BE2;
+			case "green" : return 0x00FF00;
+			case "white" : return 0xFFFFFF;
+			case "black" : return 0x000000;
+			case "dark golden" : return 0xB8860B;
+			case "dark magenta" : return 0x8B008B;
+			case "dark green" :	return 0x006400;	
+			case "dark blue" : 	return 0x00008B;
+			case "light gray" : return 0xD3D3D3;
+			case "light blue": break; //TODO
+			case "light green" : return 0x90EE90;
+			}
+		return 0x404040;
+		}
 }
 

@@ -13,10 +13,13 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	private static final byte deadcraftId = 2;
 
 	public static final int animationTime = 20;
+	public static final int buildTime = 1000;
 
 	private TileEntityGodBottler pair;
+	private int pairX,pairY,pairZ;
 	
-	private int time;
+	
+	private int workedTime = 300;
 	private int starsInStock;
 	public int direction;
 	private boolean hasStarted;
@@ -27,10 +30,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	private boolean isPowered = false;
 
-	private boolean isSync;
+	private boolean isSync = false;
 	
 	public TileEntityGodBottler() {
 		this(false);
+		inventory = new ItemStack[10];
 	}
 	
 	
@@ -61,6 +65,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		return true;
 	}	
 	
+	
+	
 	@Override
 	public void updateEntity() {
 		if(worldObj.isRemote) {
@@ -70,20 +76,27 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(!worldObj.isRemote) {
 			if(!isSync) sync();
 		}
+		workedTime++;
+		if(workedTime  >= buildTime/2 ) workedTime = 300;
 	}
 	
 	private void sync() {
+		if(pair == null) {
+			pair = (TileEntityGodBottler) worldObj.getTileEntity(pairX, pairY, pairZ);
+			return;
+		}if(this.isTop()) clientSetup(pair);
 		pair.allowed = this.allowed;
 		pair.owner = this.owner;
 		pair.locked = this.locked;
 		
-		
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), worldObj.getWorldInfo().getVanillaDimension());
 		isSync = true;
 	}
 
 
 	@Override
 	public ItemStack decrStackSize(int var1, int var2) {
+		if(this.isTop()) return pair.decrStackSize(var1, var2);
 		return null;
 	}
 
@@ -124,7 +137,12 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2) {
-		if (isTop) pair.setInventorySlotContents(var1, var2);
+		if (isTop) {
+			pair.setInventorySlotContents(var1, var2);
+			return;
+		}
+		
+		
 	}
 
 
@@ -155,8 +173,13 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		super.readFromNBT(nbtTagCompound);	
 		this.isTop = nbtTagCompound.getBoolean("top");
 		this.direction = nbtTagCompound.getInteger("direction");
-		if(this.isTop) readPairData(nbtTagCompound);
-		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), worldObj.getWorldInfo().getVanillaDimension());
+		this.clientTick = nbtTagCompound.getInteger("cTick");
+		if(pair == null) {
+			pairX = nbtTagCompound.getInteger("pairX");
+			pairY = nbtTagCompound.getInteger("pairY");
+			pairZ = nbtTagCompound.getInteger("pairZ");
+		}
+		if(this.isTop) readPairData(nbtTagCompound);	
 	}
 	
 	@Override
@@ -164,7 +187,14 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("direction", this.direction);
 		nbtTagCompound.setBoolean("top", this.isTop);
-		if(this.isTop) writePairData(pair, nbtTagCompound);
+		nbtTagCompound.setInteger("cTick", clientTick);
+		if(pair != null){
+			nbtTagCompound.setInteger("pairX", pair.xCoord);
+			nbtTagCompound.setInteger("pairY", pair.yCoord);
+			nbtTagCompound.setInteger("pairZ", pair.zCoord);
+		}
+		if(this.isTop) 	writePairData(pair, nbtTagCompound);
+		
 	}
 
 
@@ -195,7 +225,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	public void clientSetup(TileEntityGodBottler te) {
 		this.direction = te.getDirection();
-		this.clientTick = (int) animationTime;
+		this.clientTick = 0;
 		this.setTop();
 		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(te), worldObj.getWorldInfo().getVanillaDimension());
 	}
@@ -243,8 +273,17 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 
 
-	public boolean isHasStarted() {
+	public void setStarted(boolean par) {
+		this.hasStarted = par;
+	}
+	
+	public boolean hasStarted() {
 		return this.hasStarted;
+	}
+
+
+	public int getWorkedTime() {
+		return this.workedTime;
 	}
 
 

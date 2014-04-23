@@ -30,6 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemWrench extends Item {
 
     private static final String[] version = {"base","lock","info"};
+	private static final boolean DEBUG = false;
     private IIcon[] icons = {null,null,null};
 
     public ItemWrench () {
@@ -94,7 +95,7 @@ public class ItemWrench extends Item {
         if(!world.isRemote && world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
-             if (te.isUserCreator(username) && !player.isSneaking()) {
+             if ((te.isUserCreator(username) && !player.isSneaking()) || DEBUG) {
                 switch (stack.getItemDamage()) {
                     case 0:
                         FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
@@ -109,11 +110,10 @@ public class ItemWrench extends Item {
                         return false;
                 }
                 return true;
-
+                
             }else if(player.isSneaking()){
                 stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
             }else{
-                showData(te,player);
                 player.addChatComponentMessage(new ChatComponentText("You're not the owner of the block"));
             }
         }
