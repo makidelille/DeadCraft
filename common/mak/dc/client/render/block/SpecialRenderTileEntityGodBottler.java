@@ -58,25 +58,20 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 				this.model.Plateau.offsetY = -(float) (0.1* Math.log((float)(tick/te.animationTime)));
 				this.model.BrasMid.offsetY = (float) (0.12f * Math.log((float)(tick/te.animationTime)));
 				this.model.BrasBot.offsetY = (float) (0.135f * Math.log((float)(tick/te.animationTime)));
-			}if(te.hasStarted()){
-				float t = 0;// 1 - (test / te.buildTime);
+			}if(te.CLIENThasCan()){
 				GL11.glPushMatrix();
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glTranslatef(0, (float) (0.79f + 0.185*t), 0);
+				GL11.glTranslatef(0, (float) (0.79f), 0);
 				float scale = 0.15f;
 				GL11.glScalef(scale, scale, scale);
-								
-//				if(test >= te.buildTime) test = 0; //TODO remove
-//				else test++;
+
 				
 				
 				
 				this.bindTexture(canTextLoc);
 				this.can.render(null, 0, 0, 0, 0, 0, 0.0625f);
 				GL11.glPopMatrix();
-				if(test > te.animationTime) test = 0;
-				else test++;
 			}
 		}		
 		this.bindTexture(textLoc);

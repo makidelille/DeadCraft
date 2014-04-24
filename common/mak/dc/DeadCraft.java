@@ -4,6 +4,7 @@ import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.client.gui.GuiHandler;
 import mak.dc.config.ConfigHandler;
 import mak.dc.items.DeadCraftItems;
+import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.Lib;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
@@ -29,6 +30,7 @@ public class DeadCraft {
 	    public static DeadCraft instance;
 	    
 	    public static final PacketPipeline packetPipeline = new PacketPipeline();
+	    public static final CanCraftingManager canCraftingManager = new CanCraftingManager();
 		
 		@EventHandler
 		public void PreInit (FMLPreInitializationEvent event) {
@@ -64,6 +66,7 @@ public class DeadCraft {
 			DeadCraftBlocks.initTileEntity();
 			DeadCraftBlocks.registerCraftRecipe();
 			packetPipeline.initialise();
+			canCraftingManager.initialise();
 			
 		}
 		
@@ -71,5 +74,6 @@ public class DeadCraft {
 		public void PostInit (FMLPostInitializationEvent event) {
 			 DeadCraftItems.postInit();
 			 packetPipeline.postInitialise();
+			 canCraftingManager.postInitialise();
 		}
 }
