@@ -43,18 +43,24 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 	@Override
 	public void addCraftingToCrafters(ICrafting crafter) {
 		super.addCraftingToCrafters(crafter);
-		for(int i = 0; i < te.getSizeInventory(); i++) {
-			crafter.sendSlotContents(this, i, te.getStackInSlot(i));
-		}
+		crafter.sendProgressBarUpdate(this, 0, te.getWorkedTime());
 	}
 	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		for (Object player : crafters) {
-			for(int i = 0; i < te.getSizeInventory(); i++) {
-				((ICrafting)player).sendSlotContents(this, i, te.getStackInSlot(i));
-			}
+			((ICrafting)player).sendProgressBarUpdate(this, 0, te.getWorkedTime());
+		
+		}	
+	}
+	
+	@Override
+	public void updateProgressBar(int id, int data) {
+		super.updateProgressBar(id, data);
+		switch(id) {
+		case 0 :
+			te.setWorkedTime(data);
 		}
 	}
 	

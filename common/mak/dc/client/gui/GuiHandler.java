@@ -58,7 +58,6 @@ public class GuiHandler implements IGuiHandler {
                     return new GuiEggSpawner(player.inventory,  te1,ID);
                 break;
             case 2:
-            	System.out.println("gui");
             	TileEntityGodBottler te2 = (TileEntityGodBottler) world.getTileEntity(x, y, z);
             	if(te2 != null && !te2.isTop())
             		return new GuiGodBottler(player.inventory, te2, ID);

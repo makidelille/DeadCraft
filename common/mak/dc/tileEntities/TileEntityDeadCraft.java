@@ -2,6 +2,7 @@ package mak.dc.tileEntities;
 
 import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -56,6 +57,10 @@ public class TileEntityDeadCraft extends TileEntity {
         else if(this.isLocked()) return false;
         else return false;
         
+    }
+    
+    public boolean isUseableByPlayer(EntityPlayer player) {
+    	return isUserAllowed(player.getCommandSenderName()) && player.getDistanceSq(xCoord, yCoord, zCoord) <= 36;
     }
     
     public boolean isUserCreator(String name) {

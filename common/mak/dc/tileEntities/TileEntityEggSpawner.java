@@ -228,8 +228,8 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 				items.appendTag(item);
 			}
 		}
-		
 		compound.setTag("Items", items);
+		
 		compound.setInteger("buildtime", buildTime);
 		compound.setBoolean("created", created);
 		compound.setByte("started", getStarted());
@@ -242,8 +242,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		NBTTagList items = compound.getTagList("Items", 0);
-		
+		NBTTagList items = (NBTTagList) compound.getTag("Items");
 		for (int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
 			int slot = item.getByte("Slot");

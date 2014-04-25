@@ -1,9 +1,14 @@
 package mak.dc.tileEntities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import mak.dc.DeadCraft;
+import mak.dc.items.ItemGodCan;
 import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.network.DeadCraftGodBottlerPacket;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityGodBottler extends TileEntityDeadCraft implements IInventory{
 	
 	private static final byte deadcraftId = 2;
-	private static final CanCraftingManager canRecipesManager = CanCraftingManager.getInstance();
+	private static final CanCraftingManager canCraftingManager = DeadCraft.canCraftingManager;
 	
 	
 	
@@ -52,6 +57,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	 * Slot 3,8 : input resources;
 	 */
 	private ItemStack[] inventory ;
+	
+	private boolean hasIngredientsChanged;
 	/**sub construct
 	 * return this(false) = this(false,0)
 	 */
@@ -108,26 +115,66 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		}
 		if(!worldObj.isRemote) {
 			if(!isSync) sync();
-			ItemStack[] ing = this.getIngredientStacks() ;
-			int idMatchingrecipe = canRecipesManager.getMatchingRecipes(ing);
-			if(canRecipesManager.getCraftedEffects(idMatchingrecipe) != null) 
-				System.out.println(canRecipesManager.getCraftedEffects(idMatchingrecipe).getEffectId());
+			Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
+			ItemStack[] is = this.getItemStackFromMap(mapIs);
+			int idMatchingrecipe = canCraftingManager.getMatchingRecipes(is);
+			if(this.hasEmptyCan() && canCraftingManager.getCanEffectResultId(is) != null) {
+			ItemStack can = this.getEmptyCan();
+				if(workedTime >= buildTime ) {
+					this.craftCan(can,mapIs);			
+				}
+				workedTime++;
+			}else if(!this.hasEmptyCan() && this.getWorkedTime() > 0) this.workedTime = 0; 
+			else if(hasIngredientsChanged && this.getWorkedTime() > 0 ) this.workedTime = 0;
 		}
-		workedTime++;
-		if(workedTime > buildTime ) workedTime = 0;
 	}
 	
-	private ItemStack[] getIngredientStacks() {
-		List<ItemStack> is = new ArrayList();
+	
+	
+	private ItemStack[] getItemStackFromMap(Map<Integer, ItemStack> ing) { //XXX
+		ItemStack[] re = new ItemStack[ing.size()];
+		int i=0;
+		Iterator iterator = ing.entrySet().iterator();
+        Entry entry;
+        do {
+            entry = (Entry)iterator.next();
+            re[i] = (ItemStack) entry.getValue();
+        }while (iterator.hasNext());
+		return re;
+	}
+
+	private void craftCan(ItemStack can, Map<Integer, ItemStack> mapIs) {
+		if(this.getStackInSlot(2) == null) {
+			ItemStack[] iss = this.getItemStackFromMap(mapIs);
+			ItemStack newIs = canCraftingManager.craftCan(can, iss);
+			
+			this.setInventorySlotContents(2, newIs);
+			this.setInventorySlotContents(1, null);
+			
+			Iterator iterator = mapIs.entrySet().iterator();
+	        Entry entry;
+	        do {
+	            entry = (Entry)iterator.next();
+	            ItemStack is = (ItemStack) entry.getValue();
+	            is.stackSize--;
+	            this.setInventorySlotContents((int)entry.getKey(),is);
+	        }while (iterator.hasNext());
+			
+	        this.workedTime = 0;
+		}else workedTime = buildTime-1;
+	}
+
+	private ItemStack getEmptyCan() {
+		return inventory[1];
+	}
+
+	private Map<Integer,ItemStack> getIngredientStacks() {
+		Map<Integer,ItemStack> is = new HashMap();
 		for(int i = 2; i < inventory.length; i++) {
 			if(inventory[i] != null && inventory[i].stackSize > 0)
-				is.add(inventory[i]);
+				is.put(i, getStackInSlot(i));
 		}
-	//	System.out.println(is);
-		ItemStack[] re = new ItemStack[is.size()];
-		for(int j=0; j < re.length; j++)
-			re[j] = (ItemStack) is.get(j);
-		return re;
+		return is;
 	}
 
 	private void sync() {
@@ -145,9 +192,19 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 
 	@Override
-	public ItemStack decrStackSize(int var1, int var2) {
-		if(this.isTop()) return pair.decrStackSize(var1, var2);
-		return null;
+	public ItemStack decrStackSize(int slot, int nb) {
+		if(this.isTop()) return pair.decrStackSize(slot, nb);
+		else{
+			ItemStack itemstack = getStackInSlot(slot);
+			
+			if (itemstack != null) {
+				if (itemstack.stackSize <= nb) {
+					setInventorySlotContents(slot, null);
+				}else{
+					itemstack = itemstack.splitStack(nb);
+				}}
+			return itemstack;
+		}
 	}
 
 
@@ -194,6 +251,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			inventory[var1] = var2;
 			if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
 		            var2.stackSize = getInventoryStackLimit();
+			if(var1 > 2 && var1 < this.getSizeInventory() && this.workedTime > 0) this.hasIngredientsChanged = true;
+			else this.hasIngredientsChanged = false;
 		}
 		
 		
@@ -203,27 +262,25 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		return false;
+		return isTop ? pair.hasCustomInventoryName() : false;
 	}
 
 
 
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
-		if (isTop) return pair.isItemValidForSlot(var1, var2);
-		return true;
+		return isTop? pair.isItemValidForSlot(var1, var2) : true;
 	}
 
 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		if (isTop) return pair.isUseableByPlayer(var1);
-		return true;
+		return isTop ? pair.isUseableByPlayer(var1) : super.isUseableByPlayer(var1);
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound) { //TODO save inv
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);	
 		this.isTop = nbtTagCompound.getBoolean("top");
 		this.direction = nbtTagCompound.getInteger("direction");
@@ -235,8 +292,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		}
 		if(this.isTop) readPairData(nbtTagCompound);
 		else {
-			NBTTagList items = nbtTagCompound.getTagList("Items", 0);
-			
+			NBTTagList items = (NBTTagList) nbtTagCompound.getTag("Items");
 			for (int i = 0; i < items.tagCount(); i++) {
 				NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
 				int slot = item.getByte("Slot");
@@ -249,7 +305,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound) { //TODO save inv
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("direction", this.direction);
 		nbtTagCompound.setBoolean("top", this.isTop);
@@ -273,9 +329,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 					items.appendTag(item);
 				}
 			}
-			
 			nbtTagCompound.setTag("Items", items);
 		}
+		
+		System.out.println(nbtTagCompound);
 		
 	}
 
@@ -328,18 +385,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
             allowed.add(tag.getString("allowed [" +i+ "]"));
         }
         this.locked = tag.getBoolean("locked");
-        
-		NBTTagList items = tag.getTagList("Items", 0);
-		
-		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
-			int slot = item.getByte("Slot");
-			
-			if (slot >= 0 && slot < getSizeInventory()) {
-				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
-			}
-		}
-
+    
 	}
 
 	private void writePairData(TileEntityGodBottler pair, NBTTagCompound nbtTagCompound) {
@@ -352,21 +398,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
                 }
         nbtTagCompound.setBoolean("locked", pair.locked);
         
-        NBTTagList items = new NBTTagList();
-		
-		for (int i = 0; i < getSizeInventory(); i++) {		
-			ItemStack stack = getStackInSlot(i);
-			
-			if (stack != null) {
-				NBTTagCompound item = new NBTTagCompound();
-				item.setByte("Slot", (byte)i);
-				stack.writeToNBT(item);
-				items.appendTag(item);
-			}
-		}
-		
-		nbtTagCompound.setTag("Items", items);
-		
 	}
 	
 	
@@ -393,7 +424,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	
 	public boolean hasEmptyCan() {
-		return this.inventory[1] != null && this.inventory[1].stackSize > 0;
+		return this.inventory[1] != null && this.inventory[1].stackSize == 1 && (this.inventory[1].getItem() instanceof ItemGodCan);
 	}
 	
 	public boolean hasRessources() {
@@ -411,6 +442,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	@SideOnly(Side.CLIENT)
 	public boolean CLIENThasCan() {
 		return this.inventory[1] != null || this.inventory[2] != null;
+	}
+
+	public void setWorkedTime(int data) {
+		this.workedTime = data;		
 	}
 
 

@@ -14,39 +14,36 @@ import cpw.mods.fml.common.FMLLog;
 import mak.dc.util.CanEffect;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 
 public class CanCraftingManager {
 
-	private static CanCraftingManager instance = new CanCraftingManager();
 	
 	
 	private Map<ItemStack[],Integer> recipesList = new HashMap();
 	private Map<Integer,CanEffect> EffectsList = new HashMap();
 	private static boolean hasInit;
-	
-	public static CanCraftingManager getInstance() {
-		return instance;
-	}
-	
-	public CanCraftingManager() { //TODO
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)},getNextAvailableId() , new PotionEffect[]{new PotionEffect(1, 2)});
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond_axe)},getNextAvailableId() , new PotionEffect[]{new PotionEffect(1, 2)});
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond), new ItemStack(Items.diamond_axe)},getNextAvailableId() , new PotionEffect[]{new PotionEffect(1, 2)});
 
 
-	}
+	private int curentId;
 	
-	
-	
-	public void addRecipe(ItemStack[] ingredients,int id, PotionEffect[] effects) {
-		this.recipesList.put(ingredients, Integer.valueOf(id));
-		this.EffectsList.put(Integer.valueOf(id), new CanEffect(id, effects));
-		
-		FMLLog.getLogger().info("new can recipe made of " +  ingredients.toString() + " at id : " + id);
+	public CanCraftingManager getInstance() {
+		return this;
 	}
 		
+	public void addRecipe(ItemStack[] ingredients, PotionEffect[] effects) {
+		this.recipesList.put(ingredients, Integer.valueOf(this.nextId()));
+		this.EffectsList.put(Integer.valueOf(this.nextId()), new CanEffect(this.nextId(), effects));
+		
+		FMLLog.getLogger().info("new can recipe made of " +  ingredients.toString() + " at id : " + this.nextId());
+		this.curentId++;
+	}
+		
+
 	public boolean matchRecipes(ItemStack[] ingredients, ItemStack[] recipe) {
 		if(recipe.length != ingredients.length) return false;
 		for (int i=0; i < ingredients.length; i++) {
@@ -79,11 +76,12 @@ public class CanCraftingManager {
 		else {
 			NBTTagCompound tag = can.getTagCompound();
 			if(tag == null) tag = new NBTTagCompound();
-			int[] ids = tag.getIntArray("effects ids");
-			int[] newIds = new int[ids.length+1];
-			newIds = ids.clone();
-			newIds[newIds.length - 1] = effect.effectId;
-			tag.setIntArray("effects ids", newIds);
+			NBTTagList ids;
+			if(tag.hasKey("effect ids")) ids = (NBTTagList) tag.getTag("effect ids");
+			else ids = new NBTTagList();
+			NBTTagCompound newid = new NBTTagCompound();
+			newid.setInteger("id", effect.effectId);;
+			ids.appendTag(newid);
 			re.setTagCompound(tag);
 		}
 		return re;
@@ -98,11 +96,18 @@ public class CanCraftingManager {
 	
 
 	public void initialise() { //dunno if i put smthg here ?
+		this.curentId = 0;
 		hasInit = true;
 	}
 
-	public void postInitialise() {
+	/** 
+	 * register recipe here
+	*/
+	public void postInitialise() { 
 		if(!hasInit) return;
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)},new PotionEffect[]{new PotionEffect(1, 2)});
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond_axe)},new PotionEffect[]{new PotionEffect(1, 2)});
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond), new ItemStack(Items.diamond_axe)},new PotionEffect[]{new PotionEffect(1, 2)});
 		
 	}
 
@@ -110,6 +115,9 @@ public class CanCraftingManager {
 		return this.EffectsList.get(idMatchingrecipe);
 	}
 
+	private int nextId() {
+		return curentId+1;
+	}
 	
 	
 	

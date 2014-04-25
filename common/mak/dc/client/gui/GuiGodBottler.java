@@ -85,7 +85,7 @@ public class GuiGodBottler extends GuiCustom {
 			switch(i) {
 			case 0 : return 22;
 			case 1 : return 22;
-			case 2 : return (int) (36* ((2*x) - (2f/3f))); //TODO
+			case 2 : return (int) (36* ((2*x) - (2f/3f)));
 			case 3 : return (int) (36* ((2*x) - (2f/3f)));
 			default : return 0;
 			}
