@@ -142,7 +142,7 @@ public class ItemMindController extends Item {
                 if (stack != null && stack.getItem() instanceof ItemLifeCrystal) {
                     ItemLifeCrystal crsytalItem = (ItemLifeCrystal) stack.getItem();
                     int dmg = stack.getItemDamage();
-                    int chargeCrystal = ItemLifeCrystal._maxValue - dmg;
+                    int chargeCrystal = ItemLifeCrystal.MAXVALUE - dmg;
                     if (chargeCrystal > 0) {
                         crsytalItem.dischargeItem(stack, chargeCrystal);
                         chargeCrystal = chargeItem(is, chargeCrystal);

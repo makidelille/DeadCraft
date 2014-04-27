@@ -40,10 +40,13 @@ public class ContainerGodBottler extends ContainerDeadCraft{
         
 	}
 	
+	
+	
 	@Override
 	public void addCraftingToCrafters(ICrafting crafter) {
 		super.addCraftingToCrafters(crafter);
 		crafter.sendProgressBarUpdate(this, 0, te.getWorkedTime());
+		crafter.sendProgressBarUpdate(this, 1, te.getPower());
 	}
 	
 	@Override
@@ -51,7 +54,7 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 		super.detectAndSendChanges();
 		for (Object player : crafters) {
 			((ICrafting)player).sendProgressBarUpdate(this, 0, te.getWorkedTime());
-		
+			((ICrafting)player).sendProgressBarUpdate(this, 1, te.getPower());		
 		}	
 	}
 	
@@ -61,8 +64,14 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 		switch(id) {
 		case 0 :
 			te.setWorkedTime(data);
+			break;
+		case 1:
+			te.setPower(data);
+			break;
 		}
 	}
+	
+	
 	
 	
 }

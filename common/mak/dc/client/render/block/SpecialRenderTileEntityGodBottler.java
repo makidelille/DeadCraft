@@ -54,10 +54,10 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 		}else{
 			GL11.glRotatef((te.getDirection() * 90F), 0.0F, 1.0F, 0.0F);  
 			if(te.getClientTick() > 0) {
-				tick = te.getClientTick();
-				this.model.Plateau.offsetY = -(float) (0.1* Math.log((float)(tick/te.animationTime)));
-				this.model.BrasMid.offsetY = (float) (0.12f * Math.log((float)(tick/te.animationTime)));
-				this.model.BrasBot.offsetY = (float) (0.135f * Math.log((float)(tick/te.animationTime)));
+				float t= (float) te.getClientTick() / te.ANIMATIONTIME;
+				this.model.Plateau.offsetY = -(float) (0.1* Math.log(t));
+				this.model.BrasMid.offsetY = (float) (0.12f * Math.log(t));
+				this.model.BrasBot.offsetY = (float) (0.135f * Math.log(t));
 			}if(te.CLIENThasCan()){
 				GL11.glPushMatrix();
 				GL11.glEnable(GL11.GL_LIGHTING);

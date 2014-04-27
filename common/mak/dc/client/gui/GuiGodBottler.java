@@ -44,13 +44,14 @@ public class GuiGodBottler extends GuiCustom {
         subRect.get(2).draw(xSize + 8, 4);
         subRect.get(3).draw(xSize + 8 +36 - getSizeBar(3), 0);
         subRect.get(4).draw(xSize,22);
+        subRect.get(5).draw(xSize, 32 + 52 - getSizeBar(5));
 
-//        System.out.println(getSizeBar(0));
         subRect.add(0,new GuiRectangle(this, 71, 23, 4, getSizeBar(0))); // vertical l 
 		subRect.add(1,new GuiRectangle(this, 139, 23, 4, getSizeBar(1))); // vertical r 
 		subRect.add(2,new GuiRectangle(this, 71, 45, getSizeBar(2), 4)); // horizontal r 
 		subRect.add(3,new GuiRectangle(this, 107 + 36 - getSizeBar(3), 45, getSizeBar(3), 4)); // horizontal l 
 		subRect.add(4,new GuiRectangle(this, 102, 49, 12, getSizeBar(4))); // fleche 
+		subRect.add(5, new GuiRectangle(this, 16 , 7 + 52 - getSizeBar(5), 18, getSizeBar(5)));
 	
 	
    	
@@ -69,19 +70,21 @@ public class GuiGodBottler extends GuiCustom {
 		subRect.add(2,new GuiRectangle(this, 71, 45, 0, 4)); // horizontal r 
 		subRect.add(3,new GuiRectangle(this, 107, 45, 0, 4)); // horizontal l 
 		subRect.add(4,new GuiRectangle(this, 102, 49, 12, 0)); // fleche 
+		subRect.add(5, new GuiRectangle(this, 16, 7, 18, 0)); // charge
 	}
 	
 	private int getSizeBar(int i){
+		if(i == 5) return (int) (52 * ((float)te.getPower()) / te.MAXPOWER);
 		float workedTime  = this.te.getWorkedTime();
-		float x = (float)this.te.getWorkedTime() /(float)this.te.buildTime;
-		if(workedTime <= te.buildTime/3f)
+		float x = (float)this.te.getWorkedTime() /(float)this.te.BUILDTIME;
+		if(workedTime <= te.BUILDTIME/3f)
 			switch(i){
 			case 0 : return (int) (22 * (3*x)); 
 			case 1 : return (int) (22 * (3*x)); 
 			default : return 0;			
 			}
 		
-		else if(workedTime <= (5f* te.buildTime)/6f && workedTime > te.buildTime /3f)
+		else if(workedTime <= (5f* te.BUILDTIME)/6f && workedTime > te.BUILDTIME /3f)
 			switch(i) {
 			case 0 : return 22;
 			case 1 : return 22;
@@ -89,7 +92,7 @@ public class GuiGodBottler extends GuiCustom {
 			case 3 : return (int) (36* ((2*x) - (2f/3f)));
 			default : return 0;
 			}
-		else if(workedTime <= te.buildTime && workedTime > 5f* te.buildTime /6f)
+		else if(workedTime <= te.BUILDTIME && workedTime > 5f* te.BUILDTIME /6f)
 			switch(i) {
 			case 0 : return 22;
 			case 1 : return 22;

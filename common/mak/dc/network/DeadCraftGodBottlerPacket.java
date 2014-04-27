@@ -27,7 +27,7 @@ public class DeadCraftGodBottlerPacket extends AbstractPacket {
 		this.z = te.zCoord;
 		this.facing = te.direction;
 		this.isTop = te.isTop();
-		this.isPowered = te.isPowered();
+		this.isPowered = te.isRSPowered();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class DeadCraftGodBottlerPacket extends AbstractPacket {
 		if(te == null) return;
 		if(this.isTop) te.setTop();
 		te.setDirection(facing);
-		te.setPowered(isPowered);
+		te.setRSPowered(isPowered);
 	}
 
 	@Override

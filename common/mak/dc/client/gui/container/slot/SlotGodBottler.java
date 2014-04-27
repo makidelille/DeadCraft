@@ -1,5 +1,7 @@
 package mak.dc.client.gui.container.slot;
 
+import mak.dc.items.ItemGodCan;
+import mak.dc.items.ItemLifeCrystal;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -15,7 +17,12 @@ public class SlotGodBottler extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack par1ItemStack) {
-		return true;
+		switch (i) {
+		case 0: return par1ItemStack.getItem() instanceof ItemLifeCrystal;
+		case 1:	return par1ItemStack.getItem() instanceof ItemGodCan;
+		case 2: return false;
+		default : return true;
+		}
 	}
 
 }

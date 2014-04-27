@@ -140,12 +140,12 @@ public class BlockGodBottler extends BlockDeadCraft {
 			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 			if(te != null) {
 				if(world.isBlockIndirectlyGettingPowered(x, y, z)) {
-					te.setPowered(true);
+					te.setRSPowered(true);
 					this.setLightOpacity(0);
 					this.setLightLevel(0.5f);
 				}
 				else if(!world.isBlockIndirectlyGettingPowered(x, y, z)) {
-					te.setPowered(false);
+					te.setRSPowered(false);
 					this.setLightLevel(0f);
 					this.setLightOpacity(1);
 				}
