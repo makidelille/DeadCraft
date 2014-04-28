@@ -20,15 +20,15 @@ public class ItemLifeCrystal extends ItemFood {
 
     /** handle by config */
 
-    public static int _crystalCost;
-    public static int _maxValue;
+    public static final int CRYSTALCOST = 100;
+    public static final int MAXVALUE = 1_000;
 
     @SideOnly (Side.CLIENT)
     private IIcon[]    icons = { null, null };
 
     public ItemLifeCrystal () {
         super( 0, false);
-        this.setMaxDamage(_maxValue);
+        this.setMaxDamage(MAXVALUE);
         this.setUnlocalizedName(IBTInfos.ITEM_LIFECRYSTAL_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
         this.setMaxStackSize(1);
@@ -72,8 +72,8 @@ public class ItemLifeCrystal extends ItemFood {
 
             ItemStack newStack = stack;
             int dmg = stack.getItemDamage();
-            if (dmg < _crystalCost) {
-                dischargeItem(newStack, _crystalCost);
+            if (dmg < CRYSTALCOST) {
+                dischargeItem(newStack, CRYSTALCOST);
 //                player.addChatMessage("you've been healed and feed");
                 player.heal(500);
                 player.getFoodStats().setFoodSaturationLevel(20);
@@ -94,7 +94,7 @@ public class ItemLifeCrystal extends ItemFood {
     @SideOnly (Side.CLIENT)
     @Override
     public IIcon getIconFromDamage (int dmg) {
-        return dmg == _maxValue ? icons[0] : icons[1];
+        return dmg == MAXVALUE ? icons[0] : icons[1];
     }
 
     private boolean isCharged (int dmg) {

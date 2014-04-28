@@ -48,7 +48,7 @@ public class CanCraftingManager {
 		if(recipe.length != ingredients.length) return false;
 		for (int i=0; i < ingredients.length; i++) {
 			if(ingredients[i] == null) return false;
-			if(!ingredients[i].getItem().equals(ingredients[i].getItem()) || ingredients[i].getItemDamage() != ingredients[i].getItemDamage()) return false;
+			if(!ingredients[i].getItem().equals(recipe[i].getItem()) || ingredients[i].getItemDamage() != recipe[i].getItemDamage()) return false;
 		}
 		return true;
 	}

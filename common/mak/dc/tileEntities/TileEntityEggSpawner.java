@@ -79,7 +79,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	
 	
 	private void tickLifeCrystal() {
-		int maxDmg = ItemLifeCrystal._maxValue;
+		int maxDmg = ItemLifeCrystal.MAXVALUE;
 		
 		if(!worldObj.isRemote) {
 			if(Math.random() > 0.6) {
