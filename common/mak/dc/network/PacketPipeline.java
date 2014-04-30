@@ -12,6 +12,8 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import mak.dc.network.packet.DeadCraftAdminPacket;
+import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.util.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,7 +102,6 @@ public class PacketPipeline extends
     private void registerPackets() {
 		registerPacket(DeadCraftAdminPacket.class);
 		registerPacket(DeadCraftEggSpawnerPacket.class);
-		registerPacket(DeadCraftGodBottlerPacket.class);
 		
 	}
 

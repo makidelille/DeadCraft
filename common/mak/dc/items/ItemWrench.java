@@ -6,7 +6,6 @@ import java.util.List;
 import mak.dc.DeadCraft;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
-import mak.dc.network.DeadCraftAdminPacket;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,9 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -126,8 +123,7 @@ public class ItemWrench extends Item {
     	player.addChatComponentMessage(new ChatComponentText("allowed users : "  + te.getAllowedUser()));
     	if(te instanceof TileEntityGodBottler) {
     		player.addChatComponentMessage(new ChatComponentText("isTop ? " + ((TileEntityGodBottler) te).isTop()));
-    		player.addChatComponentMessage(new ChatComponentText("face : " + ((TileEntityGodBottler) te).direction));
-
+    		player.addChatComponentMessage(new ChatComponentText("direction : " + ((TileEntityGodBottler) te).getDirection()));
     	}
     }
 

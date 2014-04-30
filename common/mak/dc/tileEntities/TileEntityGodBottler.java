@@ -1,9 +1,7 @@
 package mak.dc.tileEntities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,15 +9,11 @@ import mak.dc.DeadCraft;
 import mak.dc.items.ItemGodCan;
 import mak.dc.items.ItemLifeCrystal;
 import mak.dc.items.crafting.CanCraftingManager;
-import mak.dc.network.DeadCraftGodBottlerPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGodBottler extends TileEntityDeadCraft implements IInventory{
 	
@@ -50,17 +44,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 
 	private TileEntityGodBottler pair;
-	private int pairX,pairY,pairZ;
-	
-	public int direction;
-	private boolean isTop;
-	
 
 	private int clientTick = 0;
 	private boolean isSync = false;
 	
 	private int workedTime;
-	private boolean isRSPowered = false;
 	private int power;
 
 	/**Slot 0 : Energy; 
@@ -78,22 +66,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		this(false);
 	}
 	
-	/**sub construct
-	 * @param isTop ?
-	 * @return this(top,0)
-	 */
-	public TileEntityGodBottler(boolean top) {
-		this(top, (byte) 0);
-	}
-	
 	/**Main constructor 
 	 * @param top
-	 * @param facing
 	 */
-	public TileEntityGodBottler(boolean top, byte facing) {
+	public TileEntityGodBottler(boolean top) {
 		super(true);
-		this.isTop = top;
-		this.direction = facing;
 		inventory = new ItemStack[9];
 		this.clientTick = 0;
 		this.workedTime = 0;
@@ -110,12 +87,17 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	 
 	public void updateEntity() {
+		if(pair == null || !(0 < this.blockMetadata && this.blockMetadata <= 4) ) isSync = false;
+		if(!isSync) {
+			sync();
+			this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+			return;
+		}
 		if(worldObj.isRemote) {
-			if(this.isRSPowered ) this.setClientTick(this.getClientTick() + 1);
-			else if(!this.isRSPowered) this.setClientTick(this.getClientTick() - 1);
+			if(this.isRSPowered() ) this.setClientTick(this.getClientTick() + 1);
+			else if(!this.isRSPowered()) this.setClientTick(this.getClientTick() - 1);			
 		}
 		if(!worldObj.isRemote) {
-			if(!isSync) sync();
 			Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
 			ItemStack[] is = this.getItemStackFromMap(mapIs);
 			
@@ -124,8 +106,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			if(this.getStackInSlot(0) != null) {
 				this.charge();
 			}
-			
-			
+					
 			if(this.hasEmptyCan() && idMatchingrecipe != -1 && this.hasPower() && this.isRSPowered()) {
 				ItemStack can = this.getEmptyCan();
 			
@@ -148,11 +129,9 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			ItemStack crystal = inventory[0];
 			System.out.println(crystal.getMaxDamage()  - CHARGESPEED );
 			if(crystal.getItem() instanceof ItemLifeCrystal && crystal.getItemDamage() <= crystal.getMaxDamage()  - CHARGESPEED){
-				//we start the powerTransfer
 				ItemLifeCrystal itemCrystal= (ItemLifeCrystal)crystal.getItem();
 				itemCrystal.dischargeItem(crystal, CHARGESPEED);
 				this.power += CHARGESPEED;
-				//we have done the power transfer
 			}
 		}
 		
@@ -187,14 +166,16 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	private void sync() {
 		if(pair == null) {
-			pair = (TileEntityGodBottler) worldObj.getTileEntity(pairX, pairY, pairZ);
-			return;
-		}if(this.isTop()) clientSetup(pair);
+			pair = (TileEntityGodBottler) worldObj.getTileEntity(xCoord, yCoord + (isTop() ? -1 : 1), zCoord);
+			if(pair == null) return;
+		}
+		if(this.isTop()) clientSetup(pair);
 		pair.allowed = this.allowed;
 		pair.owner = this.owner;
 		pair.locked = this.locked;
+
+		this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		
-		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), worldObj.getWorldInfo().getVanillaDimension());
 		isSync = true;
 	}
 
@@ -215,15 +196,9 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}	
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);	
-		this.isTop = nbtTagCompound.getBoolean("top");
-		this.direction = nbtTagCompound.getInteger("direction");
 		this.clientTick = nbtTagCompound.getInteger("cTick");
-		if(pair == null) {
-			pairX = nbtTagCompound.getInteger("pairX");
-			pairY = nbtTagCompound.getInteger("pairY");
-			pairZ = nbtTagCompound.getInteger("pairZ");
-		}
-		if(this.isTop) readPairData(nbtTagCompound);
+		this.blockMetadata = nbtTagCompound.getInteger("meta");
+		if(this.isTop()) readPairData(nbtTagCompound);
 		else {
 			NBTTagList items = (NBTTagList) nbtTagCompound.getTag("Items");
 			for (int i = 0; i < items.tagCount(); i++) {
@@ -236,21 +211,15 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			}
 			this.power = nbtTagCompound.getInteger("power");
 			this.workedTime = nbtTagCompound.getInteger("workTime");
-			this.isRSPowered = nbtTagCompound.getBoolean("isRsPowered");
 		}
+		this.isSync = false;
 	}
 	
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setInteger("direction", this.direction);
-		nbtTagCompound.setBoolean("top", this.isTop);
 		nbtTagCompound.setInteger("cTick", clientTick);
-		if(pair != null){
-			nbtTagCompound.setInteger("pairX", pair.xCoord);
-			nbtTagCompound.setInteger("pairY", pair.yCoord);
-			nbtTagCompound.setInteger("pairZ", pair.zCoord);
-		}
-		if(this.isTop) 	writePairData(pair, nbtTagCompound);
+		nbtTagCompound.setInteger("meta", this.blockMetadata);
+		if(this.isTop()) writePairData(pair, nbtTagCompound);
 		else {
 			NBTTagList items = new NBTTagList();
 			
@@ -267,8 +236,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			nbtTagCompound.setTag("Items", items);
 			nbtTagCompound.setInteger("power", this.power);
 			nbtTagCompound.setInteger("workTime", workedTime);
-			nbtTagCompound.setBoolean("isRsPowered", this.isRSPowered);
 		}
+		this.isSync = false;
 	}
 	
 	private void readPairData(NBTTagCompound tag) {
@@ -294,12 +263,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	
 	public void clientSetup(TileEntityGodBottler te) {
-		this.direction = te.getDirection();
 		this.clientTick = 0;
-		this.setTop();
-		
-		//updating client (in theory)
-		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(te), worldObj.getWorldInfo().getVanillaDimension());
 	}
 	
 	public void setup(TileEntityGodBottler te) {
@@ -307,6 +271,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		this.allowed = te.allowed;
 		this.owner = te.owner;
 		this.locked = te.locked;
+		this.isSync = false;
 	}
 	
 	/**
@@ -316,7 +281,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	 
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
-		if(isTop) return pair.isItemValidForSlot(var1, var2);
+		if(isTop()) return pair.isItemValidForSlot(var1, var2);
 		else {
 			switch (var1) {
 			case 0: return var2.getItem() instanceof ItemLifeCrystal;
@@ -327,14 +292,14 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		}
 	}
 	public boolean isRSPowered() {
-		return this.isRSPowered;
+		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) || worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord + (isTop() ? -1 : 1), zCoord);
 	}
 	public boolean isTop() {
-		return this.isTop;
+		return this.blockMetadata == 4;
 	}
 	 
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return isTop ? pair.isUseableByPlayer(var1) : super.isUseableByPlayer(var1);
+		return isTop() ? pair.isUseableByPlayer(var1) : super.isUseableByPlayer(var1);
 	}
 	
 	
@@ -352,7 +317,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	
 	public boolean hasPower() {
-		return isTop ? pair.hasPower() : this.power > 0;
+		return isTop() ? pair.hasPower() : this.power > 0;
 	}
 	public boolean hasRessources() {
 		for(int i = 2; i < inventory.length; i++) {
@@ -362,7 +327,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		return false;
 	}
 	public boolean hasStarted() {
-		return isTop ? pair.hasStarted() : this.workedTime > 0;
+		if(pair == null) return false;
+		return isTop() ? pair.hasStarted() : this.workedTime > 0;
 	}
 	
 	
@@ -373,7 +339,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	
 	public int getDirection() {
-		return isTop ? pair.getDirection() : direction;
+		if(pair == null) return 0;
+		return isTop() ? pair.getDirection() : this.blockMetadata;
 	}
 	private ItemStack getEmptyCan() {
 		return inventory[1];
@@ -407,19 +374,19 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		return this.pair;
 	}
 	public int getPower() {
-		return isTop ? pair.getPower() : this.power;
+		return isTop() ? pair.getPower() : this.power;
 	}
 	public int getSizeInventory() {
 		return inventory.length;
 	}
 	public ItemStack getStackInSlot(int var1) {
-		return isTop ? pair.getStackInSlot(var1) : this.inventory[var1];
+		return isTop() ? pair.getStackInSlot(var1) : this.inventory[var1];
 	}
 	public ItemStack getStackInSlotOnClosing(int var1) {
-		return isTop? pair.getStackInSlotOnClosing(var1) : this.inventory[var1];
+		return isTop() ? pair.getStackInSlotOnClosing(var1) : this.inventory[var1];
 	}
 	public int getWorkedTime() {
-		return isTop? pair.getWorkedTime() : this.workedTime;
+		return isTop() ? pair.getWorkedTime() : this.workedTime;
 	}
 	
 	/**
@@ -428,11 +395,12 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	
 	public void setDirection(int i) {
-		this.direction = i;
+		this.blockMetadata = i;
+		this.isSync = false;
 	}
 	 
 	public void setInventorySlotContents(int var1, ItemStack var2) {
-		if (isTop) {
+		if (isTop()) {
 			pair.setInventorySlotContents(var1, var2);
 			return;
 		}else{
@@ -441,7 +409,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 				var2.stackSize = getInventoryStackLimit();
 			if(var1 > 2 && var1 < this.getSizeInventory()) this.hasIngredientsChanged = true;
 			else this.hasIngredientsChanged = false;
-		}		
+		}	
 	}
 	public void setPair(TileEntityGodBottler te) {
 		this.pair = te;
@@ -449,14 +417,12 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	public void setPower(int par) {
 		this.power = par;
 	}
-	public void setRSPowered(boolean isPowered2) {
-		this.isRSPowered = isPowered2;		
-	}
 	public void setTop() {
-		this.isTop = true;
+		this.blockMetadata = 4;
+		this.isSync = false;
 	}
 	public void setWorkedTime(int data) {
-		this.workedTime = data;		
+		this.workedTime = data;
 	}
 	
 	
@@ -472,25 +438,20 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	
 	/**
-	 *  Client side used functions
+	 *  Client used functions
 	 */
-	
-	
-	@SideOnly(Side.CLIENT)
 	public int getClientTick() {
 		return clientTick;
 	}
-	@SideOnly(Side.CLIENT)
 	public void setClientTick(int tick) {
-		if(tick <= ANIMATIONTIME && tick >= 0) this.clientTick = tick;
-		else if(tick > ANIMATIONTIME) this.clientTick = ANIMATIONTIME;
-		else if(tick < 0) this.clientTick = 0;
+		if(tick < ANIMATIONTIME && tick > 0) this.clientTick = tick;
+		else if(tick >= ANIMATIONTIME) this.clientTick = ANIMATIONTIME;
+		else if(tick <= 0) this.clientTick = 0;
 	}
 	
 	/** for display only (client Side)
 	 * @return should render the can or not
 	 */
-	@SideOnly(Side.CLIENT)
 	public boolean CLIENThasCan() {
 		return this.inventory[1] != null || this.inventory[2] != null;
 	}

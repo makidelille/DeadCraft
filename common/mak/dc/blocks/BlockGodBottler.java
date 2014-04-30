@@ -2,29 +2,25 @@ package mak.dc.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import mak.dc.DeadCraft;
 import mak.dc.lib.IBTInfos;
-import mak.dc.network.DeadCraftGodBottlerPacket;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
 public class BlockGodBottler extends BlockDeadCraft {
 
@@ -33,6 +29,8 @@ public class BlockGodBottler extends BlockDeadCraft {
 	public BlockGodBottler() {
 		super(Material.iron);
 		this.setBlockName(IBTInfos.BLOCK_BOTTLER_UNLOCALIZED_NAME);
+		this.setLightOpacity(0);
+		this.setLightLevel(0.8f);
 		
 	}
 	
@@ -59,30 +57,15 @@ public class BlockGodBottler extends BlockDeadCraft {
 		
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
-		world.setBlock(x, y+1, z, this);
-		TileEntityGodBottler teBot = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-		if(teBot instanceof TileEntityGodBottler) {
-				
-		}
-		TileEntityGodBottler teTop = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
-		super.onBlockPlacedBy(world, teBot.xCoord, teBot.yCoord, teBot.zCoord, ent, is);
-		teTop.setup(teBot);
-		teBot.setPair(teTop);
-		
-		
-		//TODO Client part
-		TileEntityGodBottler teBotCl = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-		TileEntityGodBottler teTopCl = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
-		if(teBotCl instanceof TileEntityGodBottler && teTopCl instanceof TileEntityGodBottler) {
+			world.setBlock(x, y+1, z, this,4,1|2);
+			TileEntityGodBottler teBot = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 			byte face = (byte) (MathHelper.floor_double((double)(ent.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-			teBotCl.setDirection(face);
-			teTopCl.clientSetup(teBotCl);
-			DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(teBotCl), world.getWorldInfo().getVanillaDimension());
-			DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(teTopCl), world.getWorldInfo().getVanillaDimension());
-		}
-		
-		
-
+			world.setBlockMetadataWithNotify(x, y, z, face, 1|2);
+	
+			TileEntityGodBottler teTop = (TileEntityGodBottler) world.getTileEntity(x, y+1, z);
+			super.onBlockPlacedBy(world, teBot.xCoord, teBot.yCoord, teBot.zCoord, ent, is);
+			teTop.setup(teBot);
+			teBot.setPair(teTop);
 	}
 
 	
@@ -92,11 +75,11 @@ public class BlockGodBottler extends BlockDeadCraft {
 			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 			if(te.isTop()) te = te.getPair();			
 			if(!super.onBlockActivated(world, te.xCoord, te.yCoord, te.zCoord, player, side, hitX, hitY, hitZ)) {
-				 if(!world.isRemote && player.getCurrentEquippedItem() == null)
+				 if(player.getCurrentEquippedItem() == null){
 					 FMLNetworkHandler.openGui(player, DeadCraft.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
-
+					 return true;
+				 }
 			}
-
 		}
 		
 		return true;
@@ -114,14 +97,6 @@ public class BlockGodBottler extends BlockDeadCraft {
 			if(te != null && te instanceof TileEntityGodBottler) {
 				world.removeTileEntity(te.xCoord,te.yCoord + 1, te.zCoord);
 				world.setBlockToAir(te.xCoord,te.yCoord + 1, te.zCoord);
-//				world.removeTileEntity(te.xCoord,te.yCoord, te.zCoord);
-//				world.setBlockToAir(te.xCoord,te.yCoord, te.zCoord);
-//				ItemStack is = new ItemStack(block, 1,0);
-//		    	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
-//		    	is.stackSize = 1;
-//		    	EntityItem entitem = new EntityItem(world, x, y, z, is);
-//		    	entitem.setEntityItemStack(is);
-//		    	world.spawnEntityInWorld(entitem);
 				super.breakBlock(world, te.xCoord, te.yCoord, te.zCoord, block, meta);
 			}
 		    	
@@ -132,27 +107,9 @@ public class BlockGodBottler extends BlockDeadCraft {
 	
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z,int side) {
-		return side != ((TileEntityGodBottler) world.getTileEntity(x, y, z)).getDirection() ;
+		return true;
 	}
-	
-	@Override
-	public void onNeighborBlockChange(World world, int x,int y, int z, Block block){
-			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-			if(te != null) {
-				if(world.isBlockIndirectlyGettingPowered(x, y, z)) {
-					te.setRSPowered(true);
-					this.setLightOpacity(0);
-					this.setLightLevel(0.5f);
-				}
-				else if(!world.isBlockIndirectlyGettingPowered(x, y, z)) {
-					te.setRSPowered(false);
-					this.setLightLevel(0f);
-					this.setLightOpacity(1);
-				}
-				DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(te), world.getWorldInfo().getVanillaDimension());
-		}
-	}
-	
+		
 	@Override
 	public int quantityDropped(Random random) {
 		return 0;
@@ -165,14 +122,17 @@ public class BlockGodBottler extends BlockDeadCraft {
 		case UP : return true;
 		default: break;
 		}
-		
-		
-		return super.isSideSolid(world, x, y, z, side);
+		int meta = world.getBlockMetadata(x, y, z);
+		if(meta == 4) meta = world.getBlockMetadata(x, y-1, z);  
+		switch(meta){
+		case 1 :  return !(Math.abs(side.offsetX * 2 + side.offsetZ + 1)==3);
+		case 3 :  return !(Math.abs(side.offsetX * 2 + side.offsetZ + 1)==1);
+		default : return !(meta == Math.abs(side.offsetX * 2 + side.offsetZ + 1));
+		}
 	}
 	
 	@Override
 	public void randomDisplayTick(World world, int x,int y, int z, Random ran) {
-//		if(false)
 		if(((TileEntityGodBottler) world.getTileEntity(x, y, z)).hasStarted()) {
 			boolean flag = (((TileEntityGodBottler) world.getTileEntity(x, y, z)).isTop());
 			for (int i = 0; i < 5; i++) {

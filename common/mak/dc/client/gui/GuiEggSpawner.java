@@ -1,8 +1,5 @@
 package mak.dc.client.gui;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.util.GuiCustom;
@@ -10,7 +7,7 @@ import mak.dc.client.gui.util.GuiRectangle;
 import mak.dc.client.gui.util.GuiRectangleInfo;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.network.DeadCraftEggSpawnerPacket;
+import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
