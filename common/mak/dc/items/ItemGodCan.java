@@ -2,8 +2,13 @@ package mak.dc.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
+import mak.dc.DeadCraft;
+import mak.dc.canEffects.CanEffect;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,24 +16,28 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C13PacketPlayerAbilities;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemGodCan extends ItemFood{
 	
+	//TODO don't debuf when leaves player inv
 	
-	public ItemGodCan(){ //TODO finish
+	public ItemGodCan(){
 		super(1, false);
 		this.setUnlocalizedName(IBTInfos.ITEM_GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
-		this.setHasSubtypes(false);
-		this.setMaxDamage(1200);
 		this.setFull3D();
 		this.setAlwaysEdible();
 		
@@ -36,16 +45,62 @@ public class ItemGodCan extends ItemFood{
 	
 	
 	@Override
-	public void addInformation(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		// TODO add infos
-		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
+	public void addInformation(ItemStack stack, EntityPlayer player, List infos, boolean par4) {
+		if(stack.hasTagCompound()){
+			NBTTagCompound  tag = stack.getTagCompound();
+			if(tag.hasKey("effect_ids")){
+				NBTTagList ids = (NBTTagList) tag.getTag("effect_ids");
+				if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+					for(int i =0; i < ids.tagCount(); i++) {
+						infos.add("effects id : " + (ids.getCompoundTagAt(i).getInteger("id")));
+					}
+					infos.add("Is active : " + tag.getBoolean("isActive"));
+					infos.add("Time in Use : " + (tag.getInteger("tick") / 20) +  "s");
+				
+				}else {
+					infos.add(EnumChatFormatting.YELLOW + "-- Press " +EnumChatFormatting.ITALIC + "Shift" +EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +  " for More Infos --" );
+					for(int i =0; i < ids.tagCount(); i++) {
+						infos.add("effects : " + DeadCraft.canCraftingManager.getCanEffect((ids.getCompoundTagAt(i).getInteger("id"))).getName());
+					}
+				}
+			}
+		}
+
 	}
 	
 	@Override
 	public void registerIcons(IIconRegister par1IconRegister) {
 		itemIcon = par1IconRegister.registerIcon(Textures.GODCAN_TEXT_LOC);
 	}
+
+	
+    public boolean showDurabilityBar(ItemStack stack) {
+        if(stack.hasTagCompound()) return stack.getTagCompound().hasKey("isActive") ? stack.getTagCompound().getBoolean("isActive") : false;
+        return false;
+    }
+
+    public double getDurabilityForDisplay(ItemStack stack) {
+    	
+    	int maxDuration = 0;
+    	int tickInUse = 0;
+        
+    	NBTTagCompound tag = stack.getTagCompound();
+    	if(!tag.hasKey("tick") || !tag.hasKey("effect_ids")) return 0;
+    	tickInUse = tag.getInteger("tick");
+		NBTTagList tagList = (NBTTagList) tag.getTag("effect_ids");
+		for (int i=0; i <tagList.tagCount(); i++) {
+			NBTTagCompound id =  tagList.getCompoundTagAt(i);
+			if(id.hasKey("id")) {
+				int effectId = id.getInteger("id");
+				CanEffect effect = DeadCraft.canCraftingManager.getCanEffect(effectId);
+				if(effect.duration > maxDuration) maxDuration = effect.duration;
+			}
+
+		}
+    	
+    	return (double)tickInUse / (double)maxDuration;
+    }
+    	
 	
 	@Override
 	public IIcon getIconFromDamage(int par1) {
@@ -55,74 +110,55 @@ public class ItemGodCan extends ItemFood{
 	@Override
 	public ItemStack onEaten(ItemStack is, World world,	EntityPlayer player) {
 		if(!world.isRemote) {
-			is.setItemDamage(0);
 			NBTTagCompound tag = is.getTagCompound();
-			if(tag == null) tag = new NBTTagCompound();
-			tag.setString("last user", player.getCommandSenderName());
-			int[] ids = {1,2,3,4};
-			tag.setIntArray("effects ids", ids );
-			is.setTagCompound(tag);
-			if(player.isSneaking()) {
-				removeEffects(world, player, ids);
-				is.setItemDamage(getMaxDamage());
+			if(tag != null) {
+				if(!tag.hasKey("effect_ids")) return is;
+				tag.setBoolean("isActive", true);
 			}
 		}
-		
 		return is;
 	}
 	
+
+	
 	@Override
-	public void onUpdate(ItemStack is, World world,	Entity ent, int par1, boolean par2) {
+	public void onUpdate(ItemStack is, World world,	Entity ent, int par4, boolean par5) {
 		if(!world.isRemote) {
-			int time = is.getItemDamage();
 			NBTTagCompound tag = is.getTagCompound();
-			if(tag == null) return;
-			int[] ids = tag.getIntArray("effects ids");
-			if(time < this.getMaxDamage() -1 ) {
-				tag.setBoolean("isActive", true);
-//				this.applyEffects(world, ent, ids );
-				is.damageItem(1, (EntityLivingBase) ent);
-			}else if(time == this.getMaxDamage()){
-				this.removeEffects(world, ent, ids);
-				is.setItemDamage(this.getMaxDamage());
-				tag.setBoolean("isActive",false);
+			if(tag != null && tag.getBoolean("isActive")) {
+				int tickInUse = tag.getInteger("tick");
+				if(!tag.hasKey("effect_ids")) return ;
+				NBTTagList tagList = (NBTTagList) tag.getTag("effect_ids");
+				if(tagList.tagCount() == 0) {
+					tag.setInteger("tick", 0);
+					tag.setBoolean("isActive", false);
+					return;
+				}for (int i=0; i <tagList.tagCount(); i++) {
+					NBTTagCompound id =  tagList.getCompoundTagAt(i);
+					if(id.hasKey("id")) {
+						int effectId = id.getInteger("id");
+						CanEffect effect = DeadCraft.canCraftingManager.getCanEffect(effectId);
+						if(tickInUse < effect.duration) 
+							effect.applyEffect(world, (EntityPlayer) ent);
+						else {
+							effect.removeEffect(world, (EntityPlayer) ent);
+							tagList.removeTag(i);
+						}
+					}
+				}
+				tag.setInteger("tick", tickInUse+1);
+				is.setTagCompound(tag);
+
 			}
-			is.setTagCompound(tag);
+			
 		}
-	}
-		
-	@Override
-	public void onCreated(ItemStack is, World world,EntityPlayer player) {
 	}
 	
 	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		if(!player.worldObj.isRemote) {
-			NBTTagCompound tag = item.getTagCompound();
-			if(tag != null && tag.getBoolean("isActive"))
-				return false;
-		}
-		
-		return true;
+	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
+		return EnumAction.drink;
 	}
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) { //TODO almost finish
-		if(!entityItem.worldObj.isRemote) {
-			System.out.println("test");
-			NBTTagCompound tag = entityItem.getEntityData();
-			if(tag!=null){
-				if(tag.getBoolean("isActive")) {
-					String lastUser = tag.getString("last user");
-					EntityPlayer player = entityItem.worldObj.getPlayerEntityByName(lastUser);
-					removeEffects(entityItem.worldObj, player, tag.getIntArray("effects ids"));
-					player.setDead();
-					entityItem.setDead();
-					System.out.println("test2");
-				}
-			}
-		}
-		return false;
-	}
+	
 	
 	
 	

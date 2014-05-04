@@ -1,11 +1,14 @@
 package mak.dc.client.gui.container;
 
 import mak.dc.client.gui.container.slot.SlotGodBottler;
+import mak.dc.items.ItemGodCan;
+import mak.dc.items.ItemLifeCrystal;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerGodBottler extends ContainerDeadCraft{
 
@@ -38,6 +41,43 @@ public class ContainerGodBottler extends ContainerDeadCraft{
         
         
         
+	}
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		Slot slot = getSlot(i);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			ItemStack result = stack.copy();
+			
+			if (i < te.getSizeInventory()) {
+				if (!mergeItemStack(stack, 9, 44, false)) {
+					return null;
+				}
+			}else{
+				if(stack.getItem() instanceof ItemLifeCrystal && !(this.getSlot(0).getHasStack())) {
+					if(!mergeItemStack(stack, 0, 1, false)) {
+						return null;
+					}
+				}if(stack.getItem() instanceof ItemGodCan && !(this.getSlot(1).getHasStack()) ) {
+					if(!mergeItemStack(stack, 1, 2, false)) {
+						return null;
+					}
+				}else{
+					if(!mergeItemStack(stack, 3, 9, false)){
+						return null;
+					}
+				}
+			}
+			if (stack.stackSize == 0) {
+				slot.putStack(null);
+			}else{
+				slot.onSlotChanged();
+			}
+		}
+		
+		
+		return null;
 	}
 	
 	

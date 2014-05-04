@@ -2,6 +2,7 @@ package mak.dc.items;
 
 //TODO handle dmg of the stack
 
+import java.util.Iterator;
 import java.util.List;
 
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
@@ -13,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -22,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -67,7 +70,7 @@ public class ItemMindController extends Item {
 
     @SideOnly (Side.CLIENT)
     @Override
-    public void addInformation (ItemStack is, EntityPlayer player, List info, boolean par4) { //TODO add more beauty to info panel
+    public void addInformation (ItemStack is, EntityPlayer player, List info, boolean par4) {
         NBTTagCompound tag = is.getTagCompound();
 
         if (tag != null) {
@@ -109,7 +112,7 @@ public class ItemMindController extends Item {
                 is.setTagCompound(newTag);
 
                 if (player.capabilities.isCreativeMode) {
-                    is.setItemDamage(2); // TODO change after test
+                    is.setItemDamage(2);
                 } else {
                     is.setItemDamage(1);
                 }
@@ -152,7 +155,6 @@ public class ItemMindController extends Item {
                 charge = tag.getInteger("charge");
                 i++;
             }
-//          inv..onInventoryChanged();
         }
 
     }
@@ -164,10 +166,17 @@ public class ItemMindController extends Item {
                 EntityLiving entLive = (EntityLiving) ent;
                 if (entLive.isCreatureType(EnumCreatureType.creature, true)) {
                 	EntityAITempt ai = new EntityAITempt((EntityCreature) entLive, 2D, this, false);
+                	for(int i =0; i< entLive.tasks.taskEntries.size(); i++) {
+                		EntityAITaskEntry task = (EntityAITaskEntry) entLive.tasks.taskEntries.get(i);
+                		System.out.println(entLive.tasks.taskEntries.get(i).toString());
+                		if(task.action.equals(ai)) {
+                			System.out.println("done");
+                			entLive.tasks.removeTask(ai);
+                			break;
+                		}
+                	}
                     entLive.tasks.addTask(0, ai);
-                    System.out.println(entLive.tasks.taskEntries.contains(ai));
-                    if(entLive.tasks.taskEntries.contains(ai))
-                    	entLive.tasks.removeTask(ai);
+                    
                     return true;
                 }
                 if (stack.getItemDamage() != 0 && checkEntity(entLive) && dischargeItem(stack, costEntity(entLive))) {
@@ -178,20 +187,21 @@ public class ItemMindController extends Item {
                 player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj, player.posX, player.posY,
                         player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-//                player.addChatMessage((EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD
-//                        + "do not use the items of the others" + EnumChatFormatting.RESET));
+                player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD
+                        + "do not use the items of the others" + EnumChatFormatting.RESET));
                 return true;
             } else if (ent instanceof EntityPlayer || ent instanceof EntityVillager) {
                 World world = player.worldObj;
                 world.spawnEntityInWorld(new EntityLightningBolt(world, player.posX, player.posY, player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-//                player.addChatMessage((EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD
-//                        + "do not use the mindController on people" + EnumChatFormatting.RESET));
+                player.addChatComponentMessage(new ChatComponentText((EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD
+                        + "do not use the mindController on people" + EnumChatFormatting.RESET)));
+                System.out.println("test2");
                 return true;
             }
         }
 
-        return false;
+        return true;
     }
 
     private int costEntity (EntityLiving entLive) {

@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class BlockDeadCraft extends Block implements ITileEntityProvider { //TODO add ItemBlock with the data of the config
+public abstract class BlockDeadCraft extends Block implements ITileEntityProvider {
 
     
 	private static int DeadCraftId;

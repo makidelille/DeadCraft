@@ -41,7 +41,6 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-	//	GL11.glEnable(GL11.GL_BLEND);
 		GL11.glTranslated(x + 0.5F, y + 1.5F, z + 0.5F);
 		GL11.glRotatef(180f, 0f, 0f, 1.0F);
 		if(te == null) { //inventory render
@@ -55,28 +54,24 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 			GL11.glRotatef((te.getDirection() * 90F), 0.0F, 1.0F, 0.0F);  
 			if(te.getClientTick() >= 0) {
 				float t= (float) te.getClientTick() / te.ANIMATIONTIME;
-				this.model.Plateau.offsetY = -(float) (0.1* Math.log(t));
-				this.model.BrasMid.offsetY = (float) (0.12f * Math.log(t));
-				this.model.BrasBot.offsetY = (float) (0.135f * Math.log(t));
+				this.model.Plateau.offsetY = (float) (0.35* t);
+				this.model.BrasMid.offsetY = - (float) (0.33f *t);
+				this.model.BrasBot.offsetY = - (float) (0.35f *t);
 			}if(te.CLIENThasCan()){
 				GL11.glPushMatrix();
 				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glTranslatef(0, (float) (0.79f), 0);
 				float scale = 0.15f;
 				GL11.glScalef(scale, scale, scale);
-
-				
-				
-				
 				this.bindTexture(canTextLoc);
 				this.can.render(null, 0, 0, 0, 0, 0, 0.0625f);
 				GL11.glPopMatrix();
 			}
 		}		
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		this.bindTexture(textLoc);
 		this.model.render(0.0625F);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
 

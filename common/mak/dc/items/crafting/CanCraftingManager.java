@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLLog;
-import mak.dc.util.CanEffect;
+import mak.dc.canEffects.CanEffect;
+import mak.dc.canEffects.CanEffectFly;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -27,20 +29,16 @@ public class CanCraftingManager {
 	private Map<ItemStack[],Integer> recipesList = new HashMap();
 	private Map<Integer,CanEffect> EffectsList = new HashMap();
 	private static boolean hasInit;
-
-
-	private int curentId;
 	
 	public CanCraftingManager getInstance() {
 		return this;
 	}
 		
-	public void addRecipe(ItemStack[] ingredients, PotionEffect[] effects) {
-		this.recipesList.put(ingredients, Integer.valueOf(this.nextId()));
-		this.EffectsList.put(Integer.valueOf(this.nextId()), new CanEffect(this.nextId(), effects));
+	public void addRecipe(ItemStack[] ingredients, CanEffect effect) {
+		this.recipesList.put(ingredients, Integer.valueOf(effect.effectId));
+		this.EffectsList.put(Integer.valueOf(effect.effectId), effect);
 		
-		FMLLog.getLogger().info("new can recipe made of " +  ingredients.toString() + " at id : " + this.nextId());
-		this.curentId++;
+		FMLLog.getLogger().info("new can recipe made of " +  ingredients.toString() + " at id : " + effect.effectId);
 	}
 		
 
@@ -77,11 +75,14 @@ public class CanCraftingManager {
 			NBTTagCompound tag = can.getTagCompound();
 			if(tag == null) tag = new NBTTagCompound();
 			NBTTagList ids;
-			if(tag.hasKey("effect ids")) ids = (NBTTagList) tag.getTag("effect ids");
+			if(tag.hasKey("effect_ids")) ids = (NBTTagList) tag.getTag("effect_ids");
 			else ids = new NBTTagList();
 			NBTTagCompound newid = new NBTTagCompound();
 			newid.setInteger("id", effect.effectId);;
 			ids.appendTag(newid);
+			tag.setTag("effect_ids", ids);
+			tag.setBoolean("isActive", false);
+			tag.setInteger("tick", 0);
 			re.setTagCompound(tag);
 		}
 		return re;
@@ -95,8 +96,7 @@ public class CanCraftingManager {
 	}
 	
 
-	public void initialise() { //dunno if i put smthg here ?
-		this.curentId = 0;
+	public void initialise() {
 		hasInit = true;
 	}
 
@@ -105,9 +105,10 @@ public class CanCraftingManager {
 	*/
 	public void postInitialise() { 
 		if(!hasInit) return;
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)},new PotionEffect[]{new PotionEffect(1, 2)});
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond_axe)},new PotionEffect[]{new PotionEffect(1, 2)});
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond), new ItemStack(Items.diamond_axe)},new PotionEffect[]{new PotionEffect(1, 2)});
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)}, new CanEffectFly(getNextAvailableId()));
+		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.diamond_block)},new CanEffectFly(getNextAvailableId()).setDuration(90));
+
+		//TODO addRecipes
 		
 	}
 
@@ -115,8 +116,9 @@ public class CanCraftingManager {
 		return this.EffectsList.get(idMatchingrecipe);
 	}
 
-	private int nextId() {
-		return curentId+1;
+
+	public CanEffect getCanEffect(int effectId) {
+		return EffectsList.get(effectId);		
 	}
 	
 	

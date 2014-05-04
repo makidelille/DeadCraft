@@ -91,7 +91,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(!isSync) {
 			sync();
 			this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			return;
 		}
 		if(worldObj.isRemote) {
 			if(this.isRSPowered() ) this.setClientTick(this.getClientTick() + 1);
@@ -109,7 +108,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 					
 			if(this.hasEmptyCan() && idMatchingrecipe != -1 && this.hasPower() && this.isRSPowered()) {
 				ItemStack can = this.getEmptyCan();
-			
+						
 				if(workedTime >= BUILDTIME ) 
 					if(this.craftCan(can,mapIs)) this.workedTime = 0;			
 					else workedTime = BUILDTIME;
@@ -127,7 +126,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(this.power >= this.MAXPOWER ) return;
 		else if(this.inventory[0] != null){
 			ItemStack crystal = inventory[0];
-			System.out.println(crystal.getMaxDamage()  - CHARGESPEED );
 			if(crystal.getItem() instanceof ItemLifeCrystal && crystal.getItemDamage() <= crystal.getMaxDamage()  - CHARGESPEED){
 				ItemLifeCrystal itemCrystal= (ItemLifeCrystal)crystal.getItem();
 				itemCrystal.dischargeItem(crystal, CHARGESPEED);
@@ -145,7 +143,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(this.getStackInSlot(2) == null) {
 			ItemStack[] iss = this.getItemStackFromMap(mapIs);
 			ItemStack newIs = canCraftingManager.craftCan(can, iss);
-			
+
 			this.setInventorySlotContents(2, newIs);
 			this.setInventorySlotContents(1, null);
 			
@@ -158,7 +156,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	            if(is.stackSize > 0) this.setInventorySlotContents((int)entry.getKey(),is);
 	            else this.setInventorySlotContents((int)entry.getKey(), null);
 	        }while (iterator.hasNext());
-			
+			isSync = false;
 	        return true;
 		}else return false;
 	}
@@ -170,6 +168,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			if(pair == null) return;
 		}
 		if(this.isTop()) clientSetup(pair);
+		
 		pair.allowed = this.allowed;
 		pair.owner = this.owner;
 		pair.locked = this.locked;
@@ -347,7 +346,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	private Map<Integer,ItemStack> getIngredientStacks() {
 		Map<Integer,ItemStack> is = new HashMap();
-		for(int i = 2; i < inventory.length; i++) {
+		for(int i = 3; i < inventory.length; i++) {
 			if(inventory[i] != null && inventory[i].stackSize > 0)
 				is.put(i, getStackInSlot(i));
 		}
@@ -367,6 +366,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		while (iterator.hasNext()) {
 			entry = (Entry)iterator.next();
 			re[i] = (ItemStack) entry.getValue();
+			i++;
 		}
 		return re;
 	}
@@ -409,6 +409,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 				var2.stackSize = getInventoryStackLimit();
 			if(var1 > 2 && var1 < this.getSizeInventory()) this.hasIngredientsChanged = true;
 			else this.hasIngredientsChanged = false;
+			isSync = false;
 		}	
 	}
 	public void setPair(TileEntityGodBottler te) {

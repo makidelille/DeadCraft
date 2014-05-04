@@ -22,6 +22,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 //@NetworkMod(channels = {Lib.MOD_ID}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 
 public class DeadCraft {
+	
+	
 
 	 @SidedProxy(clientSide = "mak.dc.proxy.ClientProxy", serverSide = "mak.dc.proxy.CommonProxy")
 	    public static CommonProxy proxy;
