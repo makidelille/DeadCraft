@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.util.GuiCustom;
-import mak.dc.client.gui.util.GuiRectangleList;
 import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
@@ -14,25 +13,34 @@ import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiDeadCraftBlockMain extends GuiCustom {
 
-    private GuiRectangleList            names;
     private GuiSwitch               lock;
     private GuiTextField            entername;
     private TileEntityDeadCraft     te;
     private String                  user;
-    private ArrayList               allowed;
-    private boolean hasToSend;
+    private ArrayList<String>               allowed;
+    
+    
     private String s;
+    private boolean hasToSend;
     private boolean hasInit = false;
 	private boolean isLocked;
 
+	private final int slotWidth = 100;
+	private final int slotheight = 11;
+	private final float p = 1.0f/256;
+	private int focused = 0;
+	private int firstInList = 0;
+	
     private final  static ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.DEADCRAFTMAIN_GUI_TEXT_LOC);
 
     public GuiDeadCraftBlockMain (InventoryPlayer invPlayer, TileEntityDeadCraft te, int iD) {
@@ -40,18 +48,16 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
         this.te = te;
         this.user = invPlayer.player.getCommandSenderName();
-        this.allowed = te.getAllowedUser(); //TODO there is a bug somewher :(
+        this.allowed = te.getAllowedUser();
         this.isLocked = this.te.isLocked();
                 
         xSize = 176;
         ySize = 166;
         
         this.s = "";
-
-        names = new GuiRectangleList(this, 7, 23, 113,55, allowed, 0, true); //TODO finish
-       
-        lock = new GuiSwitch(this,123, 57, 0, this.isLocked, true); //TODO BUG
-        System.out.println("init");
+      
+        
+        lock = new GuiSwitch(this,123, 57, 0, this.isLocked, true);
         
 
     }
@@ -70,6 +76,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.draw(this);
         
         
+        
     }
 
     @Override
@@ -77,24 +84,65 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         lock.drawString(this, "lock :", 134 ,58,50, "gray");
         lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
         this.entername.drawTextBox();
-        names.draw(0, 0);
     }
     
     @Override
     public void drawScreen (int par1, int par2, float par3) {
         super.drawScreen(par1, par2, par3);
+                       
+        for (int i = firstInList; i < allowed.size(); i++) {
+        	this.drawSlot(i - firstInList, i, i == focused);
+        }
+        
+       
+       
+
        
     }
 
-    @Override
+    private void drawSlot(float translation, int listNb, boolean isFocused) {
+    	if(translation * slotheight > 11 * 4f || translation  < 0) return;	
+    	
+    	GL11.glTranslated(0, (slotheight - 1) * translation, 0);
+    	
+		GL11.glDisable(GL11.GL_LIGHTING);
+		Tessellator tess = Tessellator.instance;
+		mc.renderEngine.bindTexture(texture);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		if(isFocused) {
+			tess.startDrawingQuads();
+			{
+				tess.addVertexWithUV(this.guiLeft + 8 + slotWidth-1, this.guiTop + 24 +1, 0, (this.xSize + 2)*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 +1, this.guiTop + 24 +1, 0, (this.xSize + 2)*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 +1, this.guiTop + 24  + slotheight -1 , 0, (this.xSize + 2)*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 + slotWidth-1 , this.guiTop + 24 + slotheight -1, 0, (this.xSize + 2)*p  ,  0);
+			}		
+			tess.draw();
+	    }else {
+	    	tess.startDrawingQuads();
+			{
+				tess.addVertexWithUV(this.guiLeft + 8 + slotWidth-1, this.guiTop + 24 +1, 0, (this.xSize)*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 +1, this.guiTop + 24 +1, 0, (this.xSize)*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 +1, this.guiTop + 24  + slotheight -1 , 0, (this.xSize )*p  ,  0);
+				tess.addVertexWithUV(this.guiLeft + 8 + slotWidth-1 , this.guiTop + 24 + slotheight -1, 0, (this.xSize)*p  ,  0);
+			}		
+			tess.draw();
+	    }
+		
+		
+		this.drawString(getFontRenderer(), (String) allowed.get(listNb),this.guiLeft + 8 + 1, this.guiTop +  24 + 2, 101010);
+		
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glTranslated(0,- (slotheight - 1) * translation, 0);
+    }
+
+	@Override
     public void updateScreen () {
         super.updateScreen();
         this.entername.updateCursorCounter();
         if(hasToSend) sendPacket();
-        this.names.updateScreen();
         if(haschange) {
             allowed = te.getAllowedUser();
-   //         names.updateList(allowed);
             haschange = false;
         }
     }
@@ -103,36 +151,50 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void mouseClicked (int par1, int par2, int par3) {
         super.mouseClicked(par1, par2, par3);
-        boolean state;
-        state = lock.hasMouseClicked(par1, par2,par3) || names.hasMouseClicked(par1, par2, par3);
+        
+        boolean state = lock.hasMouseClicked(par1, par2, par3);
         this.isLocked = lock.isActive();
-        this.hasToSend = state;
+        
+        System.out.println(isLocked);
+              
+        int x = par1 - this.guiLeft;
+        int y = par2 - this.guiTop;
+        
+        if(x < 107 && x > 8 && y >23 && y <77){
+        	focused = (y - 23) / slotheight + firstInList;
+        	if(focused < allowed.size())
+        		entername.setText(allowed.get(focused));
+        }
+        
+        if(state) {
+        	this.hasToSend = true;
+        	te.setLocked(isLocked);
+        }
+        
   
     }
+    @Override
+    public void handleMouseInput() {
+    	super.handleMouseInput();
+    	if(Mouse.getEventDWheel() / 120 > 0 && ((GuiButton) buttonList.get(2)).enabled) this.actionPerformed((GuiButton) buttonList.get(2));
+    	if(Mouse.getEventDWheel() / 120 < 0 && ((GuiButton) buttonList.get(3)).enabled) this.actionPerformed((GuiButton) buttonList.get(3));
+
+    }
+    
+    
+    
+
+
+
 
     @Override
-	protected void sendPacket() {
+    protected void sendPacket() {
     	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te);
     	System.out.println(pkt.toString());
-    	DeadCraft.packetPipeline.sendToServer(pkt); //XXX
-        this.haschange = true;
-        this.hasToSend = false;
-	}
-
-	@Override
-    protected void mouseClickMove (int par1, int par2, int par3, long par4) {
-        super.mouseClickMove(par1, par2, par3, par4);
-        if( names.hasMouseClickMove(par1, par2, par3, par4)) this.hasToSend = true;
-        
+    	DeadCraft.packetPipeline.sendToServer(pkt);
+    	this.haschange = true;
+    	this.hasToSend = false;
     }
-
-    @Override
-    protected void mouseMovedOrUp (int par1, int par2, int par3) {
-    	super.mouseMovedOrUp(par1, par2, par3);
-    	if( names.hasMouseMovedOrUp(par1, par2, par3)) this.hasToSend =  true;
-
-    }
-
 
 
     @Override
@@ -145,8 +207,15 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         GuiButton b1 = new GuiButton(1, guiLeft + 145, guiTop + 10, 16, 10, "-");
         b1.enabled = false;
         
+        GuiButton up = new GuiButton(2, guiLeft + 108, guiTop + 25, 10,20, null);
+        up.enabled = firstInList > 0 ;
+        GuiButton down = new GuiButton(3,guiLeft + 108, guiTop + 55, 10,20, null);
+        down.enabled = firstInList < allowed.size() - 1;
+        
         this.buttonList.add(b0);
         this.buttonList.add(b1);
+        this.buttonList.add(up);
+        this.buttonList.add(down);
 
         this.entername = new GuiTextField(getFontRenderer(), 7,10, 112, 12); //BUG
         this.entername.setFocused(true);
@@ -178,14 +247,35 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     public void actionPerformed (GuiButton button) {
         String s = entername.getText();        
         if(s == "") return;
-        if(button.id == 0){
+        switch (button.id) {
+        case 0 : 
         	if(allowed.contains(s)) return;        	
         	allowed.add(s);
-        	sendPacket();
-        }else if(button.id == 1 ) {
+        	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
+        	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
+        	hasToSend = true;
+        	break;
+        case 1 :
         	if(!allowed.contains(s)) return;
         	allowed.remove(s);
-        	sendPacket();
+        	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
+        	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
+        	hasToSend = true;
+        	break;
+        case 2 :
+        	firstInList--;
+        	if(firstInList < 0 ) firstInList = 0;
+        	if(firstInList >= allowed.size() - 1) firstInList = allowed.size() - 1;
+        	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
+        	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
+        	break;
+        case 3 :
+        	firstInList++;
+        	if(firstInList < 0 ) firstInList = 0;
+        	if(firstInList >= allowed.size() - 1) firstInList = allowed.size() - 1;
+        	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
+        	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
+        	break;
         }
         this.haschange = true;
         
@@ -193,26 +283,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     }
 
 	@Override
-	protected void defineSubRect() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private String[] getDisplayedName(int start) {
-		String[] re = new String[5];
-		int size = this.allowed.size();
-		if(size >= start + 5)
-			for(int i =0; i < 5; i++)
-				re[i] = (String) this.allowed.get(start + i);
-		else if(size < start + 5) {
-			int dif = start - size + 5;
-			if(dif <0) return null;
-			for(int i=0; i < dif; i++)
-				re[i] = (String) this.allowed.get(start + i);
-		}
-		
-		return re;
-	}
+	protected void defineSubRect() {}
     
     
 

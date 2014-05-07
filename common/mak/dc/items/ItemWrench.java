@@ -92,13 +92,13 @@ public class ItemWrench extends Item {
         if(!world.isRemote && world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
-             if ((te.isUserCreator(username) && !player.isSneaking()) || DEBUG) {
+             if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
-                        FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
+                    	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 1: 
-                    	//change things
+                    	if(te.isUserCreator(username)) showAdminData(te, player);
                         break;
                     case 2: 
                         showData(te,player);
@@ -117,10 +117,14 @@ public class ItemWrench extends Item {
         return false;
     }
 
-    private void showData (TileEntityDeadCraft te, EntityPlayer player) {
+    private void showAdminData (TileEntityDeadCraft te, EntityPlayer player) {
     	player.addChatComponentMessage(new ChatComponentText("owner : " + te.getowner()));
     	player.addChatComponentMessage(new ChatComponentText("state "  + (te.isLocked()  ? "private"  :"public")));
-    	player.addChatComponentMessage(new ChatComponentText("allowed users : "  + te.getAllowedUser()));
+    	player.addChatComponentMessage(new ChatComponentText("allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser() : "none")));
+    	
+    }
+    
+    private void showData(TileEntityDeadCraft te, EntityPlayer player) {
     	if(te instanceof TileEntityGodBottler) {
     		player.addChatComponentMessage(new ChatComponentText("isTop ? " + ((TileEntityGodBottler) te).isTop()));
     		player.addChatComponentMessage(new ChatComponentText("direction : " + ((TileEntityGodBottler) te).getDirection()));
@@ -134,7 +138,6 @@ public class ItemWrench extends Item {
         if(!world.isRemote && player.isSneaking()) {
             is.setItemDamage(is.getItemDamage() < 2 ? (is.getItemDamage() + 1) : 0);
         }
-
         return is;
     }
 
@@ -153,20 +156,4 @@ public class ItemWrench extends Item {
         return allowed;
     }
 
-    public String addUser (ItemStack is) {
-        String re = "";
-        NBTTagCompound tag = is.getTagCompound();
-        if (tag != null) re = tag.getString("lastEntry");
-        return re;
-    }
-
-    public void setName (ItemStack is, String s) {
-        System.out.println(is);
-        NBTTagCompound tag = is.getTagCompound();
-        if (tag != null) {
-            tag.setString("lastEntry", s); // TODO ??
-            is.setTagCompound(tag);
-        }
-        System.out.println(is.getTagCompound());
-    }
 }

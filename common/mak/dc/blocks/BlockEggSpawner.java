@@ -52,26 +52,6 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		if(!world.isRemote) {
 			TileEntityEggSpawner te = (TileEntityEggSpawner) world.getTileEntity(x, y, z);
 			if (te != null && te instanceof IInventory) {
-				IInventory inventory = (IInventory)te;
-				
-				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					ItemStack stack = inventory.getStackInSlotOnClosing(i);
-					
-					if (stack != null) {
-						float spawnX = x + world.rand.nextFloat();
-						float spawnY = y + world.rand.nextFloat();
-						float spawnZ = z + world.rand.nextFloat();
-						
-						EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
-						
-						float mult = 0.05F;
-						
-						droppedItem.motionX = (-0.5F + world.rand.nextFloat()) * mult;
-						droppedItem.motionY = (4 + world.rand.nextFloat()) * mult;
-						droppedItem.motionZ = (-0.5F + world.rand.nextFloat()) * mult;
-						
-						world.spawnEntityInWorld(droppedItem);
-					}}
 				
 				if(te.getEggInStock() > 0) {
 					EntityItem eggDropped = new EntityItem(world, x + world.rand.nextFloat(), y + world.rand.nextFloat(), z + world.rand.nextFloat(), new ItemStack(Blocks.dragon_egg, 0,te.getEggInStock()));

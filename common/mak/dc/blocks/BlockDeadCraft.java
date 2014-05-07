@@ -6,8 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -77,7 +79,24 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
     	ItemStack is = new ItemStack(this);
     	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
     	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
-    	this.dropBlockAsItem(world, x, y, z, is);       	
+    	this.dropBlockAsItem(world, x, y, z, is);   
+    	
+    	if(te.hasInventory() ) {
+    		IInventory teinv = ((IInventory) te);
+    		for (int i=0 ; i < ((IInventory) te).getSizeInventory(); i++) {
+    			ItemStack stack = teinv.getStackInSlotOnClosing(i);
+				
+				if (stack != null) {
+					float spawnX = x + world.rand.nextFloat();
+					float spawnY = y + world.rand.nextFloat();
+					float spawnZ = z + world.rand.nextFloat();
+					
+					EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);				
+					world.spawnEntityInWorld(droppedItem);
+				}}
+    			
+    	}
+    	
     	world.removeTileEntity(x, y, z);
     	world.setBlock(x, y, z, Blocks.air);
     }

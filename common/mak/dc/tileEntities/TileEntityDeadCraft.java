@@ -3,6 +3,7 @@ package mak.dc.tileEntities;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -131,6 +132,10 @@ public class TileEntityDeadCraft extends TileEntity {
             allowed.add(tagCompound.getString("allowed [" +i+ "]"));
         }
         this.locked = tagCompound.getBoolean("locked");		
+	}
+
+	public  boolean hasInventory() {
+		return this instanceof IInventory;
 	}
 
 

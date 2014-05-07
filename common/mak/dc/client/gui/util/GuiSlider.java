@@ -1,7 +1,5 @@
 package mak.dc.client.gui.util;
 
-import java.awt.Button;
-
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import net.minecraft.client.Minecraft;
@@ -56,16 +54,9 @@ public class GuiSlider extends GuiRectangle {
             drawSlider(getCursorPos());
         }
     }
-    
-    @Override
-    public void handleMouseInput() {
-    	super.handleMouseInput();
-    	wheel(Mouse.getX(), Mouse.getY());
-    }
-    
 
 
-    private void drawSlider (int pos) { //TODO fix it
+    private void drawSlider (int pos) {
         GL11.glColor4f(1, 1, 1, 1);
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         for(int i =0 ; i < this.sizeBar; i++) {
@@ -90,11 +81,11 @@ public class GuiSlider extends GuiRectangle {
         cursorPos = pos <= size - 1 - sizeBar ? (pos >= 0 ? pos : 0) : size - sizeBar - 1;
     }
     
-    private void incCursorPos() {
+    public void incCursorPos() {
     	setCursorPos((this.getCursorPos()) + 1);
     }
     
-    private void decCursorpos() {
+    public void decCursorpos() {
     	setCursorPos((this.getCursorPos()) - 1);
     }
 
@@ -125,14 +116,8 @@ public class GuiSlider extends GuiRectangle {
         }return false;
     }
 
-    public void wheel (int x, int y) { // TODO later
-        int dx = Mouse.getDWheel();
-        if(dx > 0) actionPerformed((GuiButton) this.buttonList.get(0));
-        if(dx < 0) actionPerformed((GuiButton) this.buttonList.get(1));
-    }
-
     public int getRatio () {
-        return (int) ((float)(100 * cursorPos / (this.size-sizeBar - 1)));
+        return (int) ((float)(100f * (float)cursorPos / (float) (this.size-sizeBar - 1)));
     }
     
     public void init() {
@@ -157,10 +142,6 @@ public class GuiSlider extends GuiRectangle {
 
 	public int getSize() {
 		return this.size;
-	}
-
-	public float getMult() {
-		return (float) (1/(Math.E + Math.exp((float) getSizeBar()/getSize())));
 	}
 
 }
