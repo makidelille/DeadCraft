@@ -53,7 +53,7 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 		}else{
 			GL11.glRotatef((te.getDirection() * 90F), 0.0F, 1.0F, 0.0F);  
 			if(te.getClientTick() >= 0) {
-				float t= (float) te.getClientTick() / te.ANIMATIONTIME;
+				float t= 1f - (float) te.getClientTick() / te.ANIMATIONTIME;
 				this.model.Plateau.offsetY = (float) (0.35* t);
 				this.model.BrasMid.offsetY = - (float) (0.33f *t);
 				this.model.BrasBot.offsetY = - (float) (0.35f *t);

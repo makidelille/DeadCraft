@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import cpw.mods.fml.common.FMLLog;
 import mak.dc.canEffects.CanEffect;
 import mak.dc.canEffects.CanEffectFly;
+import mak.dc.canEffects.CanEffectPotion;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -37,8 +38,6 @@ public class CanCraftingManager {
 	public void addRecipe(ItemStack[] ingredients, CanEffect effect) {
 		this.recipesList.put(ingredients, Integer.valueOf(effect.effectId));
 		this.EffectsList.put(Integer.valueOf(effect.effectId), effect);
-		
-		FMLLog.getLogger().info("new can recipe made of " +  ingredients.toString() + " at id : " + effect.effectId);
 	}
 		
 
@@ -105,8 +104,13 @@ public class CanCraftingManager {
 	*/
 	public void postInitialise() { 
 		if(!hasInit) return;
+		
 		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)}, new CanEffectFly(getNextAvailableId()));
 		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.diamond_block)},new CanEffectFly(getNextAvailableId()).setDuration(90));
+		
+		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.dirt)	}, new CanEffectPotion(getNextAvailableId(), 20, "potion_speed", new PotionEffect[] {new PotionEffect(1, 1, 5),new PotionEffect(8, 1, 5)}));
+		this.addRecipe(new ItemStack[] { new ItemStack(Items.apple)	}, new CanEffectPotion(getNextAvailableId(), 20, "potion_resistance", new PotionEffect[] {new PotionEffect(11,1,5) ,new PotionEffect(12,1,5)}));
+		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.acacia_stairs) }, new CanEffectPotion(getNextAvailableId(), 20, "potion_haste", new PotionEffect[] {new PotionEffect(3,1,1000) ,new PotionEffect(3,1,1000)}));
 
 		//TODO addRecipes
 		

@@ -19,13 +19,13 @@ public abstract class CanEffect {
 	 * the effects of the can
 	 */
 	
-	public final String name;
+	private String name;
 	
 	/**
 	 * in seconds
 	 */
 	
-	public int duration;
+	private int duration;
 		
 	public CanEffect(int effectId, int duration, String name) {
 		this.effectId = effectId;
@@ -38,6 +38,9 @@ public abstract class CanEffect {
 	public String getName() {
 		return this.name;
 	}
+	public int getDuration() {
+		return this.duration;
+	}
 	
 	
 	
@@ -46,6 +49,13 @@ public abstract class CanEffect {
 		this.duration = 20 * dur;
 		return this;
 	}
+	
+	public CanEffect setName(String newname) {
+		this.name = newname;
+		return this;
+	}
+	
+	
 	public abstract void applyEffect(World world, EntityPlayer player);	
 	public abstract void removeEffect(World world,EntityPlayer player);
 	

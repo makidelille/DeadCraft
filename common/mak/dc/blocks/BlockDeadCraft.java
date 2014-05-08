@@ -35,6 +35,8 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 	public static int getNextId() {
 		return DeadCraftId++;
 	}
+
+
 	
     protected BlockDeadCraft (Material par2Material) {
         super(par2Material);
@@ -43,20 +45,21 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
        
     }
     
+    public BlockDeadCraft setBlockName(String name) {
+    	return (BlockDeadCraft) super.setBlockName(name);
+    }
+       
       
     @Override
     public void onBlockPlacedBy (World world, int x, int y, int z, EntityLivingBase ent,  ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
-        if(!world.isRemote) {
         	if(is.getTagCompound() != null && world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
                 te.readNBTData(is.getTagCompound());
         	}else if(world.getTileEntity(x, y, z)!= null && ent instanceof EntityPlayer) {
                 TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
                 te.setOwner(((EntityPlayer)ent).getCommandSenderName());
-            }
-        }
-       
+            }      
 	        	 
      }
     
@@ -65,7 +68,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
     	if(!world.isRemote) {
 	    	if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
 	            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return ;
-	            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName()) && player.getHeldItem().getItem() instanceof ItemWrench) {
+	            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName()) && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWrench) {
 	            	this.breakBlock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 	            	return;
 	            	}
@@ -78,7 +81,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
     public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
     	ItemStack is = new ItemStack(this);
     	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-    	is.setTagCompound(te.writeNBTData(new NBTTagCompound()));
+    	is.setTagCompound(te.writeNBTData());
     	this.dropBlockAsItem(world, x, y, z, is);   
     	
     	if(te.hasInventory() ) {

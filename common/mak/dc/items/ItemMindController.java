@@ -1,6 +1,6 @@
 package mak.dc.items;
 
-//TODO handle dmg of the stack
+//TODO handle dmg of the stack maybye change the activation
 
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +47,6 @@ public class ItemMindController extends Item {
 
     public ItemMindController () {
         super();
-        this.setUnlocalizedName(IBTInfos.ITEM_MINDCONTROLLER_UNLOCALIZED_NAME);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setNoRepair();
@@ -142,10 +141,10 @@ public class ItemMindController extends Item {
                 chargeEmpty = _maxCharge - charge;
                 ItemStack stack = inv.getStackInSlot(i);
 
-                if (stack != null && stack.getItem() instanceof ItemLifeCrystal) {
-                    ItemLifeCrystal crsytalItem = (ItemLifeCrystal) stack.getItem();
+                if (stack != null && stack.getItem() instanceof ItemCrystal) {
+                    ItemCrystal crsytalItem = (ItemCrystal) stack.getItem();
                     int dmg = stack.getItemDamage();
-                    int chargeCrystal = ItemLifeCrystal.MAXVALUE - dmg;
+                    int chargeCrystal = ItemCrystal.MAXCHARGE - dmg;
                     if (chargeCrystal > 0) {
                         crsytalItem.dischargeItem(stack, chargeCrystal);
                         chargeCrystal = chargeItem(is, chargeCrystal);

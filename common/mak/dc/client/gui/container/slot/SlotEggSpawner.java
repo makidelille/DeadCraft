@@ -1,7 +1,7 @@
 package mak.dc.client.gui.container.slot;
 
 import mak.dc.items.DeadCraftItems;
-import mak.dc.items.ItemLifeCrystal;
+import mak.dc.items.ItemCrystal;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -35,8 +35,8 @@ public class SlotEggSpawner extends Slot {
 			return Item.getIdFromItem(stack.getItem()) == Block.getIdFromBlock(Blocks.obsidian);
 		else if (slot == 4)
 			return Item.getIdFromItem(stack.getItem()) == Block.getIdFromBlock(Blocks.diamond_block);
-		else if(slot ==  6 || slot == 7)
-			return stack.getItem() == DeadCraftItems.lifeCrystal;
+		else if(slot ==  6)
+			return stack.getItem() == DeadCraftItems.crystal;
 		else		
 			return false;
 	}

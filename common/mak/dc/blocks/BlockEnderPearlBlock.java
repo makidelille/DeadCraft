@@ -21,13 +21,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockEnderPearlBlock extends Block {
 
-
-    public static boolean _IS_CREATIVE_MOVED; //if true, creatives players will be moved
+	/**
+	 * if true, creatives players will be moved
+	 */
+	public static boolean _IS_CREATIVE_MOVED = true; //TODO config file
 
 
     public BlockEnderPearlBlock() {
         super(Material.rock);
-        this.setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_UNLOACLIZED_NAME);
         this.setHardness(3.0F);
         this.setResistance(1.5F);
         this.setTickRandomly(true);

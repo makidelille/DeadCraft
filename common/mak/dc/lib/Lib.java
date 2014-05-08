@@ -5,7 +5,7 @@ public class Lib {
 	
 	public static final String MOD_NAME = "Dead Craft";
 	public static final String MOD_ID  = "deadcraft";
-	public static final String MOD_VERSION = "--dev";	
+	public static final String MOD_VERSION = "0.01 alpha";	
 	
 
 }

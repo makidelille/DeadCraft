@@ -22,8 +22,6 @@ public class CanEffectFly extends CanEffect{
 
 	@Override
 	public void removeEffect(World world, EntityPlayer player) {
-		System.out.println("end");
-		
 		if(!player.capabilities.allowFlying) return;
 		PlayerCapabilities newCap = player.capabilities;
 		newCap.allowFlying = false;

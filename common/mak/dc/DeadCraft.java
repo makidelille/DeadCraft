@@ -1,13 +1,14 @@
 package mak.dc;
 
 import mak.dc.blocks.DeadCraftBlocks;
-import mak.dc.client.gui.GuiHandler;
 import mak.dc.config.ConfigHandler;
+import mak.dc.event.DeadCraftEvents;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.Lib;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -77,5 +78,6 @@ public class DeadCraft {
 			 DeadCraftItems.postInit();
 			 packetPipeline.postInitialise();
 			 canCraftingManager.postInitialise();
+			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
 		}
 }

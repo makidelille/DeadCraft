@@ -30,7 +30,6 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		this.setResistance(10F);
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.5F);
-		this.setBlockName(IBTInfos.BLOCK_EGGSPAWNER_UNLOCALIZED_NAME);
 		}
 
 	@Override

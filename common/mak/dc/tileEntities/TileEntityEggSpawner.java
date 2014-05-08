@@ -1,7 +1,7 @@
 package mak.dc.tileEntities;
 
 import mak.dc.items.DeadCraftItems;
-import mak.dc.items.ItemLifeCrystal;
+import mak.dc.items.ItemCrystal;
 import mak.dc.lib.IBTInfos;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,8 +17,13 @@ import cpw.mods.fml.common.FMLLog;
 public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory {
 		
 	private static final byte deadcraftId = 1;
+
+	public static final int MAXPOWER = 12_000;
+
+	public static final int CHARGESPEED = 50;
+	public static final int POWERUSAGE = 1;
 	
-	public static int _maxBuildTime = 1000; //TODO change
+	public static int _maxBuildTime = 6000;
 	
 	
 	private ItemStack[] invContent;
@@ -33,10 +38,12 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	private byte redState = 0;
 	private byte mode = 1;
 
+	private int power;
+
 
 	public TileEntityEggSpawner() {
 		super(true);
-		invContent = new ItemStack[9];
+		invContent = new ItemStack[8];
 		setStarted((byte) 0);
 		created = false;
 		buildTime = 0;
@@ -46,12 +53,15 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
+			if(this.getStackInSlot(6) != null)
+				charge();
 			if(hasStarted() && getProgress() < 100) {
-				buildTime += Math.max(getLifeMultiplier(),1);
-				tickLifeCrystal();
+				if(this.power - POWERUSAGE > 0) {
+					this.decharge();
+					buildTime++;
+				}
 			}if(hasStarted() && getProgress() >= 100) {
 				setBuildTime(0);
-				
 				setStarted((byte) 0);
 				created = true;
 				
@@ -76,26 +86,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		
 
 	}
-	
-	
-	private void tickLifeCrystal() {
-		int maxDmg = ItemLifeCrystal.MAXVALUE;
-		
-		if(!worldObj.isRemote) {
-			if(Math.random() > 0.6) {
-				ItemStack crystal = invContent[6];
-				if(crystal != null && crystal.getItemDamage() != maxDmg - 1) {
-					crystal.setItemDamage(crystal.getItemDamage() + 1);
-				}else{
-					crystal = invContent[7];
-					if(crystal != null && crystal.getItemDamage() != maxDmg - 1) {
-						crystal.setItemDamage(crystal.getItemDamage() + 1);
-					}
-				}
-			}
-		}
-	}
-
 	private void updateRedstone(byte state) {
 		switch(redState) {
 		case 0:
@@ -120,23 +110,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public boolean hasStarted() {
 		return getStarted() == 1;
 	}
-
-	
-	public int getLifeMultiplier() {
-		int re = 0;
-		for (int i = 6 ; i < 8 ; i++) {
-				if(getStackInSlot(i) != null) {
-					ItemStack stack = getStackInSlot(i);
-					if (stack.getItemDamage() <= stack.getMaxDamage()) {
-						int dmg = stack.getMaxDamage() - stack.getItemDamage();
-						int coeff = (int)(((double)dmg) / stack.getMaxDamage() * 50);
-						re += coeff;
-					}
-				}
-			}
-		return re;
-	}
-
 
 	public void setBuildTime(int i) {
 		this.buildTime = i;
@@ -193,8 +166,8 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 			return Item.getIdFromItem(itemstack.getItem()) == Block.getIdFromBlock(Blocks.obsidian);
 		else if (slot == 4)
 			return Item.getIdFromItem(itemstack.getItem()) == Block.getIdFromBlock(Blocks.diamond_block);
-		else if(slot ==  6 || slot == 7)
-			return itemstack.getItem() == DeadCraftItems.lifeCrystal;
+		else if(slot ==  6)
+			return itemstack.getItem() == DeadCraftItems.crystal;
 		else		
 			return false;
 	}
@@ -236,6 +209,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		compound.setInteger("eggInStock", eggInStock);
 		compound.setByte("redState", redState);
 		compound.setByte("mode", mode);
+		compound.setInteger("power", power);
 	}
 	
 	@Override
@@ -259,6 +233,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		eggInStock = compound.getInteger("eggInStock");
 		redState = compound.getByte("redState");
 		mode = compound.getByte("mode");
+		power = compound.getInteger("power");
 
 	}
 
@@ -332,10 +307,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 				getStackInSlot(slot).stackSize--;
 				if(getStackInSlot(slot).stackSize == 0) {
 					setInventorySlotContents(slot, null);
-				}
-//			onInventoryChanged();
-						
-				
+				}				
 		}
 			
 	}
@@ -354,8 +326,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 				eggInStock--;
 				updateRedstone((byte) 1);
 				wait = 5;
-//				Sound.EGG_SPAWN.play(xCoord +0.5D, yCoord +0.5D, zCoord + 0.5D, 3.0F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
-//				worldObj.playSound(xCoord, yCoord, zCoord, "", 3.0F, orldObj.rand.nextFloat() * 0.1F + 0.9F, true);
 				return true;
 			}	
 		}
@@ -419,7 +389,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public String getInventoryName() {
-		return IBTInfos.TILE_EGGSPAWNER_NAME;
+		return IBTInfos.TILE_EGGSPANWER_KEY;
 	}
 
 	@Override
@@ -427,8 +397,30 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		return false;
 	}
 
+	private void charge() {
+		if(this.power >= this.MAXPOWER ) return;
+		else if(this.invContent[6] != null){
+			ItemStack crystal = invContent[6];
+			if(crystal.getItem() instanceof ItemCrystal){
+				this.power += CHARGESPEED - ItemCrystal.dischargeItem(crystal, CHARGESPEED);
+			}
+		}
+	}
+	private void decharge() {
+		this.power -= POWERUSAGE;
+	}
+	
 	@Override
 	public void openInventory() {}
+
+	public int getPower() {
+		return this.power;
+	}
+
+	public void setPower(int data) {
+		this.power = data;
+		
+	}
 
 
 

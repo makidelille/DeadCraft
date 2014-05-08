@@ -1,23 +1,25 @@
 package mak.dc.items;
 
-// TODO rework the functions
-
 import java.util.List;
 
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants.NBT;
 
 import org.lwjgl.input.Keyboard;
 
@@ -25,144 +27,154 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDeadWand extends Item {
-
-    @SideOnly(Side.CLIENT)
-    private IIcon[] icons = { null, null };
-
+	
+	public static final int MAXCHARGE = 250;
+	
     public ItemDeadWand () {
         super();
         this.setMaxStackSize(1);
-        this.setUnlocalizedName(IBTInfos.ITEM_DEADWAND_UNLOCALIZED_NAME);
         this.setHasSubtypes(false);
-        this.setMaxDamage(1000);
 
     }
+    
+    @Override
+    public void getSubItems(Item item, CreativeTabs tab ,List l) {
+    	ItemStack is = new ItemStack(item, 1, 0);
+    	NBTTagCompound tag = new NBTTagCompound();
+    	tag.setInteger("charge", 0);
+    	is.setTagCompound(tag);
+    	l.add(is);
+    	
+    	is = new ItemStack(item, 1, 0);
+    	tag = new NBTTagCompound();
+    	tag.setInteger("charge", MAXCHARGE);
+    	is.setTagCompound(tag);
+    	l.add(is);
+    }
+    
+    @Override
+    public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
+    	if(is.hasTagCompound() && is.getTagCompound().hasKey("charge")){
+    		l.add("charge : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE);
+    	}
+    }
+    
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+    	return stack.hasTagCompound();
+    }
+    
+	  @Override
+	public double getDurabilityForDisplay(ItemStack stack) {
+		 NBTTagCompound tag = stack.getTagCompound();
+		 if(tag == null) return 0;
+		 return 1d - (double) tag.getInteger("charge") / MAXCHARGE;
+	  }	
+	  
+	  @Override
+	public void registerIcons(IIconRegister iconRegister) {
+		itemIcon = iconRegister.registerIcon(Textures.DEADWAND_TEXT_LOC);
+	}
+    
 
     @Override
     public boolean onLeftClickEntity (ItemStack stack, EntityPlayer player, Entity entity) {
         if (!player.worldObj.isRemote && entity.isEntityAlive()) {
-
-            float pv = ((EntityLivingBase) entity).getHealth();
-            int dmg = stack.getItemDamage();
-            boolean survivalMode = !player.capabilities.isCreativeMode;
-
-            entity.attackEntityFrom(new EntityDamageSource("player", player), pv);
-
-            if (!isCharged(dmg) && !hasPlayerCrystal(player, (int) pv) && survivalMode) {
-                if (entity instanceof EntityPlayer) {
-                    player.attackEntityFrom(DamageSource.magic, pv);
-                } else {
-                    player.attackEntityFrom(DamageSource.magic, pv / 2);
-                }
-            }
-
-            if (!isCharged(dmg)) {
-                if (!hasPlayerCrystal(player, (int) pv) && survivalMode) {
-
-                    player.addPotionEffect(new PotionEffect(9, (int) pv * 10, (int) pv, false));
-                    player.addPotionEffect(new PotionEffect(17, (int) pv * 10, (int) pv, false));
-
-                } else {
-
-                    ItemStack crystal = getCrystal(player);
-                    if(crystal != null ) crystal.setItemDamage((int) (crystal.getItemDamage() + pv));
-
-                }
-            } else if (isCharged(dmg)) {
-
-                player.addPotionEffect(new PotionEffect(1, 1000, 5, false));
-                player.addPotionEffect(new PotionEffect(3, 1000, 5, false));
-                player.addPotionEffect(new PotionEffect(5, 1000, 5, false));
-                player.addPotionEffect(new PotionEffect(8, 1000, 5, false));
-                player.addPotionEffect(new PotionEffect(10, 1000, 5, false));
-                stack.setItemDamage(getMaxDamage());
-                return false;
-            }
-
-            if (!isCharged(dmg)) {
-                stack.setItemDamage((int) (dmg - pv * 3 / 2));
-            }
-
-            return false;
-        }
-        return false;
-    }
-
-    @SideOnly (Side.CLIENT)
-    @Override
-    public void registerIcons (IIconRegister registerIcon) {
-        for (int i = 0; i < 2; i++)
-            icons[i] = registerIcon.registerIcon(Textures.DEADWAND_TEXT_LOC[i]);
-
-    }
-
-    @SideOnly (Side.CLIENT)
-    @Override
-    public IIcon getIconFromDamage (int dmg) {
-        return isCharged(dmg) ? icons[1] : icons[0];
-
-    }
-
-    @SideOnly (Side.CLIENT)
-    @Override
-    public void addInformation (ItemStack stack, EntityPlayer player, List info, boolean par4) {
-        if (isCharged(stack.getItemDamage())) {
-            info.add("wand is Charged ! ");
-        } else {
-            info.add("make " + (stack.getItemDamage()) + " damage to charge !");
-        }
-        
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        	if(!stack.hasTagCompound()) return false;
         	
-        }else{
-        	info.add(EnumChatFormatting.YELLOW + "-- Press " +EnumChatFormatting.ITALIC + "Shift" +EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +  " for more Information --" );
+        	NBTTagCompound tag = stack.getTagCompound();
+        	float targetPv = ((EntityLivingBase) entity).getHealth();
+        	boolean isCreative = player.capabilities.isCreativeMode;
+        	int charge = tag.getInteger("charge");
+        	
+        	if(charge >= MAXCHARGE) return true;
+        	else {
+        		
+        		entity.attackEntityFrom(new DamageSource("magic"), targetPv);
+        		
+        		if(!isCreative){
+        			player.attackEntityFrom(new DamageSource("magic"), targetPv * 2f/3f);
+        			
+        			player.addPotionEffect(new PotionEffect(9, (int) targetPv * 20, 5, false));
+        			player.addPotionEffect(new PotionEffect(17, (int) targetPv * 20, 5, false));
+        		}
+        		
+        		ItemStack crystalIs = this.getCrystal(player);
+        		int chargeToAdd = (int) (1f/3f * targetPv);
+        		if(crystalIs != null) {
+        			int chargeleft = ItemCrystal.chargeItem(crystalIs, (int) (2f/3f * targetPv));
+        			chargeToAdd += chargeleft;
+        		}
+        		chargeItem(stack, chargeToAdd);
+        		
+        		return false;
+        	}
         }
-    }
-
-    @Override
-    public boolean isRepairable () {
-        return false;
-    }
-
-    @Override
-    public boolean isDamageable () {
         return true;
     }
+    
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world,	EntityPlayer player) {
+    	if(player.isSneaking()) {
+	    	int charge = getCharge(stack);
+	    	ItemStack cryIs = getCrystal(player);
+			if(charge > 0 && cryIs  != null){
+				int chargeleft = ItemCrystal.chargeItem(cryIs, charge);
+				dischargeItem(stack, charge - chargeleft);
+			}
+    	}
+    	return stack;
+	}
 
-    private boolean isCharged (int dmg) {
-        return dmg == 0;
-    }
+	public static int chargeItem(ItemStack stack, int chargeToAdd) {
+		if(!stack.hasTagCompound()) return chargeToAdd;
+    	NBTTagCompound tag = stack.getTagCompound();
+    	int curentCharge = tag.getInteger("charge");
+    	if(curentCharge >= MAXCHARGE) return chargeToAdd;
+    	if(curentCharge  + chargeToAdd > MAXCHARGE) {
+    		tag.setInteger("charge", MAXCHARGE);
+    		stack.setTagCompound(tag);    		
+    		return curentCharge + chargeToAdd - MAXCHARGE;
+    	}else{
+    		tag.setInteger("charge", curentCharge + chargeToAdd);
+    		stack.setTagCompound(tag);    		
+    		return 0;
+    	}
+		
+	}
+	
+	public static int dischargeItem(ItemStack stack, int chargeToRem) {
+		if(!stack.hasTagCompound()) return chargeToRem;
+    	NBTTagCompound tag = stack.getTagCompound();
+    	int curentCharge = tag.getInteger("charge");
+    	if(curentCharge <= 0) return chargeToRem;
+    	if(curentCharge  - chargeToRem < 0) {
+    		tag.setInteger("charge", 0);
+    		stack.setTagCompound(tag);    		
+    		return chargeToRem - curentCharge;
+    	}else{
+    		tag.setInteger("charge", curentCharge - chargeToRem);
+    		stack.setTagCompound(tag);    		
+    		return 0;
+    	}
+	}
+	
+	public static int getCharge(ItemStack stack) {
+		if(!stack.hasTagCompound()) return 0;
+    	NBTTagCompound tag = stack.getTagCompound();
+    	return tag.getInteger("charge");
+	}
 
-    private boolean hasPlayerCrystal (EntityPlayer player, int pv) {
-        InventoryPlayer inv = player.inventory;
+	private static ItemStack getCrystal(EntityPlayer player) {
+		ItemStack re = null;
+		for(int i=0; i<player.inventory.getSizeInventory(); i++) {
+			ItemStack is = player.inventory.getStackInSlot(i);
+			if(is != null && is.getItem() instanceof ItemCrystal) {
+				if(!ItemCrystal.isFullyCharged(is)) return is;
+				re = is;
+			}
+		}
+		return re;
+	}
 
-        for (int slot = 0; slot < inv.getSizeInventory() - 1; slot++) {
-            ItemStack slotStack = player.inventory.getStackInSlot(slot);
-
-            if (slotStack != null && slotStack.getItem() instanceof ItemLifeCrystal) {
-                ItemStack crystal = inv.getStackInSlot(slot);
-                if (crystal.getItemDamage() < crystal.getMaxDamage() - pv) return true;
-            }
-        }
-        return false;
-    }
-
-    private ItemStack getCrystal (EntityPlayer player) {
-        InventoryPlayer inv = player.inventory;
-
-        for (int slot = 0; slot < inv.getSizeInventory() - 1; slot++) {
-
-            ItemStack slotStack = player.inventory.getStackInSlot(slot);
-
-            if (slotStack != null && slotStack.getItem() instanceof ItemLifeCrystal) {
-                ItemStack crystal = inv.getStackInSlot(slot);
-                if (crystal.getItemDamage() < crystal.getMaxDamage()) return crystal;
-            }
-        }
-        return null;
-    }
-
-    public void resetStack (ItemStack stack) {
-        stack.setItemDamage(getMaxDamage());
-    }
 }

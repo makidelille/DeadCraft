@@ -1,5 +1,6 @@
 package mak.dc.blocks;
 
+import mak.dc.items.DeadCraftItems;
 import mak.dc.items.itemBlock.ItemBlockDeadCraft;
 import mak.dc.lib.IBTInfos;
 import mak.dc.tileEntities.TileEntityEggSpawner;
@@ -23,9 +24,9 @@ public class DeadCraftBlocks {
 		
 		BlockDeadCraft.init();
 		
-		eggSpawner = new BlockEggSpawner();
-		enderPearlBlock = new BlockEnderPearlBlock();
-		godBottler = new BlockGodBottler();
+		eggSpawner = new BlockEggSpawner().setBlockName(IBTInfos.BLOCK_EGGSPAWNER_KEY);
+		enderPearlBlock = new BlockEnderPearlBlock().setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
+		godBottler = new BlockGodBottler().setBlockName(IBTInfos.BLOCK_BOTTLER_KEY);
 		
 		eggSpawner.setid(BlockDeadCraft.getNextId());
 		godBottler.setid(BlockDeadCraft.getNextId());
@@ -50,12 +51,9 @@ public class DeadCraftBlocks {
 	
 	
 	
-	public static void registerCraftRecipe() {
+	public static void registerCraftRecipe() {		
 		/**Shapeless Crafting*/
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.obsidian, 1), new Object[] {
-			Items.lava_bucket,Items.water_bucket
-		});
 		GameRegistry.addShapelessRecipe(new ItemStack(enderPearlBlock, 1,0), new Object[] {Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Blocks.stone});
 		
 		
@@ -66,6 +64,18 @@ public class DeadCraftBlocks {
 											Character.valueOf('E'), Blocks.obsidian,
 											Character.valueOf('A'),Items.nether_star,
 											Character.valueOf('X'), enderPearlBlock
+		});
+		GameRegistry.addRecipe(new ItemStack(godBottler, 1), new Object[] {
+			"INI",
+			"IDI",
+			"PCP",
+			Character.valueOf('I'), Items.iron_ingot,
+			Character.valueOf('N'), Items.nether_star,
+			Character.valueOf('C'), DeadCraftItems.crystal,
+			Character.valueOf('P'), Blocks.piston,
+			Character.valueOf('D'), Items.diamond
+		
+		
 		});
 		
 	}

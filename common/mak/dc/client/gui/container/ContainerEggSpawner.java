@@ -26,8 +26,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 			}
 		}
 		
-		for (int x = 0; x < 2; x++)
-			addSlotToContainer(new SlotEggSpawner(te, 6 + x, 20 + x * 18, 84));		
+		addSlotToContainer(new SlotEggSpawner(te, 6 , 29, 72));		
 		
 		
 		for (int x = 0; x < 9; x++)
@@ -55,10 +54,9 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
-			ItemStack result = stack.copy();
 			
 			if (i < te.getSizeInventory() - 1) {
-				if (!mergeItemStack(stack, 8, 44, false)) {
+				if (!mergeItemStack(stack, 7, 43, false)) {
 					return null;
 				}
 			}else {
@@ -68,12 +66,12 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 				case 0 : 
 					return null;
 				case 1 : 
-					if(!mergeItemStack(stack,pSlot, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
+					if(!mergeItemStack(stack,pSlot-1, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
 						return null;	
 					}
 					break;
 				case 4:
-					if(!mergeItemStack(stack,pSlot, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
+					if(!mergeItemStack(stack,pSlot-1, pSlot,false) && !mergeItemStack(stack, pSlot +1 , pSlot +2, false))  {
 						return null;	
 					}
 					break;
@@ -91,25 +89,15 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 					if (!mergeItemStack(stack, pSlot-1 , pSlot + 1 , false)) {
 						return null;
 					}
-					break;
-				default : 
-					if(!mergeItemStack(stack, 8, 8+player.inventory.getSizeInventory() , false)) {
-						return null;
-					}
-						
-				
+					break;		
 				}
-	
 				
 			}
 			if (stack.stackSize == 0) {
 				slot.putStack(null);
 			}else{
 				slot.onSlotChanged();
-			}
-			slot.onPickupFromSlot(player, stack);
-			
-			return result;
+			}			
 		}
 		
 		return null;
@@ -138,9 +126,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 		player.sendProgressBarUpdate(this, 2, te.getStarted());
 		player.sendProgressBarUpdate(this, 3, te.getRedstoneState());
 		player.sendProgressBarUpdate(this, 4, te.getMode());
-		for(int i = 0; i < 6; i++) {
-			player.sendSlotContents(this, i, te.getStackInSlot(i));
-		}
+		player.sendProgressBarUpdate(this, 5, te.getPower());
     }
 	
 	@Override
@@ -153,9 +139,8 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 			((ICrafting)player).sendProgressBarUpdate(this, 2, te.getStarted());
 			((ICrafting)player).sendProgressBarUpdate(this, 3, te.getRedstoneState());
 			((ICrafting)player).sendProgressBarUpdate(this, 4, te.getMode());
-			for(int i = 0; i < 6; i++) {
-				((ICrafting)player).sendSlotContents(this, i, te.getStackInSlot(i));
-			}
+			((ICrafting)player).sendProgressBarUpdate(this, 5, te.getPower());
+
 		}
 	}
 	
@@ -177,6 +162,9 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
     		break;
     	case 4 :
     		te.setMode((byte) data);
+    		break;
+    	case 5 :
+    		te.setPower(data);
     		break;
     	}
     }

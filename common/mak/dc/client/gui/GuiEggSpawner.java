@@ -16,6 +16,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+//TODO render bug depending if there is a crystal in inv
+
 public class GuiEggSpawner extends GuiCustom{
 
 	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.EGGSPAWNER_GUI_TEXT_LOC);
@@ -27,8 +29,7 @@ public class GuiEggSpawner extends GuiCustom{
 		this.te = te;
 		
 		xSize = 184;
-		ySize = 189;
-		
+		ySize = 189;	
 		
 		
 		
@@ -36,6 +37,7 @@ public class GuiEggSpawner extends GuiCustom{
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		
@@ -43,48 +45,52 @@ public class GuiEggSpawner extends GuiCustom{
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		int[] lifeBarHeight = {0,0};
+		int powerBar;
 		int durationBarLenght;
 		
-		for(int i =0; i < 2; i++) {
-			lifeBarHeight[i] = (int) (te.getLifeBar(i) * 6.3F) ;
-			subRect.set((1+i),new GuiRectangle(this, 27 + i * 18, 81 - lifeBarHeight[i], 2, lifeBarHeight[i]));
-			subRect.get(1+i).draw(xSize, 63 - lifeBarHeight[i]);
-		}
+		powerBar = (int) (50 *  (float) te.getPower() / (float) te.MAXPOWER);
+		subRect.set(1, new GuiRectangle(this, 29, 18 + 50 - powerBar, 16, powerBar));
+		subRect.get(1).draw(185, 64 + 50 - powerBar);
+		
 		durationBarLenght =  (int)(te.getProgress() * 1.60);
 		subRect.set(0, new GuiRectangle (this, 11, 8, durationBarLenght, 3));
 		subRect.get(0).draw(0, ySize);
 		
-		((GuiRectangleInfo) subRect.get(3)).drawTexturedLeftRect();	
+		((GuiRectangleInfo) subRect.get(2)).drawTexturedLeftRect();	
 		
-		((GuiRectangleInfo) subRect.get(4)).drawSeparatorH(-85, 80, 75);
+		((GuiRectangleInfo) subRect.get(3)).drawSeparatorH(-85, 80, 75);
 		
 		
 		initGui();
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		getFontRenderer().drawSplitString("Dragon Egg Spawner", 122, 19, 46, 0x404040);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glColor4f(1, 1, 1, 1);
+
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		getFontRenderer().drawSplitString("Dragon Egg Spawner", 122, 22, 46, 0x404040);
 		
 		String str = null;
 		
-		str = ("State : " + (te.hasStarted() ? "active" : "inactive"));
-		getFontRenderer().drawSplitString(str, 65, 56, 110, (te.hasStarted() ? 0x00FF00 : 0xFF0000));
+		str = ("State: " + (te.hasStarted() ? "active" : "inactive"));
+		getFontRenderer().drawSplitString(str, 65, 57, 110, (te.hasStarted() ? 0x00FF00 : 0xFF0000));
 		
 		
-		str = ("Progress : " + te.getProgress() + "%");
-		getFontRenderer().drawSplitString(str, 65, 66, 110, 0x404040);
-		
-		
-		str = ("Life multiplier : " + te.getLifeMultiplier() + "%");
-		getFontRenderer().drawSplitString(str, 65, 76, 110, 0x404040);
-		
-		str = ("Egg in stock : " + te.getEggInStock());
-		getFontRenderer().drawSplitString(str, 65, 86, 110, 0x404040);
+		str = ("Progress: " + te.getProgress() + "%");
+		getFontRenderer().drawSplitString(str, 65, 67, 110, 0x404040);
+				
+		str = ("Power: " + te.getPower() + "/" + te.MAXPOWER);
+		getFontRenderer().drawSplitString(str, 65, 77, 110, 0x404040);
+
+		str = ("Egg in stock: " + te.getEggInStock());
+		getFontRenderer().drawSplitString(str, 65, 87, 110, 0x404040);
 		
 		redGuiDisplay();
 		prodGuiDisplay();
+		GL11.glEnable(GL11.GL_LIGHTING);
 				
 	}
 		
@@ -97,11 +103,11 @@ public class GuiEggSpawner extends GuiCustom{
 		drawButtonStartStop();
 		
 		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(3)).drawButtonRedState(i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(2)).drawButtonRedState(i + 1, -22, 20 + i * 20);
 		}
 		
 		for (int i = 4 ; i < 6 ; i++) {
-			((GuiRectangleInfo) subRect.get(4)).drawButtonBasedOnState(i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
+			((GuiRectangleInfo) subRect.get(3)).drawButtonBasedOnState(i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
 		}
 	
 	
@@ -129,10 +135,10 @@ public class GuiEggSpawner extends GuiCustom{
 		String str = "";
 		
 		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(3)).drawTexturedRedState(i + 1, -22, 20 + i * 20);
+			((GuiRectangleInfo) subRect.get(2)).drawTexturedRedState(i + 1, -22, 20 + i * 20);
 		}
 		
-		((GuiRectangleInfo) subRect.get(3)).setActiveRedState(te.getRedstoneState());
+		((GuiRectangleInfo) subRect.get(2)).setActiveRedState(te.getRedstoneState());
 		
 		switch (te.getRedstoneState()) {
 		case 0:
@@ -148,7 +154,7 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		str = str + "when a dragon egg spawn";
 		
-		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, - 90, 25, 70);
+		((GuiRectangleInfo) subRect.get(2)).drawString(this, str, - 90, 25, 70);
 	}
 	
 
@@ -169,14 +175,13 @@ public class GuiEggSpawner extends GuiCustom{
 			str = "the spawner is in loop mode, it create eggs until you clicked ths 'Stop' button, or change mode";
 		}
 		
-		((GuiRectangleInfo) subRect.get(4)).drawString(this, str, -90,  85, 70);
+		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, -90,  85, 70);
 	}
 
 	@Override
 	protected void defineSubRect() {
-		subRect.add(new GuiRectangle (this, 11, 8, 0, 3));
-		subRect.add(new GuiRectangle(this,27 + 0 * 18, 81 - 0, 2, 0));
-		subRect.add(new GuiRectangle(this,27 + 1 * 18, 81 - 0, 2, 0));
+		subRect.add(new GuiRectangle (this, 11, 8, 0, 3)); //TOP BAR
+		subRect.add(new GuiRectangle(this, 29, 18, 16, 0)); //powerbar
 		subRect.add(new GuiRectangleInfo(this));
 		subRect.add(new GuiRectangleInfo(this));
 		

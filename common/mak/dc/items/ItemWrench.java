@@ -32,7 +32,6 @@ public class ItemWrench extends Item {
 
     public ItemWrench () {
         super();
-        this.setUnlocalizedName(IBTInfos.ITEM_CONTROLLER_KEY);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
     }

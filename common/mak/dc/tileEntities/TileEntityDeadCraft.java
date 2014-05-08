@@ -113,10 +113,11 @@ public class TileEntityDeadCraft extends TileEntity {
 		return this.deadcraftId;
 	}
 
-	public NBTTagCompound writeNBTData(NBTTagCompound nbtTagCompound) {
+	public NBTTagCompound writeNBTData() {
+		NBTTagCompound nbtTagCompound = new NBTTagCompound();
 		nbtTagCompound.setString("owner", this.owner);
-        int nbersAll = allowed.size();
-                if(allowed.size() != 0) {       
+        int nbersAll = allowed.isEmpty() ?  0 : allowed.size();
+                if(allowed.size() > 0) {       
                     for (int i = 0; i < nbersAll; i++ ) 
                         nbtTagCompound.setString("allowed [" +i+ "]" , allowed.get(i).toString());
                     nbtTagCompound.setInteger("nbAllowed", nbersAll);

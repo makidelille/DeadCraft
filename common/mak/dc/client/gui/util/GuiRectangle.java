@@ -130,7 +130,7 @@ public class GuiRectangle extends GuiScreen{
 			case "dark green" :	return 0x006400;	
 			case "dark blue" : 	return 0x00008B;
 			case "light gray" : return 0xD3D3D3;
-			case "light blue": break; //TODO add heexacode
+			case "light blue": return 0xADD8E6;
 			case "light green" : return 0x90EE90;
 			}
 		return 0x404040;

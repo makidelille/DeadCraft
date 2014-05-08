@@ -7,8 +7,9 @@ import java.util.Map.Entry;
 
 import mak.dc.DeadCraft;
 import mak.dc.items.ItemGodCan;
-import mak.dc.items.ItemLifeCrystal;
+import mak.dc.items.ItemCrystal;
 import mak.dc.items.crafting.CanCraftingManager;
+import mak.dc.lib.IBTInfos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	/**
 	 * rate of the charge and of the usage
 	 */
-	private static final int CHARGESPEED = 50;
+	private static final int CHARGESPEED = 500;
 	private static final int POWERUSAGE = 1;
 	
 	
@@ -126,10 +127,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(this.power >= this.MAXPOWER ) return;
 		else if(this.inventory[0] != null){
 			ItemStack crystal = inventory[0];
-			if(crystal.getItem() instanceof ItemLifeCrystal && crystal.getItemDamage() <= crystal.getMaxDamage()  - CHARGESPEED){
-				ItemLifeCrystal itemCrystal= (ItemLifeCrystal)crystal.getItem();
-				itemCrystal.dischargeItem(crystal, CHARGESPEED);
-				this.power += CHARGESPEED;
+			if(crystal.getItem() instanceof ItemCrystal){
+				this.power += CHARGESPEED - ItemCrystal.dischargeItem(crystal, CHARGESPEED);
 			}
 		}
 		
@@ -283,7 +282,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		if(isTop()) return pair.isItemValidForSlot(var1, var2);
 		else {
 			switch (var1) {
-			case 0: return var2.getItem() instanceof ItemLifeCrystal;
+			case 0: return var2.getItem() instanceof ItemCrystal;
 			case 1:	return var2.getItem() instanceof ItemGodCan;
 			case 2: return false;
 			default : return true;
@@ -353,7 +352,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		return is;
 	}
 	public String getInventoryName() {
-		return "GodBottler";
+		return IBTInfos.TILE_BOTTLER_KEY;
 	}
 	public int getInventoryStackLimit() {
 		return 64;

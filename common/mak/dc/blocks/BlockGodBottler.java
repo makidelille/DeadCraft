@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityReddustFX;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,10 +29,13 @@ public class BlockGodBottler extends BlockDeadCraft {
 	
 	public BlockGodBottler() {
 		super(Material.iron);
-		this.setBlockName(IBTInfos.BLOCK_BOTTLER_UNLOCALIZED_NAME);
 		this.setLightOpacity(0);
 		this.setLightLevel(0.8f);
-		
+	}
+	
+	@Override
+	public void registerBlockIcons(IIconRegister p_149651_1_) {
+		return;
 	}
 	
 	@Override

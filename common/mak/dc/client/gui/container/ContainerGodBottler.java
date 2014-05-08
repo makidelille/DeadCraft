@@ -2,7 +2,7 @@ package mak.dc.client.gui.container;
 
 import mak.dc.client.gui.container.slot.SlotGodBottler;
 import mak.dc.items.ItemGodCan;
-import mak.dc.items.ItemLifeCrystal;
+import mak.dc.items.ItemCrystal;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,7 +20,7 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 		this.te = te2;
 		this.invPlayer = inventory;
 
-		this.addSlotToContainer(new SlotGodBottler(te,0, 17,62));
+		this.addSlotToContainer(new SlotGodBottler(te, 0, 17,62));
 		this.addSlotToContainer(new SlotGodBottler(te, 1, 65, 6));
 		this.addSlotToContainer(new SlotGodBottler(te, 2, 99, 63));
 		for (int i= 0; i < 2; i++)
@@ -28,7 +28,6 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 				this.addSlotToContainer(new SlotGodBottler(te, 3+ i *3 + j, 115 + j*18, 6 + i*18));
 		
 		
-		//player slot
 		for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlotToContainer(new Slot(invPlayer, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
@@ -48,18 +47,17 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 		Slot slot = getSlot(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
-			ItemStack result = stack.copy();
 			
-			if (i < te.getSizeInventory()) {
+			if (i < te.getSizeInventory() - 1) {
 				if (!mergeItemStack(stack, 9, 44, false)) {
 					return null;
 				}
 			}else{
-				if(stack.getItem() instanceof ItemLifeCrystal && !(this.getSlot(0).getHasStack())) {
-					if(!mergeItemStack(stack, 0, 1, false)) {
+				if(stack.getItem() instanceof ItemCrystal) {
+					if(!mergeItemStack(stack, 0, 2, false)) {
 						return null;
 					}
-				}if(stack.getItem() instanceof ItemGodCan && !(this.getSlot(1).getHasStack()) ) {
+				}if(stack.getItem() instanceof ItemGodCan ) {
 					if(!mergeItemStack(stack, 1, 2, false)) {
 						return null;
 					}
@@ -100,7 +98,7 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 	
 	@Override
 	public void updateProgressBar(int id, int data) {
-		super.updateProgressBar(id, data);
+		//super.updateProgressBar(id, data);
 		switch(id) {
 		case 0 :
 			te.setWorkedTime(data);

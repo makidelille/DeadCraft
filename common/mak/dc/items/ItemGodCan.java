@@ -31,12 +31,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemGodCan extends ItemFood{
-	
-	//TODO don't debuf when leaves player inv
-	
+		
 	public ItemGodCan(){
 		super(1, false);
-		this.setUnlocalizedName(IBTInfos.ITEM_GODCAN_UNLOCALIZED_NAME);
 		this.setMaxStackSize(1);
 		this.setFull3D();
 		this.setAlwaysEdible();
@@ -93,7 +90,7 @@ public class ItemGodCan extends ItemFood{
 			if(id.hasKey("id")) {
 				int effectId = id.getInteger("id");
 				CanEffect effect = DeadCraft.canCraftingManager.getCanEffect(effectId);
-				if(effect.duration > maxDuration) maxDuration = effect.duration;
+				if(effect.getDuration() > maxDuration) maxDuration = effect.getDuration();
 			}
 
 		}
@@ -125,6 +122,7 @@ public class ItemGodCan extends ItemFood{
 	public void onUpdate(ItemStack is, World world,	Entity ent, int par4, boolean par5) {
 		if(!world.isRemote) {
 			NBTTagCompound tag = is.getTagCompound();
+			if(tag.getInteger("tick") > 0) tag.setBoolean("isActive", true);
 			if(tag != null && tag.getBoolean("isActive")) {
 				int tickInUse = tag.getInteger("tick");
 				if(!tag.hasKey("effect_ids")) return ;
@@ -138,7 +136,7 @@ public class ItemGodCan extends ItemFood{
 					if(id.hasKey("id")) {
 						int effectId = id.getInteger("id");
 						CanEffect effect = DeadCraft.canCraftingManager.getCanEffect(effectId);
-						if(tickInUse < effect.duration) 
+						if(tickInUse < effect.getDuration()) 
 							effect.applyEffect(world, (EntityPlayer) ent);
 						else {
 							effect.removeEffect(world, (EntityPlayer) ent);
@@ -158,75 +156,44 @@ public class ItemGodCan extends ItemFood{
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 		return EnumAction.drink;
 	}
-	
-	
-	
-	
-	
-	private void applyEffects(World world, Entity ent, int[] effectIds) {
+
+
+	private static void removeEffects(World world, ItemStack is,	EntityPlayer player) {
 		if(!world.isRemote) {
-			for (int i=0; i < effectIds.length; i++) {
-				int id = effectIds[i];
-				EntityPlayer player = (EntityPlayer) ent;
-				switch(id) {
-				case 1 :					
-					if(player.capabilities.allowFlying) break;
-					player.capabilities.allowFlying = true;
-					player.sendPlayerAbilities();
-					break;
-				case 2 :
-					player.addPotionEffect(new PotionEffect(1, 20, 5));
-					player.addPotionEffect(new PotionEffect(8, 20, 5));
-					break;
-				case 3:
-					player.addPotionEffect(new PotionEffect(11,20,5));
-					player.addPotionEffect(new PotionEffect(12,20,5));
-					break;
-				case 4:
-					player.addPotionEffect(new PotionEffect(3,20,1000));
-					player.addPotionEffect(new PotionEffect(5,20,100));
-					break;
+			NBTTagCompound tag = is.getTagCompound();
+			if(tag != null) {
+				if(!tag.hasKey("effect_ids")) return ;
+				NBTTagList tagList = (NBTTagList) tag.getTag("effect_ids");
+				if(tagList.tagCount() == 0) {
+					tag.setInteger("tick", 0);
+					tag.setBoolean("isActive", false);
+					return;
+				}for (int i=0; i <tagList.tagCount(); i++) {
+					NBTTagCompound id =  tagList.getCompoundTagAt(i);
+					if(id.hasKey("id")) {
+						int effectId = id.getInteger("id");
+						CanEffect effect = DeadCraft.canCraftingManager.getCanEffect(effectId);
+						effect.removeEffect(world,  player);
+					}
+
 				}
+				is.setTagCompound(tag);
+
 			}
+			
 		}
 		
 	}
 	
-	private void removeEffects(World world, Entity ent, int[] effectIds) {
+	public static void pauseEffects(World world,ItemStack is,EntityPlayer player) {
 		if(!world.isRemote) {
-			for (int i=0; i < effectIds.length; i++) {
-				int id = effectIds[i];
-				EntityPlayerMP player = (EntityPlayerMP) ent;
-				switch(id) {
-				case 1 : 
-					if(!player.capabilities.allowFlying) break;
-					PlayerCapabilities newCap = player.capabilities;
-					newCap.allowFlying = false;
-					player.playerNetServerHandler.processPlayerAbilities(new C13PacketPlayerAbilities(newCap));
-					player.playerNetServerHandler.sendPacket(new net.minecraft.network.play.server.S39PacketPlayerAbilities(newCap));
-					break;
-				case 2 :
-					player.removePotionEffect(1);
-					player.removePotionEffect(8);
-					break;
-				case 3:
-					player.removePotionEffect(11);
-					player.removePotionEffect(12);
-					break;
-				case 4:
-					player.removePotionEffect(3);
-					player.removePotionEffect(5);
-					break;
-				
-				
-				
-				}
+			NBTTagCompound tag = is.getTagCompound();
+			if(tag != null && tag.getBoolean("isActive")) {
+				tag.setBoolean("isActive", false);
+				removeEffects(world, is, player);
 			}
+			is.setTagCompound(tag);
 		}
 	}
 	
-	
-	
-	
-
 }
