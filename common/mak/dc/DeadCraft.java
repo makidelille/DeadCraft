@@ -24,7 +24,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class DeadCraft {
 	
-	
+	//TODO add name localisation
 
 	 @SidedProxy(clientSide = "mak.dc.proxy.ClientProxy", serverSide = "mak.dc.proxy.CommonProxy")
 	    public static CommonProxy proxy;

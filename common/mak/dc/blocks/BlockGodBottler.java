@@ -3,7 +3,6 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
-import mak.dc.lib.IBTInfos;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
@@ -22,6 +21,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockGodBottler extends BlockDeadCraft {
 
@@ -110,6 +111,25 @@ public class BlockGodBottler extends BlockDeadCraft {
 	}
 	
 	@Override
+	public void onWrenched(World world, int x, int y, int z, int side,float hitX, float hitY, float hitZ) {
+		if(side <= 1) return;
+		TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
+		if(world.getBlockMetadata(x, y, z) == 4) te = te.getPair();
+		switch(side) {
+		case 2 : side = 0;
+			break;
+		case 3 : side = 2;
+			break;
+		case 4 : side = 3;
+			break;
+		case 5 : side = 1;
+			break;
+		}
+		world.setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, side, 1|2);
+		world.notifyBlocksOfNeighborChange(te.xCoord,  te.yCoord+ 1, te.zCoord, this);
+	}
+	
+	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z,int side) {
 		return true;
 	}
@@ -135,6 +155,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(World world, int x,int y, int z, Random ran) {
 		if(((TileEntityGodBottler) world.getTileEntity(x, y, z)).hasStarted()) {

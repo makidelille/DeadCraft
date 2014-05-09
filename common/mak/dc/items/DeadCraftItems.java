@@ -102,9 +102,13 @@ public class DeadCraftItems {
 				Character.valueOf('R'), Items.redstone
 		});
 		/**
-		 * craft of mindcontroller
+		 * craft of Mindcontroller
 		 */
 		is = new ItemStack(mindController);
+		tag = new NBTTagCompound();
+		tag.setBoolean("creative", false);
+    	tag.setInteger("charge", 0);
+    	is.setTagCompound(tag);
 		CraftingManager.getInstance().addRecipe(is, new Object[] {
 				" T ",
 				"ICI",
@@ -114,7 +118,7 @@ public class DeadCraftItems {
 				Character.valueOf('C'), crystal
 		});
 		/**
-		 * craft of deadwand
+		 * craft of Deadwand
 		 */
 		is = new ItemStack(deadWand);
 		tag = new NBTTagCompound();

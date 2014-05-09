@@ -51,7 +51,7 @@ public class BlockEnderPearlBlock extends Block {
     @Override
     public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
         if(!world.isRemote) {
-            if(!((EntityPlayer)entity).capabilities.isCreativeMode || (((EntityPlayer)entity).capabilities.isCreativeMode && _IS_CREATIVE_MOVED))		
+            if(!((EntityPlayer)entity).capabilities.isCreativeMode || (((EntityPlayer)entity).capabilities.isCreativeMode && _IS_CREATIVE_MOVED) && !world.isBlockIndirectlyGettingPowered(x, y, z))		
                 teleportEntity(world, x, y, z, entity);
         }
     }
@@ -60,7 +60,7 @@ public class BlockEnderPearlBlock extends Block {
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
-        if(!world.isRemote) {
+        if(!world.isRemote && !((EntityPlayer)ent).isSneaking()) {
             if(!((EntityPlayer)ent).capabilities.isCreativeMode || (((EntityPlayer)ent).capabilities.isCreativeMode && _IS_CREATIVE_MOVED))
                 teleportEntity(world,x,y,z,ent);
         }

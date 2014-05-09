@@ -52,19 +52,25 @@ public class DeadCraftBlocks {
 	
 	
 	public static void registerCraftRecipe() {		
-		/**Shapeless Crafting*/
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(enderPearlBlock, 1,0), new Object[] {Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Items.ender_pearl,Blocks.stone});
+		GameRegistry.addRecipe(new ItemStack(enderPearlBlock, 1,0), new Object[] {
+			"EEE",
+			"EOE",
+			"EEE",
+			Character.valueOf('O'), Blocks.obsidian,
+			Character.valueOf('E'), Items.ender_pearl
+		});
 		
-		
-		/**Shaped Crafting*/
 		
 		GameRegistry.addRecipe(new ItemStack(eggSpawner, 1), new Object[] {
-										"EXE","XAX","EXE",
-											Character.valueOf('E'), Blocks.obsidian,
-											Character.valueOf('A'),Items.nether_star,
-											Character.valueOf('X'), enderPearlBlock
+			"EXE",
+			"XAX",
+			"EXE",
+			Character.valueOf('E'), Blocks.obsidian,
+			Character.valueOf('A'),Items.nether_star,
+			Character.valueOf('X'), enderPearlBlock
 		});
+		
 		GameRegistry.addRecipe(new ItemStack(godBottler, 1), new Object[] {
 			"INI",
 			"IDI",

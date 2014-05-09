@@ -14,13 +14,12 @@ public class Textures {
 	
 	/** Items textures localization */
 	public static final String DEADWAND_TEXT_LOC =  _TEXT_LOC + "deadwand";
-	public static final String[] LIFECRYSTAL_TEXT_LOC = { _TEXT_LOC + "lifecrystal",_TEXT_LOC + "lifecrystal_charged"};
-	public static final String[] MINDCONTROLLER_TEXT_LOC = { _TEXT_LOC + "mindcontroller_passive", _TEXT_LOC + "mindcontroller_active",_TEXT_LOC + "mindcontroller_creative" };
+	public static final String MINDCONTROLLER_TEXT_LOC =  _TEXT_LOC + "mindcontroller";
 	public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base",_TEXT_LOC + "controller_lock",_TEXT_LOC + "controller_info" };
 	public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
     
 	/** Models Textures localization */
-	public static final String[] MINDCONTROLLER_MODEL_TEXT_LOC = {PATH_MODEL + "mindcontrollermodeltexturemap_passive.png",PATH_MODEL + "mindcontrollermodeltexturemap_active.png",PATH_MODEL + "mindcontrollermodeltexturemap_creative.png"};
+	public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";
 	public static final String GODBOTTLER_MODEL_TEXT_LOC = PATH_MODEL + "godbottlertexturemap.png";
 	public static final String GODCAN_MODEL_TEXT_LOC = PATH_MODEL + "godcantexturemap.png";
 	

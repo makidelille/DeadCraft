@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.DeadCraft;
+import mak.dc.blocks.BlockDeadCraft;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
+import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
@@ -27,7 +30,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemWrench extends Item {
 
     private static final String[] version = {"base","lock","info"};
-	private static final boolean DEBUG = false;
     private IIcon[] icons = {null,null,null};
 
     public ItemWrench () {
@@ -46,7 +48,7 @@ public class ItemWrench extends Item {
         infos[1] = EnumChatFormatting.RESET + "wrench mode : " +EnumChatFormatting.ITALIC + "" +  (is.getItemDamage() == 0 ? "basic" : (is.getItemDamage() == 1 ? "lock" : (is.getItemDamage() == 2? "infos" : EnumChatFormatting.RED + "should not exist")));
         if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) infos[2] = getDescription(is.getItemDamage());
         
-       
+       //TODO not pretty
         
         for(int i=0; i<infos.length;i++){
             list.add(infos[i]);
@@ -94,13 +96,15 @@ public class ItemWrench extends Item {
              if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
-                    	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
+                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z, side, hitX, hitY,hitZ);
                         break;
                     case 1: 
-                    	if(te.isUserCreator(username)) showAdminData(te, player);
+                    	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 2: 
+                    	player.addChatComponentMessage(new ChatComponentText("" + te.blockMetadata));
                         showData(te,player);
+                        if(te.isUserCreator(username)) showAdminData(te, player);
                         break;
                     default:
                         return false;
@@ -117,16 +121,25 @@ public class ItemWrench extends Item {
     }
 
     private void showAdminData (TileEntityDeadCraft te, EntityPlayer player) {
-    	player.addChatComponentMessage(new ChatComponentText("owner : " + te.getowner()));
-    	player.addChatComponentMessage(new ChatComponentText("state "  + (te.isLocked()  ? "private"  :"public")));
-    	player.addChatComponentMessage(new ChatComponentText("allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser() : "none")));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "====Admin===="));
+    	player.addChatComponentMessage(new ChatComponentText("Owner : " + te.getowner()));
+    	player.addChatComponentMessage(new ChatComponentText("Lock state : "  + (te.isLocked()  ? "private"  :"public")));
+    	player.addChatComponentMessage(new ChatComponentText("Allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser() : "none")));
     	
     }
     
     private void showData(TileEntityDeadCraft te, EntityPlayer player) {
+    	
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA  + te.getBlockType().getUnlocalizedName()));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  + "====Public===="));
+
     	if(te instanceof TileEntityGodBottler) {
-    		player.addChatComponentMessage(new ChatComponentText("isTop ? " + ((TileEntityGodBottler) te).isTop()));
-    		player.addChatComponentMessage(new ChatComponentText("direction : " + ((TileEntityGodBottler) te).getDirection()));
+    		player.addChatComponentMessage(new ChatComponentText("Power : " + ((TileEntityGodBottler) te).getPower() + "/" +  ((TileEntityGodBottler) te).MAXPOWER));
+    		player.addChatComponentMessage(new ChatComponentText("Redstone powered : " + (((TileEntityGodBottler) te).isRSPowered() ? (EnumChatFormatting.GREEN + "True") : (EnumChatFormatting.RED + "False") )));
+    	}
+    	if(te instanceof TileEntityEggSpawner) {
+    		player.addChatComponentMessage(new ChatComponentText("Power : " + ((TileEntityEggSpawner) te).getPower() + "/" +  ((TileEntityEggSpawner) te).MAXPOWER));
+    		player.addChatComponentMessage(new ChatComponentText("Progress :" + ((TileEntityEggSpawner) te).getProgress() + "%"));
     	}
     }
 

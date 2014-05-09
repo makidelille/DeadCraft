@@ -95,7 +95,14 @@ public class ItemCrystal extends Item {
     	if(!is.hasTagCompound()) return false;
     	NBTTagCompound tag = is.getTagCompound();
     	return tag.getInteger("charge") == MAXCHARGE;
-    }    
+    }
+    
+    public static boolean isEmpty (ItemStack is) {
+    	if(!is.hasTagCompound()) return false;
+    	NBTTagCompound tag = is.getTagCompound();
+    	return tag.getInteger("charge") == 0;
+    }
+    
     /**
      * 
      * @param stack

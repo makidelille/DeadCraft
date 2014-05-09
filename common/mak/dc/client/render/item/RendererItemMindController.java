@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public class RendererItemMindController implements IItemRenderer {
 
 	protected ModelMindController model;
-	protected static final ResourceLocation[] texture = {new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[0]),new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[1]),new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC[2])};
+	protected static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.MINDCONTROLLER_MODEL_TEXT_LOC);
 	
 	
 	public RendererItemMindController () {
@@ -50,7 +50,7 @@ public class RendererItemMindController implements IItemRenderer {
 			
 			GL11.glPushMatrix();
 			
-			Minecraft.getMinecraft().renderEngine.bindTexture(texture[item.getItemDamage()]);
+			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 			
 			GL11.glRotatef(angle , 0, -1,0);
 			angle = 90;
@@ -74,7 +74,7 @@ public class RendererItemMindController implements IItemRenderer {
 			
 			GL11.glPushMatrix();
 			
-			Minecraft.getMinecraft().renderEngine.bindTexture(texture[item.getItemDamage()]);
+			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
 			float angle = 90;
 			GL11.glRotatef(angle , -1, -1,0);
