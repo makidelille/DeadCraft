@@ -31,7 +31,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 	public BlockGodBottler() {
 		super(Material.iron);
 		this.setLightOpacity(0);
-		this.setLightLevel(0.8f);
+		this.setLightLevel(0.5f);
 	}
 	
 	@Override

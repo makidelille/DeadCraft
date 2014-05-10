@@ -22,7 +22,7 @@ public class GuiGodBottler extends GuiCustom {
 	private static final ResourceLocation textUtil = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
 	private TileEntityGodBottler te;
 
-
+//FIXME client dupe bug on the crystal
 
 	public GuiGodBottler(InventoryPlayer inventory, TileEntityGodBottler te2,int iD) {
 		super(new ContainerGodBottler(inventory, te2),iD);

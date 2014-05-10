@@ -5,9 +5,9 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import mak.dc.DeadCraft;
-import mak.dc.canEffects.CanEffect;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
+import mak.dc.util.canEffects.CanEffect;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -49,18 +49,20 @@ public class ItemGodCan extends ItemFood{
 				NBTTagList ids = (NBTTagList) tag.getTag("effect_ids");
 				if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 					for(int i =0; i < ids.tagCount(); i++) {
-						infos.add("effects id : " + (ids.getCompoundTagAt(i).getInteger("id")));
+						infos.add("Effects id : " +EnumChatFormatting.YELLOW + (ids.getCompoundTagAt(i).getInteger("id")));
 					}
-					infos.add("Is active : " + tag.getBoolean("isActive"));
-					infos.add("Time in Use : " + (tag.getInteger("tick") / 20) +  "s");
+					infos.add("Is active : " +EnumChatFormatting.YELLOW + tag.getBoolean("isActive"));
+					infos.add("Time in Use : " +EnumChatFormatting.YELLOW + (tag.getInteger("tick") / 20) +  "s");
 				
 				}else {
-					infos.add(EnumChatFormatting.YELLOW + "-- Press " +EnumChatFormatting.ITALIC + "Shift" +EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +  " for More Infos --" );
+					infos.add(EnumChatFormatting.YELLOW + "-- Press Shift for More Infos --" );
 					for(int i =0; i < ids.tagCount(); i++) {
-						infos.add("effects : " + DeadCraft.canCraftingManager.getCanEffect((ids.getCompoundTagAt(i).getInteger("id"))).getName());
+						infos.add("Effects : " +EnumChatFormatting.YELLOW + ""+ DeadCraft.canCraftingManager.getCanEffect((ids.getCompoundTagAt(i).getInteger("id"))).getName());
 					}
 				}
 			}
+		}else{
+			infos.add(EnumChatFormatting.GRAY + "No effects");
 		}
 
 	}
@@ -122,6 +124,12 @@ public class ItemGodCan extends ItemFood{
 	public void onUpdate(ItemStack is, World world,	Entity ent, int par4, boolean par5) {
 		if(!world.isRemote) {
 			NBTTagCompound tag = is.getTagCompound();
+			if(tag == null) {
+				tag = new NBTTagCompound();
+				tag.setBoolean("isActive", false);
+				tag.setInteger("tick",0);			
+				return;
+			}
 			if(tag.getInteger("tick") > 0) tag.setBoolean("isActive", true);
 			if(tag != null && tag.getBoolean("isActive")) {
 				int tickInUse = tag.getInteger("tick");
@@ -194,6 +202,25 @@ public class ItemGodCan extends ItemFood{
 			}
 			is.setTagCompound(tag);
 		}
+	}
+
+
+	public static boolean hasId(ItemStack is,int idMatchingrecipe) {
+		NBTTagCompound tag = is.getTagCompound();
+		if(tag != null) {
+			if(!tag.hasKey("effect_ids")) return false;
+			NBTTagList tagList = (NBTTagList) tag.getTag("effect_ids");
+			if(tagList.tagCount() == 0) 
+				return false;
+			for (int i=0; i <tagList.tagCount(); i++) {
+				NBTTagCompound id =  tagList.getCompoundTagAt(i);
+				if(id.hasKey("id"))
+					if(id.getInteger("id") == idMatchingrecipe) return true;
+				
+			}
+			return false;
+		}
+		return false;
 	}
 	
 }

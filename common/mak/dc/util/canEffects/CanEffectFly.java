@@ -1,4 +1,4 @@
-package mak.dc.canEffects;
+package mak.dc.util.canEffects;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
+import mak.dc.entity.ai.EntityAITemptMindController;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.util.DamageSourceDeadCraft;
@@ -17,6 +18,7 @@ import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -38,7 +40,7 @@ public class ItemMindController extends Item {
     /** handle by config */
     private static int                 MAXCHARGE        = 4_000;
     private static int                 CostForPassiveEntityUse = 100; //Config
-    private static int                 CostForHostileEntityUse = 250; //Config
+    private static int                 CostForHostileEntityUse = 25; //Config
 
     public ItemMindController () {
         super();
@@ -109,13 +111,13 @@ public class ItemMindController extends Item {
             if(plrName == "") plrName = "none";
             
             String ListInfo = EnumChatFormatting.AQUA + "Creator : " +EnumChatFormatting.ITALIC +  plrName + EnumChatFormatting.RESET;
-            String ListInfo2 = "charge : " + EnumChatFormatting.ITALIC + "" + charge + "/" + MAXCHARGE ;
+            String ListInfo2 = "Charge : " + EnumChatFormatting.ITALIC + "" +EnumChatFormatting.YELLOW + (tag.getBoolean("creative") ?  "infinite" : (charge + "/" + MAXCHARGE));
           
 
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo);
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && tag.getBoolean("creative")) info.add("is Creative Spawed");
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && tag.getBoolean("creative")) info.add("Is Creative Spawed");
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo2);
-            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +" -- Press Shift for info --");
+            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
 
         } else {
             String listInfo = EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + ""
@@ -177,24 +179,32 @@ public class ItemMindController extends Item {
             	dischargeItem(stack, CostForPassiveEntityUse);
             	EntityLiving entLive = (EntityLiving) ent;
                 if (entLive.isCreatureType(EnumCreatureType.creature, true)) {
-                	EntityAITempt ai = new EntityAITempt((EntityCreature) entLive, 2D, this, false);
-//                	for(int i =0; i< entLive.tasks.taskEntries.size(); i++) {
-//                		EntityAITaskEntry task = (EntityAITaskEntry) entLive.tasks.taskEntries.get(i);
-//                		System.out.println(entLive.tasks.taskEntries.get(i).toString());
-//                		if(task.action.equals(ai)) {
-//                			System.out.println("done");
-//                			entLive.tasks.removeTask(ai); //TODO create func to delete it
-//                			break;
-//                		}
-//                	}
-                    entLive.tasks.addTask(0, ai);
+                	EntityAITemptMindController ai = new EntityAITemptMindController((EntityCreature) entLive, 2D, false, player);
+                	boolean flag = true;
+					for(int i =0; i< entLive.tasks.taskEntries.size(); i++) {
+                		EntityAITaskEntry task = (EntityAITaskEntry) entLive.tasks.taskEntries.get(i);
+                		if(task.action instanceof EntityAITemptMindController) {
+                			entLive.tasks.removeTask(task.action);
+                			player.worldObj.playSoundAtEntity(player,"mob.chicken.plop", 1.0F,0.5f);
+                			flag  = false;
+                			break;
+                		}
+                	}
+                    if(flag) {
+                    	entLive.tasks.addTask(0, ai);
+            			player.worldObj.playSoundAtEntity(player,"mob.chicken.plop", 1.0F,5f);
+                    }
                     
                     return true;
                 }
-                if (stack.getItemDamage() != 0 && checkEntity(entLive) && canDischargeItem(stack, getEntityCost(entLive))) {
-                    entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive, player, 4F, 1.2D, 2D));
+                if (checkEntity(entLive) && canDischargeItem(stack, getEntityCost(entLive))) {
+                	entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive, player, 4F, 1.2D, 2D));
                     dischargeItem(stack, getEntityCost(entLive));
+                    player.worldObj.playSoundAtEntity(player, "fireworks.blast_far", 1f, 0.5f);
                     return true;
+                }if(entLive instanceof EntitySlime && canDischargeItem(stack, MAXCHARGE / 4)  ) {
+                	player.worldObj.spawnEntityInWorld(new EntityLightningBolt(entLive.worldObj, entLive.posX, entLive.posY,
+                			entLive.posZ));
                 }
             } else if (!isUserCreator(stack, player)) {
                 player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj, player.posX, player.posY,
@@ -227,6 +237,10 @@ public class ItemMindController extends Item {
         if (player.isClientWorld()) {
             NBTTagCompound tag = stack.stackTagCompound;
             if (tag == null) return false;
+            if(!tag.hasKey("player")) {
+            	tag.setString("player", player.getCommandSenderName());
+            	stack.setTagCompound(tag);
+            }
             String user = tag.getString("player");
             if (user.equalsIgnoreCase(player.getCommandSenderName())) return true;
         }
@@ -250,7 +264,7 @@ public class ItemMindController extends Item {
     public static int chargeItem (ItemStack stack, int chargeAmount) {
     	if(!stack.hasTagCompound()) return chargeAmount;
     	NBTTagCompound tag = stack.getTagCompound();
-    	if(tag.getBoolean("creativeSpawn")) {
+    	if(tag.getBoolean("creative")) {
     		tag.setInteger("charge", MAXCHARGE);
     		stack.setTagCompound(tag);    	
     		return 0;
@@ -277,7 +291,7 @@ public class ItemMindController extends Item {
     public static int dischargeItem (ItemStack stack, int dischargeAmount) {
     	if(!stack.hasTagCompound()) return dischargeAmount;
     	NBTTagCompound tag = stack.getTagCompound();
-    	if(tag.getBoolean("creativeSpawn")) {
+    	if(tag.getBoolean("creative")) {
     		tag.setInteger("charge", MAXCHARGE);
     		stack.setTagCompound(tag);    	
     		return 0;
@@ -303,8 +317,7 @@ public class ItemMindController extends Item {
     private static boolean canDischargeItem(ItemStack stack, int cost) {
     	if(!stack.hasTagCompound()) return false;
     	NBTTagCompound tag = stack.getTagCompound();
-    	if(tag.getBoolean("creativeSpawn")) 	return true;
-    	
+    	if(tag.getBoolean("creativeSpawn")) return true;
     	int curentCharge = tag.getInteger("charge");
     	if(curentCharge <= 0) return false;
     	if(curentCharge  - cost < 0) return false;

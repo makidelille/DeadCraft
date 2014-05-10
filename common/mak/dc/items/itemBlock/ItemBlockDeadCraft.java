@@ -39,12 +39,12 @@ public class ItemBlockDeadCraft extends ItemBlock{
 					List lis = NBTTagCompoundDeadCraft.getInfoListfordipslay(tag);
 					for(int i= 0; i <lis.size(); i++) info.add(lis.get(i));
 				}else{
-					info.add(EnumChatFormatting.YELLOW +" -- Press Shift for info --");
+					info.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
 				}
-			}else{
-				info.add((EnumChatFormatting.YELLOW +" -- has not been set for the first time --"));
 			}
 				
+		}else{
+			info.add((EnumChatFormatting.GRAY +"Is not set"));
 		}
 	}
 	

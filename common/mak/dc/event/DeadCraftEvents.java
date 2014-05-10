@@ -1,18 +1,25 @@
 package mak.dc.event;
 
 
+import mak.dc.entity.ai.EntityAITemptMindController;
 import mak.dc.items.ItemGodCan;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class DeadCraftEvents {
-
+	
 	@SubscribeEvent
 	public void OnPlayerOpenGui(PlayerOpenContainerEvent e) {
 		InventoryPlayer playerInv = e.entityPlayer.inventory;
@@ -37,4 +44,5 @@ public class DeadCraftEvents {
 			ItemGodCan.pauseEffects(e.player.worldObj, is, e.player);
 		}
 	}
+	
 }

@@ -43,7 +43,8 @@ public class TileEntityDeadCraft extends TileEntity {
     }
 
     public void setAllowedUser (ArrayList users) {
-    	allowed = users;
+    	if(users != null) allowed = users;
+    	else allowed = new ArrayList<String>();
     }
 
 

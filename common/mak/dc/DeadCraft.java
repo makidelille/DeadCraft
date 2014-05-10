@@ -79,5 +79,6 @@ public class DeadCraft {
 			 packetPipeline.postInitialise();
 			 canCraftingManager.postInitialise();
 			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
+			
 		}
 }

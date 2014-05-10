@@ -155,15 +155,16 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         boolean state = lock.hasMouseClicked(par1, par2, par3);
         this.isLocked = lock.isActive();
         
-        System.out.println(isLocked);
-              
         int x = par1 - this.guiLeft;
         int y = par2 - this.guiTop;
         
         if(x < 107 && x > 8 && y >23 && y <77){
         	focused = (y - 23) / slotheight + firstInList;
-        	if(focused < allowed.size())
+        	if(focused < allowed.size()) {
         		entername.setText(allowed.get(focused));
+        		((GuiButton) this.buttonList.get(0)).enabled = this.entername.getText().trim().length() > 0;
+                ((GuiButton) this.buttonList.get(1)).enabled = this.entername.getText().trim().length() > 0;
+        	}
         }
         
         if(state) {
@@ -190,7 +191,6 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     protected void sendPacket() {
     	DeadCraftAdminPacket pkt = new DeadCraftAdminPacket(te);
-    	System.out.println(pkt.toString());
     	DeadCraft.packetPipeline.sendToServer(pkt);
     	this.haschange = true;
     	this.hasToSend = false;

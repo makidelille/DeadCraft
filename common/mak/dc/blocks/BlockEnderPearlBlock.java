@@ -16,16 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockEnderPearlBlock extends Block {
-
-	/**
-	 * if true, creatives players will be moved
-	 */
-	public static boolean _IS_CREATIVE_MOVED = true; //TODO config file
-
 
     public BlockEnderPearlBlock() {
         super(Material.rock);
@@ -51,7 +47,7 @@ public class BlockEnderPearlBlock extends Block {
     @Override
     public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
         if(!world.isRemote) {
-            if(!((EntityPlayer)entity).capabilities.isCreativeMode || (((EntityPlayer)entity).capabilities.isCreativeMode && _IS_CREATIVE_MOVED) && !world.isBlockIndirectlyGettingPowered(x, y, z))		
+            if(!((EntityPlayer)entity).capabilities.isCreativeMode && !world.isBlockIndirectlyGettingPowered(x, y, z))		
                 teleportEntity(world, x, y, z, entity);
         }
     }
@@ -61,7 +57,7 @@ public class BlockEnderPearlBlock extends Block {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote && !((EntityPlayer)ent).isSneaking()) {
-            if(!((EntityPlayer)ent).capabilities.isCreativeMode || (((EntityPlayer)ent).capabilities.isCreativeMode && _IS_CREATIVE_MOVED))
+            if(!((EntityPlayer)ent).capabilities.isCreativeMode )
                 teleportEntity(world,x,y,z,ent);
         }
     }
@@ -82,10 +78,13 @@ public class BlockEnderPearlBlock extends Block {
                         return ;
                     }else{
                         EntityPlayerMP playerMP = (EntityPlayerMP)ent;
-                        if(playerMP != null)
-                            playerMP.setPositionAndUpdate(newX, newY, newZ);
-                        return ;
-                    }}}
+                        if (playerMP.playerNetServerHandler.func_147362_b().isChannelOpen() && playerMP.worldObj == world){
+	                        EnderTeleportEvent event = new EnderTeleportEvent(playerMP, newX, newY, newZ, 2f);
+	                        MinecraftForge.EVENT_BUS.post(event);
+	                        playerMP.setPositionAndUpdate(newX, newY, newZ);
+	                        world.playSoundAtEntity(playerMP, "mob.endermen.portal", 1.0f, world.rand.nextFloat() * 0.1F +0.9f);
+	                        return ;
+                    }}}}
 
         }else {
 
@@ -104,17 +103,5 @@ public class BlockEnderPearlBlock extends Block {
             }
         }
     }
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,int meta) {
-			
-	}
-
-	
-
-
-
-
-
 
 }

@@ -1,4 +1,4 @@
-package mak.dc.canEffects;
+package mak.dc.util.canEffects;
 
 import java.util.List;
 

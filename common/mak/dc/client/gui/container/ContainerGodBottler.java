@@ -54,7 +54,7 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 				}
 			}else{
 				if(stack.getItem() instanceof ItemCrystal) {
-					if(!mergeItemStack(stack, 0, 2, false)) {
+					if(!mergeItemStack(stack, 0, 1, false)) {
 						return null;
 					}
 				}if(stack.getItem() instanceof ItemGodCan ) {
@@ -98,7 +98,7 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 	
 	@Override
 	public void updateProgressBar(int id, int data) {
-		//super.updateProgressBar(id, data);
+		super.updateProgressBar(id, data);
 		switch(id) {
 		case 0 :
 			te.setWorkedTime(data);

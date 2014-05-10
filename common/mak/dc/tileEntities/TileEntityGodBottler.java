@@ -39,8 +39,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	/**
 	 * rate of the charge and of the usage
 	 */
-	private static final int CHARGESPEED = 500;
-	private static final int POWERUSAGE = 1;
+	private static final int MAXCHARGESPEED = 100;
+	private static final int POWERUSAGE = 10;
 	
 	
 
@@ -106,16 +106,20 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			if(this.getStackInSlot(0) != null) {
 				this.charge();
 			}
+			if(this.isRSPowered())
+				this.idleDecharge();
 					
 			if(this.hasEmptyCan() && idMatchingrecipe != -1 && this.hasPower() && this.isRSPowered()) {
 				ItemStack can = this.getEmptyCan();
-						
-				if(workedTime >= BUILDTIME ) 
-					if(this.craftCan(can,mapIs)) this.workedTime = 0;			
-					else workedTime = BUILDTIME;
-				else{
-					workedTime++;
-					this.decharge();
+				if(!ItemGodCan.hasId(can, idMatchingrecipe)) {
+				
+					if(workedTime >= BUILDTIME ) 
+						if(this.craftCan(can,mapIs)) this.workedTime = 0;			
+						else workedTime = BUILDTIME;
+					else{
+						workedTime++;
+						this.decharge();
+					}
 				}
 				
 			}else if(!this.hasEmptyCan()) this.workedTime = 0; 
@@ -123,12 +127,15 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		}
 	}
 	
+
 	private void charge() {
 		if(this.power >= this.MAXPOWER ) return;
 		else if(this.inventory[0] != null){
 			ItemStack crystal = inventory[0];
 			if(crystal.getItem() instanceof ItemCrystal){
-				this.power += CHARGESPEED - ItemCrystal.dischargeItem(crystal, CHARGESPEED);
+				int toCharge = MAXCHARGESPEED;
+				if(power + MAXCHARGESPEED > MAXPOWER) toCharge = MAXPOWER - power;
+				this.power += toCharge - ItemCrystal.dischargeItem(crystal, toCharge);
 			}
 		}
 		
@@ -136,6 +143,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	private void decharge() {
 		this.power -= POWERUSAGE;
+	}
+	private void idleDecharge() {
+		if(power - 1>=0)
+			this.power--;
+		else this.power = 0;
 	}
 
 	private boolean  craftCan(ItemStack can, Map<Integer, ItemStack> mapIs) {

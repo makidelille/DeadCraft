@@ -68,7 +68,6 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 				GL11.glPopMatrix();
 			}
 		}		
-		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		this.bindTexture(textLoc);
 		this.model.render(0.0625F);

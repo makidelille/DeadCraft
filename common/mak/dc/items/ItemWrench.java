@@ -1,6 +1,8 @@
 package mak.dc.items;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import mak.dc.DeadCraft;
@@ -29,7 +31,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWrench extends Item {
 
-    private static final String[] version = {"base","lock","info"};
+    private static final String[] version = {"Base","Admin","Info"};
     private IIcon[] icons = {null,null,null};
 
     public ItemWrench () {
@@ -43,16 +45,23 @@ public class ItemWrench extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
-        String[] infos = {"","",""};
-        infos[0] = EnumChatFormatting.UNDERLINE + "shift right click to change state";
-        infos[1] = EnumChatFormatting.RESET + "wrench mode : " +EnumChatFormatting.ITALIC + "" +  (is.getItemDamage() == 0 ? "basic" : (is.getItemDamage() == 1 ? "lock" : (is.getItemDamage() == 2? "infos" : EnumChatFormatting.RED + "should not exist")));
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) infos[2] = getDescription(is.getItemDamage());
+    	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) list.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
+    	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+	    	String infos0 = EnumChatFormatting.GREEN +"Shift right click to change state";
+	    	list.add(infos0);
+    	}
+    	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+    		String infos1 = EnumChatFormatting.GRAY + "Wrench mode : " +EnumChatFormatting.YELLOW + version[is.getItemDamage()];
+	        list.add(infos1);
+	        String infos2 = getDescription(is.getItemDamage());
+			List<String> strs = Arrays.asList(infos2.split("\n"));
+			for(int i= 0; i < strs.size(); i++) {
+				list.add(strs.get(i));
+			}
+		}
+       
         
-       //TODO not pretty
-        
-        for(int i=0; i<infos.length;i++){
-            list.add(infos[i]);
-        }
+      
     }
 
     @SideOnly(Side.CLIENT)
@@ -60,13 +69,14 @@ public class ItemWrench extends Item {
         String re = "";
         switch(itemDamage) {
             case 0 :
-                re = "you can change propeties of the block";
+                re = EnumChatFormatting.YELLOW+"If you're allowed to use the block :\n" +"-You can do basics stuff";
                 break;
             case 1 :
-                re = "you can lock the block";
+                re = EnumChatFormatting.RED + "If you're the owner of the block :\n" + "-You change the security informations";
                 break;
             case 2:
-                re  = "you get infos on the block";
+                re = EnumChatFormatting.RED +"if you're the owner of the block :\n" + "-You can see the secuity infos \n" +
+                		EnumChatFormatting.YELLOW+"If you're allowed to use the block :\n"+"-You get infos on the block\n";
                 break;
                 default : break;
         }
@@ -96,13 +106,12 @@ public class ItemWrench extends Item {
              if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
-                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z, side, hitX, hitY,hitZ);
+                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z, side, hitX, hitY,hitZ);
                         break;
                     case 1: 
                     	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
                         break;
                     case 2: 
-                    	player.addChatComponentMessage(new ChatComponentText("" + te.blockMetadata));
                         showData(te,player);
                         if(te.isUserCreator(username)) showAdminData(te, player);
                         break;
@@ -121,19 +130,20 @@ public class ItemWrench extends Item {
     }
 
     private void showAdminData (TileEntityDeadCraft te, EntityPlayer player) {
-    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "====Admin===="));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "====Owner===="));
     	player.addChatComponentMessage(new ChatComponentText("Owner : " + te.getowner()));
     	player.addChatComponentMessage(new ChatComponentText("Lock state : "  + (te.isLocked()  ? "private"  :"public")));
-    	player.addChatComponentMessage(new ChatComponentText("Allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser() : "none")));
+    	player.addChatComponentMessage(new ChatComponentText("Allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser().toString() : "none")));
     	
     }
     
     private void showData(TileEntityDeadCraft te, EntityPlayer player) {
     	
-    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA  + te.getBlockType().getUnlocalizedName()));
-    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  + "====Public===="));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA  + "" +EnumChatFormatting.BOLD + te.getBlockType().getLocalizedName()));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  + "====Alowed===="));
 
     	if(te instanceof TileEntityGodBottler) {
+    		if(((TileEntityGodBottler) te).isTop()) player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + "This is the Top Block, data are stored bellow"));
     		player.addChatComponentMessage(new ChatComponentText("Power : " + ((TileEntityGodBottler) te).getPower() + "/" +  ((TileEntityGodBottler) te).MAXPOWER));
     		player.addChatComponentMessage(new ChatComponentText("Redstone powered : " + (((TileEntityGodBottler) te).isRSPowered() ? (EnumChatFormatting.GREEN + "True") : (EnumChatFormatting.RED + "False") )));
     	}

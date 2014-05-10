@@ -91,6 +91,7 @@ public class ItemDeadWand extends Item {
         	else {
         		
         		entity.attackEntityFrom(new DamageSource("magic"), targetPv);
+        		player.worldObj.playSoundEffect((double)entity.posX + 0.5D, (double)entity.posY + 0.5D, (double)entity.posZ + 0.5D, "random.burp", 1.0F,5f);
         		
         		if(!isCreative){
         			player.attackEntityFrom(new DamageSource("magic"), targetPv * 2f/3f);

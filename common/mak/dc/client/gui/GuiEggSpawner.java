@@ -16,8 +16,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-//TODO render bug depending if there is a crystal in inv
-
 public class GuiEggSpawner extends GuiCustom{
 
 	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.EGGSPAWNER_GUI_TEXT_LOC);

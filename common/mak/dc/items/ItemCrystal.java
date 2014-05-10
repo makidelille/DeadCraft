@@ -24,7 +24,7 @@ public class ItemCrystal extends Item {
     /** handle by config */
 
     public static final int CRYSTALCOST = 100;
-    public static final int MAXCHARGE = 1_000;
+    public static final int MAXCHARGE = 2_500;
 
 
     public ItemCrystal () {
