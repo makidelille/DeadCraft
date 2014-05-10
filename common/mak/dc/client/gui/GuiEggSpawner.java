@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -69,21 +70,21 @@ public class GuiEggSpawner extends GuiCustom{
 		GL11.glColor4f(1, 1, 1, 1);
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		getFontRenderer().drawSplitString("Dragon Egg Spawner", 122, 22, 46, 0x404040);
+		getFontRenderer().drawSplitString(te.getInventoryName(), 122, 22, 46, 0x404040);
 		
 		String str = null;
 		
-		str = ("State: " + (te.hasStarted() ? "active" : "inactive"));
+		str = (StatCollector.translateToLocal("dc.block.eggSpawner.gui.status") + " : " + (te.hasStarted() ? StatCollector.translateToLocal("dc.active") : StatCollector.translateToLocal("dc.inactive")));
 		getFontRenderer().drawSplitString(str, 65, 57, 110, (te.hasStarted() ? 0x00FF00 : 0xFF0000));
 		
 		
-		str = ("Progress: " + te.getProgress() + "%");
+		str = (StatCollector.translateToLocal("dc.progress") + " : " + te.getProgress() + "%");
 		getFontRenderer().drawSplitString(str, 65, 67, 110, 0x404040);
 				
-		str = ("Power: " + te.getPower() + "/" + te.MAXPOWER);
+		str = (StatCollector.translateToLocal("dc.power") + " : " + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo"));
 		getFontRenderer().drawSplitString(str, 65, 77, 110, 0x404040);
 
-		str = ("Egg in stock: " + te.getEggInStock());
+		str = (StatCollector.translateToLocal("dc.block.eggSpawner.gui.eggInStock") + " : " + te.getEggInStock());
 		getFontRenderer().drawSplitString(str, 65, 87, 110, 0x404040);
 		
 		redGuiDisplay();
@@ -113,11 +114,11 @@ public class GuiEggSpawner extends GuiCustom{
 	}
 		
 	private void drawButtonStartStop() {
-		GuiButton button = new GuiButton(6, guiLeft + 90, guiTop - 20 , 60, 20 , "Stop");
+		GuiButton button = new GuiButton(6, guiLeft + 90, guiTop - 20 , 60, 20 , StatCollector.translateToLocal("dc.stop"));
 		button.enabled = te.hasStarted();
 		buttonList.add(button);
 		
-		button = new GuiButton(0, guiLeft + 30, guiTop - 20, 60, 20, "Start");
+		button = new GuiButton(0, guiLeft + 30, guiTop - 20, 60, 20, StatCollector.translateToLocal("dc.start"));
 		button.enabled = !te.hasStarted();
 		buttonList.add(button);
 	}
@@ -128,7 +129,7 @@ public class GuiEggSpawner extends GuiCustom{
 		DeadCraft.packetPipeline.sendToServer(new DeadCraftEggSpawnerPacket(te,(byte) button.id));
 	}
 
-		
+		//TODO redo don't like it
 	private void redGuiDisplay() {
 		String str = "";
 		
@@ -138,21 +139,18 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		((GuiRectangleInfo) subRect.get(2)).setActiveRedState(te.getRedstoneState());
 		
-		switch (te.getRedstoneState()) {
-		case 0:
-			str = "emit a short pulse ";
-			break;
-		case 1:
-			str = "stop emitting ";
-			break;
-		case 2 :
-			str = "does nothing ";
-			break;
-		}
-		
-		str = str + "when a dragon egg spawn";
-		
-		((GuiRectangleInfo) subRect.get(2)).drawString(this, str, - 90, 25, 70);
+//		switch (te.getRedstoneState()) {
+//		case 0:
+//			str = "emit a short pulse ";
+//			break;
+//		case 1:
+//			str = "stop emitting ";
+//			break;
+//		case 2 :
+//			str = "does nothing ";
+//			break;
+//		}		
+//		((GuiRectangleInfo) subRect.get(2)).drawString(this, str, - 90, 25, 70);
 	}
 	
 
@@ -165,15 +163,15 @@ public class GuiEggSpawner extends GuiCustom{
 			drawTexturedModalRect(-21, 84 + i * 20, xSize + 2, i * 16, 16, 16);
 			}
 		
-		switch(te.getMode()) {
-		case 1 :
-			str = "the spawner is set to create only one egg";
-			break;
-		case 0 :
-			str = "the spawner is in loop mode, it create eggs until you clicked ths 'Stop' button, or change mode";
-		}
-		
-		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, -90,  85, 70);
+//		switch(te.getMode()) {
+//		case 1 :
+//			str = "the spawner is set to create only one egg";
+//			break;
+//		case 0 :
+//			str = "the spawner is in loop mode, it create eggs until you clicked ths 'Stop' button, or change mode";
+//		}
+//		
+//		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, -90,  85, 70);
 	}
 
 	@Override

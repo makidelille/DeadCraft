@@ -28,6 +28,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemGodCan extends ItemFood{
@@ -49,20 +50,20 @@ public class ItemGodCan extends ItemFood{
 				NBTTagList ids = (NBTTagList) tag.getTag("effect_ids");
 				if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 					for(int i =0; i < ids.tagCount(); i++) {
-						infos.add("Effects id : " +EnumChatFormatting.YELLOW + (ids.getCompoundTagAt(i).getInteger("id")));
+						infos.add(StatCollector.translateToLocal("dc.godcan.info.effectid") + " : " +EnumChatFormatting.YELLOW + (ids.getCompoundTagAt(i).getInteger("id")));
 					}
-					infos.add("Is active : " +EnumChatFormatting.YELLOW + tag.getBoolean("isActive"));
-					infos.add("Time in Use : " +EnumChatFormatting.YELLOW + (tag.getInteger("tick") / 20) +  "s");
+					infos.add(StatCollector.translateToLocal("dc.godcan.info.isActive") + " : " +EnumChatFormatting.YELLOW + (tag.getBoolean("isActive") ? StatCollector.translateToLocal("dc.true") : StatCollector.translateToLocal("dc.false")));
+					infos.add(StatCollector.translateToLocal("dc.godcan.info.time") + " : " +EnumChatFormatting.YELLOW + (tag.getInteger("tick") / 20) +  StatCollector.translateToLocal("dc.second"));
 				
 				}else {
-					infos.add(EnumChatFormatting.YELLOW + "-- Press Shift for More Infos --" );
+					infos.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
 					for(int i =0; i < ids.tagCount(); i++) {
-						infos.add("Effects : " +EnumChatFormatting.YELLOW + ""+ DeadCraft.canCraftingManager.getCanEffect((ids.getCompoundTagAt(i).getInteger("id"))).getName());
+						infos.add(StatCollector.translateToLocal("dc.godcan.info.effects") + " : " +EnumChatFormatting.YELLOW + ""+ DeadCraft.canCraftingManager.getCanEffect((ids.getCompoundTagAt(i).getInteger("id"))).getName());
 					}
 				}
 			}
 		}else{
-			infos.add(EnumChatFormatting.GRAY + "No effects");
+			infos.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("dc.godcan.info.noEffect"));
 		}
 
 	}

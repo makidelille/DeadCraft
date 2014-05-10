@@ -1,8 +1,74 @@
 itemGroup.DeadCraft=Dead Craft
 
-
-
 item.deadwand.name=Wand of Death
-item.lifecrystal.name=Crystal of life
+item.crystal.name=Crystal
+item.mindcontroller.name=MindController
+item.wrench.name=Wrench
+item.godcan.name=God-Can
 tile.dragoneggspawner.name=Dragon Egg Spawner
 tile.enderpearlblock.name=Ender Block
+tile.godbottler.name=God-Bottler
+
+dc.true=True
+dc.false=False
+dc.public=Public
+dc.private=Private
+dc.power=Power
+dc.charge=Charge
+dc.none=None
+dc.progress=Progress
+dc.infinite=Infinite
+dc.second=s
+dc.kilo=K
+dc.start=Start
+dc.stop=Stop
+dc.active=Active
+dc.inactive=Inactive
+
+dc.block.info.notSet=Is not set yet
+dc.block.info.hasAllowedList=has an allowed list
+dc.block.gui.lock=Lock
+dc.block.notOwner=You're not the owner of this block
+dc.block.notAllowed=You're not allowed to use this block
+dc.block.owner=Owner
+dc.block.lockState=Lock State
+dc.block.allowed=Allowed users
+
+dc.block.eggSpawner.gui.status=State
+dc.block.eggSpawner.gui.eggInStock=Egg in Stock
+
+dc.info.holdShift=-- Press Shift for info --
+dc.info.isCreative=Is creative spawned
+
+dc.wrench.info.name.base=Base
+dc.wrench.info.name.admin=Admin
+dc.wrench.info.name.info=Info
+dc.wrench.info.change=Shift + Right click to change mode
+dc.wrench.info.wrenchMode=Wrench mode
+dc.wrench.info.ifAllowed=If you're allowed to use the block
+dc.wrench.info.ifAdmin=If you're the owner of the block
+dc.wrench.info.doBasics=You can do basics stuff
+dc.wrench.info.editSec=You can change the security
+dc.wrench.info.seeSec=You get the security information
+dc.wrench.info.seeInfo=You get information on the block
+dc.wrench.header.owner=Owner
+dc.wrench.header.allowed=Allowed
+dc.wrench.redstone=Is redstone powered 
+dc.wrench.isTop=This is the top Block, Data are stored bellow
+
+dc.mindcontroller.info.creator=Creator
+dc.mindcontroller.info.activate=Right click to activate
+dc.mindcontroller.useNotCreat=Do not use the items of the others
+dc.mindcontroller.usePlayer=Do not use the MindController on people
+
+dc.godcan.info.effectid=Effect Id
+dc.godcan.info.isActive=Is Active
+dc.godcan.info.time=Time in use
+dc.godcan.info.effects=Effects
+dc.godcan.info.noEffect=No effect
+
+dc.canEffect.fly.name=Fly
+dc.canEffect.potion.name=Potion
+dc.canEffect.potion_speed.name=Speed Boost
+dc.canEffect.potion_resistance.name=Resistance Boost
+dc.caneffect.potion_haste.name=Mining Speed Boost

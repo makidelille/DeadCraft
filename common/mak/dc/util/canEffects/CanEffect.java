@@ -7,6 +7,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public abstract class CanEffect {
@@ -19,7 +20,7 @@ public abstract class CanEffect {
 	 * the effects of the can
 	 */
 	
-	private String name;
+	private String unlocalizedName;
 	
 	/**
 	 * in seconds
@@ -29,14 +30,14 @@ public abstract class CanEffect {
 		
 	public CanEffect(int effectId, int duration, String name) {
 		this.effectId = effectId;
-		this.name = name;
+		this.unlocalizedName = name;
 		this.duration = 20 * duration;
 	}
 	public int getEffectId() {
 		return this.effectId;
 	}
 	public String getName() {
-		return this.name;
+		return StatCollector.translateToLocal("dc.canEffect." + this.unlocalizedName + ".name");
 	}
 	public int getDuration() {
 		return this.duration;
@@ -51,7 +52,7 @@ public abstract class CanEffect {
 	}
 	
 	public CanEffect setName(String newname) {
-		this.name = newname;
+		this.unlocalizedName = newname;
 		return this;
 	}
 	

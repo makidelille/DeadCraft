@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -70,10 +71,10 @@ public class ItemCrystal extends Item {
     public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
     	if(is.hasTagCompound() && is.getTagCompound().hasKey("charge")){
     		if(is.getTagCompound().getBoolean("creativeSpawn")) {
-    			l.add("is Creative Spawned");
-    			l.add("charge : " + EnumChatFormatting.YELLOW + "infinite"+EnumChatFormatting.RESET);
+    			l.add(StatCollector.translateToLocal("dc.info.isCreative"));
+    			l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.infinite") +EnumChatFormatting.RESET);
     		}
-    		else l.add("charge : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE + EnumChatFormatting.RESET);
+    		else l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE + EnumChatFormatting.RESET);
     	}
     }
     

@@ -23,7 +23,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public static final int CHARGESPEED = 50;
 	public static final int POWERUSAGE = 1;
 	
-	public static int _maxBuildTime = 6000;
+	public static int _maxBuildTime = 8000;
 	
 	
 	private ItemStack[] invContent;
@@ -389,7 +389,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 
 	@Override
 	public String getInventoryName() {
-		return IBTInfos.TILE_EGGSPANWER_KEY;
+		return blockType.getLocalizedName();
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,12 +40,12 @@ public class ItemBlockDeadCraft extends ItemBlock{
 					List lis = NBTTagCompoundDeadCraft.getInfoListfordipslay(tag);
 					for(int i= 0; i <lis.size(); i++) info.add(lis.get(i));
 				}else{
-					info.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
+					info.add(EnumChatFormatting.YELLOW +StatCollector.translateToLocal("dc.info.holdShift"));
 				}
 			}
 				
 		}else{
-			info.add((EnumChatFormatting.GRAY +"Is not set"));
+			info.add((EnumChatFormatting.GRAY +StatCollector.translateToLocal("dc.block.info.notSet")));
 		}
 	}
 	

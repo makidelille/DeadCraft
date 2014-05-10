@@ -13,7 +13,7 @@ public class GuiRectangleInfo extends GuiRectangle {
 	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.UTIL_GUI_TEXT_LOC);
 	private byte activeRedState;
 
-
+//TODO redo use a tess to make dynamic size background 
 	public GuiRectangleInfo(GuiCustom gui) {
 		super(gui,-100, 15, 100, 164);
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);

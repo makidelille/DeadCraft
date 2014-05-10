@@ -7,10 +7,13 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import mak.dc.client.gui.container.ContainerGodBottler;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
+import mak.dc.client.gui.util.GuiRectangleInfo;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
@@ -48,12 +51,13 @@ public class GuiGodBottler extends GuiCustom {
         subRect.get(4).draw(xSize,22);
         subRect.get(5).draw(xSize, 32 + 52 - getSizeBar(5));
 
+        
         subRect.add(0,new GuiRectangle(this, 71, 23, 4, getSizeBar(0))); // vertical l 
 		subRect.add(1,new GuiRectangle(this, 139, 23, 4, getSizeBar(1))); // vertical r 
 		subRect.add(2,new GuiRectangle(this, 71, 45, getSizeBar(2), 4)); // horizontal r 
 		subRect.add(3,new GuiRectangle(this, 107 + 36 - getSizeBar(3), 45, getSizeBar(3), 4)); // horizontal l 
 		subRect.add(4,new GuiRectangle(this, 102, 49, 12, getSizeBar(4))); // fleche 
-		subRect.add(5, new GuiRectangle(this, 16 , 7 + 52 - getSizeBar(5), 18, getSizeBar(5))); //power bar
+		subRect.add(5,new GuiRectangle(this, 16 , 7 + 52 - getSizeBar(5), 18, getSizeBar(5))); //power bar
 	
 	
    	
@@ -63,7 +67,7 @@ public class GuiGodBottler extends GuiCustom {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
        GuiRectangle rect = new GuiRectangle(this, 16, 7, 18, 52);
-       rect.drawHoverString(x, y, ("Power: " +te.getPower() + "/" + te.MAXPOWER));
+       rect.drawHoverString(x, y, (StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo")));
 
 	}
 
@@ -74,7 +78,7 @@ public class GuiGodBottler extends GuiCustom {
 		subRect.add(2,new GuiRectangle(this, 71, 45, 0, 4)); // horizontal r 
 		subRect.add(3,new GuiRectangle(this, 107, 45, 0, 4)); // horizontal l 
 		subRect.add(4,new GuiRectangle(this, 102, 49, 12, 0)); // fleche 
-		subRect.add(5, new GuiRectangle(this, 16, 7, 18, 0)); // charge
+		subRect.add(5,new GuiRectangle(this, 16, 7, 18, 0)); // charge
 	}
 	
 	private int getSizeBar(int i){

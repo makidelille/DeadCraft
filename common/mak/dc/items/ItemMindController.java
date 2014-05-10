@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -110,18 +111,18 @@ public class ItemMindController extends Item {
             String plrName = tag.getString("player");
             if(plrName == "") plrName = "none";
             
-            String ListInfo = EnumChatFormatting.AQUA + "Creator : " +EnumChatFormatting.ITALIC +  plrName + EnumChatFormatting.RESET;
-            String ListInfo2 = "Charge : " + EnumChatFormatting.ITALIC + "" +EnumChatFormatting.YELLOW + (tag.getBoolean("creative") ?  "infinite" : (charge + "/" + MAXCHARGE));
+            String ListInfo = EnumChatFormatting.AQUA + StatCollector.translateToLocal("dc.mindcontroller.info.creator") + " : " +EnumChatFormatting.ITALIC +  plrName + EnumChatFormatting.RESET;
+            String ListInfo2 = StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.ITALIC + "" +EnumChatFormatting.YELLOW + (tag.getBoolean("creative") ?  StatCollector.translateToLocal("dc.infinite") : (charge + "/" + MAXCHARGE));
           
 
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo);
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && tag.getBoolean("creative")) info.add("Is Creative Spawed");
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && tag.getBoolean("creative")) info.add(StatCollector.translateToLocal("dc.info.isCreative"));
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(ListInfo2);
-            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
+            if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) info.add(EnumChatFormatting.YELLOW +StatCollector.translateToLocal("dc.info.holdShift"));
 
         } else {
             String listInfo = EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + ""
-                    + EnumChatFormatting.UNDERLINE + "Right click to activate";
+                    + EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("dc.mindcontroller.info.activate");
             info.add(listInfo);
 
         }
@@ -211,14 +212,14 @@ public class ItemMindController extends Item {
                         player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
                 player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD
-                        + "do not use the items of the others" + EnumChatFormatting.RESET));
+                        + StatCollector.translateToLocal("dc.mindcontroller.useNotCreat") + EnumChatFormatting.RESET));
                 return true;
             } else if (ent instanceof EntityPlayer || ent instanceof EntityVillager) {
                 World world = player.worldObj;
                 world.spawnEntityInWorld(new EntityLightningBolt(world, player.posX, player.posY, player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
                 player.addChatComponentMessage(new ChatComponentText((EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD
-                        + "do not use the mindController on people" + EnumChatFormatting.RESET)));
+                        + StatCollector.translateToLocal("dc.mindcontroller.usePlayer") + EnumChatFormatting.RESET)));
                 return true;
             }
         }

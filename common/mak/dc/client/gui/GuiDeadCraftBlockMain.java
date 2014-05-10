@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -81,8 +82,8 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
 
     @Override
     protected void drawGuiContainerForegroundLayer (int x, int y) {
-        lock.drawString(this, "lock :", 134 ,58,50, "gray");
-        lock.drawString(this, lock.isActive() ? "private" : "public" , 134, 65, 50, lock.isActive() ? "red" : "green");
+        lock.drawString(this, StatCollector.translateToLocal("dc.block.gui.lock") + " :", 134 ,58,90, "gray");
+        lock.drawString(this, lock.isActive() ? StatCollector.translateToLocal("dc.private") : StatCollector.translateToLocal("dc.public") , 134, 68, 50, lock.isActive() ? "red" : "green");
         this.entername.drawTextBox();
     }
     

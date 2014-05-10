@@ -21,6 +21,7 @@ import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -31,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWrench extends Item {
 
-    private static final String[] version = {"Base","Admin","Info"};
+    private static final String[] version = {StatCollector.translateToLocal("dc.wrench.info.name.base"),StatCollector.translateToLocal("dc.wrench.info.name.admin"),StatCollector.translateToLocal("dc.wrench.info.name.info")};
     private IIcon[] icons = {null,null,null};
 
     public ItemWrench () {
@@ -45,13 +46,13 @@ public class ItemWrench extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
-    	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) list.add(EnumChatFormatting.YELLOW +"-- Press Shift for info --");
+    	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
     	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-	    	String infos0 = EnumChatFormatting.GREEN +"Shift right click to change state";
+	    	String infos0 = EnumChatFormatting.GREEN +StatCollector.translateToLocal("dc.wrench.info.change");
 	    	list.add(infos0);
     	}
     	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-    		String infos1 = EnumChatFormatting.GRAY + "Wrench mode : " +EnumChatFormatting.YELLOW + version[is.getItemDamage()];
+    		String infos1 = EnumChatFormatting.GRAY + StatCollector.translateToLocal("dc.wrench.info.wrenchMode") + " : "+EnumChatFormatting.YELLOW + version[is.getItemDamage()];
 	        list.add(infos1);
 	        String infos2 = getDescription(is.getItemDamage());
 			List<String> strs = Arrays.asList(infos2.split("\n"));
@@ -69,14 +70,14 @@ public class ItemWrench extends Item {
         String re = "";
         switch(itemDamage) {
             case 0 :
-                re = EnumChatFormatting.YELLOW+"If you're allowed to use the block :\n" +"-You can do basics stuff";
+                re = EnumChatFormatting.YELLOW+ StatCollector.translateToLocal("dc.wrench.info.ifAllowed")  +" :\n-" + StatCollector.translateToLocal("dc.wrench.info.doBasics");
                 break;
             case 1 :
-                re = EnumChatFormatting.RED + "If you're the owner of the block :\n" + "-You change the security informations";
+                re = EnumChatFormatting.RED + StatCollector.translateToLocal("dc.wrench.info.ifAdmin")+" :\n-" + StatCollector.translateToLocal("dc.wrench.info.editSec");
                 break;
             case 2:
-                re = EnumChatFormatting.RED +"if you're the owner of the block :\n" + "-You can see the secuity infos \n" +
-                		EnumChatFormatting.YELLOW+"If you're allowed to use the block :\n"+"-You get infos on the block\n";
+                re = EnumChatFormatting.RED +StatCollector.translateToLocal("dc.wrench.info.ifAdmin") + " :\n-" + StatCollector.translateToLocal("dc.wrench.info.seeSec") + "\n" +
+                		EnumChatFormatting.YELLOW+StatCollector.translateToLocal("dc.wrench.info.ifAllowed") + " :\n-"+ StatCollector.translateToLocal("dc.wrench.info.seeInfo");
                 break;
                 default : break;
         }
@@ -123,33 +124,35 @@ public class ItemWrench extends Item {
             }else if(player.isSneaking()){
                 stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
             }else{
-                player.addChatComponentMessage(new ChatComponentText("You're not the owner of the block"));
+                player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.notOwner")));
             }
         }
         return false;
     }
 
     private void showAdminData (TileEntityDeadCraft te, EntityPlayer player) {
-    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "====Owner===="));
-    	player.addChatComponentMessage(new ChatComponentText("Owner : " + te.getowner()));
-    	player.addChatComponentMessage(new ChatComponentText("Lock state : "  + (te.isLocked()  ? "private"  :"public")));
-    	player.addChatComponentMessage(new ChatComponentText("Allowed users : "  + (te.getAllowedUser().size() > 0 ? te.getAllowedUser().toString() : "none")));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "====" + StatCollector.translateToLocal("dc.wrench.header.owner") +"===="));
+    	player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.owner") + " : " + te.getowner()));
+    	player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.lockState") + " : " + (te.isLocked()  ? StatCollector.translateToLocal("dc.private") : StatCollector.translateToLocal("dc.public"))));
+    	player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.allowed") + " : " + (te.getAllowedUser().size() > 0 ? te.getAllowedUser().toString() : StatCollector.translateToLocal("dc.none"))));
     	
     }
     
     private void showData(TileEntityDeadCraft te, EntityPlayer player) {
-    	
+    	player.addChatComponentMessage(new ChatComponentText(""));
+    	player.addChatComponentMessage(new ChatComponentText(""));
+
     	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA  + "" +EnumChatFormatting.BOLD + te.getBlockType().getLocalizedName()));
-    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  + "====Alowed===="));
+    	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  +"====" + StatCollector.translateToLocal("dc.wrench.header.allowed") +"===="));
 
     	if(te instanceof TileEntityGodBottler) {
-    		if(((TileEntityGodBottler) te).isTop()) player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + "This is the Top Block, data are stored bellow"));
-    		player.addChatComponentMessage(new ChatComponentText("Power : " + ((TileEntityGodBottler) te).getPower() + "/" +  ((TileEntityGodBottler) te).MAXPOWER));
-    		player.addChatComponentMessage(new ChatComponentText("Redstone powered : " + (((TileEntityGodBottler) te).isRSPowered() ? (EnumChatFormatting.GREEN + "True") : (EnumChatFormatting.RED + "False") )));
+    		if(((TileEntityGodBottler) te).isTop()) player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.wrench.isTop")));
+    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.power")+ " : " + ((TileEntityGodBottler) te).getPower() + "/" +  ((TileEntityGodBottler) te).MAXPOWER));
+    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.wrench.redstone")+ " : " + (((TileEntityGodBottler) te).isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) )));
     	}
     	if(te instanceof TileEntityEggSpawner) {
-    		player.addChatComponentMessage(new ChatComponentText("Power : " + ((TileEntityEggSpawner) te).getPower() + "/" +  ((TileEntityEggSpawner) te).MAXPOWER));
-    		player.addChatComponentMessage(new ChatComponentText("Progress :" + ((TileEntityEggSpawner) te).getProgress() + "%"));
+    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.power")+ " : " + ((TileEntityEggSpawner) te).getPower() + "/" +  ((TileEntityEggSpawner) te).MAXPOWER));
+    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.progress")+ " : " + ((TileEntityEggSpawner) te).getProgress() + "%"));
     	}
     }
 
@@ -162,20 +165,4 @@ public class ItemWrench extends Item {
         }
         return is;
     }
-
-
-    public ArrayList getAllowedList (ItemStack is) {
-        NBTTagCompound tag = is.getTagCompound();
-        ArrayList allowed = new ArrayList();
-        if (tag != null) {
-            int nbersAll = tag.getInteger("nbAlllowed");
-            NBTTagCompound tagAllowed = tag.getCompoundTag("allowed");
-            for (int i = 0; i < nbersAll; i++) {
-
-                allowed.add(i, tagAllowed.getString("allowed " + i));
-            }
-        }
-        return allowed;
-    }
-
 }

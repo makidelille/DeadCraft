@@ -18,6 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
@@ -55,7 +56,7 @@ public class ItemDeadWand extends Item {
     @Override
     public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
     	if(is.hasTagCompound() && is.getTagCompound().hasKey("charge")){
-    		l.add("charge : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE);
+    		l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE);
     	}
     }
     
