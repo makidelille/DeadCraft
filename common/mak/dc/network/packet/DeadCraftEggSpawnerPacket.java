@@ -54,7 +54,7 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 		if (!worldObj.isRemote) {
 			switch (buttonId) {
 			case 0:
-				if (!te.hasStarted()) {
+				if (!te.hasStarted()) { //start button
 					if (te.isInventoryComplete() && te.getProgress() == 0) {
 						te.decrStackCreation();
 						te.setStarted((byte) 1);
@@ -82,11 +82,11 @@ public class DeadCraftEggSpawnerPacket extends AbstractPacket {
 				if (te.getMode() != 1)
 					te.setMode((byte) 1);
 				break;
-			case 5:
+			case 5: //
 				if (te.getMode() != 0)
 					te.setMode((byte) 0);
 				break;
-			case 6:
+			case 6: //stop button
 				te.setStarted((byte) 0);
 			}
 

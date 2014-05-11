@@ -1,17 +1,26 @@
 package mak.dc.client.gui;
 
+import java.util.Arrays;
+
 import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.util.GuiCustom;
+import mak.dc.client.gui.util.GuiDrawHelper;
 import mak.dc.client.gui.util.GuiRectangle;
-import mak.dc.client.gui.util.GuiRectangleInfo;
+import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -28,9 +37,7 @@ public class GuiEggSpawner extends GuiCustom{
 		this.te = te;
 		
 		xSize = 184;
-		ySize = 189;	
-		
-		
+		ySize = 189;			
 		
 	}
 
@@ -38,12 +45,15 @@ public class GuiEggSpawner extends GuiCustom{
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1, 1, 1, 1);
-		
-		
+				
+		GuiDrawHelper.drawLeftRect(this, 15, -80, 80, 95);
+		GuiDrawHelper.drawHorizontalLine(this, -75, 60, 70);
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
+		
+				
 		int powerBar;
 		int durationBarLenght;
 		
@@ -55,13 +65,12 @@ public class GuiEggSpawner extends GuiCustom{
 		subRect.set(0, new GuiRectangle (this, 11, 8, durationBarLenght, 3));
 		subRect.get(0).draw(0, ySize);
 		
-		((GuiRectangleInfo) subRect.get(2)).drawTexturedLeftRect();	
-		
-		((GuiRectangleInfo) subRect.get(3)).drawSeparatorH(-85, 80, 75);
-		
 		
 		initGui();
+		
+		
 		GL11.glEnable(GL11.GL_LIGHTING);
+		
 	}
 
 	@Override
@@ -89,31 +98,44 @@ public class GuiEggSpawner extends GuiCustom{
 		
 		redGuiDisplay();
 		prodGuiDisplay();
+		
+		String infoStr = "here are some infos about the buttons";
+		
+		if(guiLeft - 70 <=x  && x<= guiLeft-70 + 18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
+			infoStr = "it'll emit a short pulse when the spawner spawn something in the world";
+		}
+		if(guiLeft - 70 +20<=x  && x<= guiLeft-70 + 20 + 18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
+			infoStr = "test1";
+		}
+		if(guiLeft - 70 +40<=x  && x<= guiLeft-70 + 40 +18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
+			infoStr = "test2";
+		}
+		if(guiLeft - 65 <=x  && x<= guiLeft-65 + 18  &&  guiTop +72 <= y&& y <=guiTop +72 + 18) {
+			infoStr = "test3";
+		}
+		if(guiLeft - 65 +22 <=x  && x<= guiLeft-65 + 18 +22  &&  guiTop +72 <= y&& y <=guiTop +72 + 18) {
+			infoStr = "test4";
+		}
+		drawInfoPanel(infoStr, "Infos", -76, 115, 76);
 		GL11.glEnable(GL11.GL_LIGHTING);
+		
+		//TODO the infos text
 				
 	}
 		
 	
 
+
 	@Override
 	public void initGui() {
-		super.initGui();
-		
-		drawButtonStartStop();
-		
-		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(2)).drawButtonRedState(i + 1, -22, 20 + i * 20);
+		super.initGui();		
+		int redstoneState=te.getRedstoneState();
+		for(int i =0; i < 3 ;i++) {
+			GuiButton button = new GuiButton(1+i, guiLeft - 70 + 20 * i, guiTop + 30 , 18, 18 , "");
+			button.enabled = redstoneState != i;
+			buttonList.add(button);
 		}
 		
-		for (int i = 4 ; i < 6 ; i++) {
-			((GuiRectangleInfo) subRect.get(3)).drawButtonBasedOnState(i, -22, 83 + (i - 4) * 20 , te.isRepeatOn(i - 4)); //change to a switch gui
-		}
-	
-	
-		
-	}
-		
-	private void drawButtonStartStop() {
 		GuiButton button = new GuiButton(6, guiLeft + 90, guiTop - 20 , 60, 20 , StatCollector.translateToLocal("dc.stop"));
 		button.enabled = te.hasStarted();
 		buttonList.add(button);
@@ -121,65 +143,75 @@ public class GuiEggSpawner extends GuiCustom{
 		button = new GuiButton(0, guiLeft + 30, guiTop - 20, 60, 20, StatCollector.translateToLocal("dc.start"));
 		button.enabled = !te.hasStarted();
 		buttonList.add(button);
+		
+		
+		for(int i=0; i < 2; i++) {
+			GuiButton button1 = new GuiButton(4 + i, guiLeft - 65 + 22 * i, guiTop + 72, 18 ,18, "");
+			button1.enabled = te.getMode() == i;
+			buttonList.add(button1);
+		}
+			
 	}
-	
 
 	@Override
 	public void actionPerformed(GuiButton button) {
 		DeadCraft.packetPipeline.sendToServer(new DeadCraftEggSpawnerPacket(te,(byte) button.id));
 	}
-
-		//TODO redo don't like it
+	
 	private void redGuiDisplay() {
-		String str = "";
+		GL11.glColor4f(1f,1f,1f,1f);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+		IIcon[] icons = {Items.redstone.getIconFromDamage(0), Blocks.redstone_torch.getIcon(0, 0), Items.gunpowder.getIconFromDamage(0)};
+		this.drawTexturedModelRectFromIcon(-70 +1,  30 +1, Items.redstone.getIconFromDamage(1), 16,16);
+		this.drawTexturedModelRectFromIcon(-70 + 40+1 ,  30 +1,  Items.gunpowder.getIconFromDamage(1), 16,16);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		this.drawTexturedModelRectFromIcon(-70 + 20 +1 , 30 ,  Blocks.redstone_torch.getIcon(0, 0), 16,16);
+
+		String str =EnumChatFormatting.UNDERLINE +   "Redstone" + " : ";
+		getFontRenderer().drawSplitString(str, -68, 20, 70, GuiDrawHelper.getColor("chocolate"));
 		
-		for (int i = 0 ; i < 3; i++) {
-			((GuiRectangleInfo) subRect.get(2)).drawTexturedRedState(i + 1, -22, 20 + i * 20);
+		
+		str = EnumChatFormatting.ITALIC +"";
+		switch(te.getRedstoneState()) {
+		case 0 :
+			str = EnumChatFormatting.DARK_RED +"" + EnumChatFormatting.ITALIC + "classical";
+			break;
+		case 1 : 
+			str =  EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + "inverted" ;
+			break;
+		case 2 :
+			str = EnumChatFormatting.BLACK +""+ EnumChatFormatting.ITALIC + "disable";
+			break;
 		}
+		getFontRenderer().drawSplitString(str, -65, 50, 70, 0x404040);
+
 		
-		((GuiRectangleInfo) subRect.get(2)).setActiveRedState(te.getRedstoneState());
 		
-//		switch (te.getRedstoneState()) {
-//		case 0:
-//			str = "emit a short pulse ";
-//			break;
-//		case 1:
-//			str = "stop emitting ";
-//			break;
-//		case 2 :
-//			str = "does nothing ";
-//			break;
-//		}		
-//		((GuiRectangleInfo) subRect.get(2)).drawString(this, str, - 90, 25, 70);
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 	
 
 	private void prodGuiDisplay( ) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-			
-		String str = "";
-					
-		for (int i = 0 ; i < 2 ; i++) {
-			drawTexturedModalRect(-21, 84 + i * 20, xSize + 2, i * 16, 16, 16);
-			}
+		for(int i= 0; i < 2; i++) {
+			this.drawTexturedModalRect(- 64 + 22 * i, + 73, xSize + 2, 0 + 16 *i, 18, 18);
+		}
+		getFontRenderer().drawSplitString(EnumChatFormatting.UNDERLINE +"Mode"+ " : ", -62, 62, 70, 0x404040);
+
+		String str = te.isRepeatOn() ? (EnumChatFormatting.BLUE +""+EnumChatFormatting.ITALIC + "Repeat") : (EnumChatFormatting.YELLOW +"" +EnumChatFormatting.ITALIC + "Single run");
 		
-//		switch(te.getMode()) {
-//		case 1 :
-//			str = "the spawner is set to create only one egg";
-//			break;
-//		case 0 :
-//			str = "the spawner is in loop mode, it create eggs until you clicked ths 'Stop' button, or change mode";
-//		}
-//		
-//		((GuiRectangleInfo) subRect.get(3)).drawString(this, str, -90,  85, 70);
+		getFontRenderer().drawSplitString(str, -70, 92,70, 0x404040);
+
 	}
 
 	@Override
 	protected void defineSubRect() {
 		subRect.add(new GuiRectangle (this, 11, 8, 0, 3)); //TOP BAR
 		subRect.add(new GuiRectangle(this, 29, 18, 16, 0)); //powerbar
-		subRect.add(new GuiRectangleInfo(this));
-		subRect.add(new GuiRectangleInfo(this));
-		
 	}
+	
+	
+	
+
 }

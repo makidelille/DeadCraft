@@ -1,23 +1,18 @@
 package mak.dc.client.gui;
 
-import java.util.Arrays;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import mak.dc.client.gui.container.ContainerGodBottler;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
-import mak.dc.client.gui.util.GuiRectangleInfo;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
-import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiGodBottler extends GuiCustom {
 	
@@ -26,6 +21,7 @@ public class GuiGodBottler extends GuiCustom {
 	private TileEntityGodBottler te;
 
 //FIXME client dupe bug on the crystal
+	//TODO info problems 
 
 	public GuiGodBottler(InventoryPlayer inventory, TileEntityGodBottler te2,int iD) {
 		super(new ContainerGodBottler(inventory, te2),iD);
@@ -38,7 +34,8 @@ public class GuiGodBottler extends GuiCustom {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX,	int mouseY) {
 		GL11.glColor4f(1, 1, 1, 1);
-
+		GL11.glDisable(GL11.GL_LIGHTING);
+		
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);   	
         
@@ -59,16 +56,20 @@ public class GuiGodBottler extends GuiCustom {
 		subRect.add(4,new GuiRectangle(this, 102, 49, 12, getSizeBar(4))); // fleche 
 		subRect.add(5,new GuiRectangle(this, 16 , 7 + 52 - getSizeBar(5), 18, getSizeBar(5))); //power bar
 	
-	
-   	
+	    GL11.glEnable(GL11.GL_LIGHTING);
+
 	}
 	
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		GL11.glDisable(GL11.GL_LIGHTING);
        GuiRectangle rect = new GuiRectangle(this, 16, 7, 18, 52);
        rect.drawHoverString(x, y, (StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo")));
-
+       
+       String infoStr = "some text of a style dunno what to do but i'll write the problem";
+       this.drawInfoPanel(infoStr, "Info", -63, 8, 62);
+       GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override

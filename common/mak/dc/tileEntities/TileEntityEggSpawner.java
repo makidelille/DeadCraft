@@ -364,12 +364,9 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		return mode;
 	}
 
-	public boolean isRepeatOn(int i) {
-		return mode == i;
-	}
 
 	public boolean isRepeatOn() {
-		return isRepeatOn(0);
+		return mode == 0;
 	}
 
 	public ItemStack[] getInventory() {
