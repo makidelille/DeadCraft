@@ -90,7 +90,7 @@ public class GuiEggSpawner extends GuiCustom{
 		str = (StatCollector.translateToLocal("dc.progress") + " : " + te.getProgress() + "%");
 		getFontRenderer().drawSplitString(str, 65, 67, 110, 0x404040);
 				
-		str = (StatCollector.translateToLocal("dc.power") + " : " + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo"));
+		str = (StatCollector.translateToLocal("dc.power") + " : " + te.getPower() + "/" + te.MAXPOWER/1000 + StatCollector.translateToLocal("dc.kilo"));
 		getFontRenderer().drawSplitString(str, 65, 77, 110, 0x404040);
 
 		str = (StatCollector.translateToLocal("dc.block.eggSpawner.gui.eggInStock") + " : " + te.getEggInStock());
@@ -99,27 +99,26 @@ public class GuiEggSpawner extends GuiCustom{
 		redGuiDisplay();
 		prodGuiDisplay();
 		
-		String infoStr = "here are some infos about the buttons";
+		String infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.info");
 		
 		if(guiLeft - 70 <=x  && x<= guiLeft-70 + 18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
-			infoStr = "it'll emit a short pulse when the spawner spawn something in the world";
+			infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.redstone.normal") ;
 		}
 		if(guiLeft - 70 +20<=x  && x<= guiLeft-70 + 20 + 18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
-			infoStr = "test1";
+			infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.redstone.inverted") ;
 		}
 		if(guiLeft - 70 +40<=x  && x<= guiLeft-70 + 40 +18  && guiTop +30 + 18 >= y && y >= guiTop +30) {
-			infoStr = "test2";
+			infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.redstone.off") ; 
 		}
 		if(guiLeft - 65 <=x  && x<= guiLeft-65 + 18  &&  guiTop +72 <= y&& y <=guiTop +72 + 18) {
-			infoStr = "test3";
+			infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.single") ; 
 		}
 		if(guiLeft - 65 +22 <=x  && x<= guiLeft-65 + 18 +22  &&  guiTop +72 <= y&& y <=guiTop +72 + 18) {
-			infoStr = "test4";
+			infoStr = StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.loop") ; 
 		}
-		drawInfoPanel(infoStr, "Infos", -76, 115, 76);
+		drawInfoPanel(infoStr, StatCollector.translateToLocal("dc.block.eggSpawner.gui.info.header"), -76, 115, 76);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		
-		//TODO the infos text
 				
 	}
 		
@@ -168,20 +167,20 @@ public class GuiEggSpawner extends GuiCustom{
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		this.drawTexturedModelRectFromIcon(-70 + 20 +1 , 30 ,  Blocks.redstone_torch.getIcon(0, 0), 16,16);
 
-		String str =EnumChatFormatting.UNDERLINE +   "Redstone" + " : ";
+		String str =EnumChatFormatting.UNDERLINE +   StatCollector.translateToLocal("dc.block.eggSpawner.gui.redstone.mode") + " : ";
 		getFontRenderer().drawSplitString(str, -68, 20, 70, GuiDrawHelper.getColor("chocolate"));
 		
 		
 		str = EnumChatFormatting.ITALIC +"";
 		switch(te.getRedstoneState()) {
 		case 0 :
-			str = EnumChatFormatting.DARK_RED +"" + EnumChatFormatting.ITALIC + "classical";
+			str = EnumChatFormatting.DARK_RED +"" + EnumChatFormatting.ITALIC +StatCollector.translateToLocal("dc.block.eggSpawner.gui.redstone.normal");
 			break;
 		case 1 : 
-			str =  EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + "inverted" ;
+			str =  EnumChatFormatting.RED + "" + EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.block.eggSpawner.gui.redstone.inverted") ;
 			break;
 		case 2 :
-			str = EnumChatFormatting.BLACK +""+ EnumChatFormatting.ITALIC + "disable";
+			str = EnumChatFormatting.BLACK +""+ EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.block.eggSpawner.gui.redstone.disable");
 			break;
 		}
 		getFontRenderer().drawSplitString(str, -65, 50, 70, 0x404040);
@@ -197,9 +196,9 @@ public class GuiEggSpawner extends GuiCustom{
 		for(int i= 0; i < 2; i++) {
 			this.drawTexturedModalRect(- 64 + 22 * i, + 73, xSize + 2, 0 + 16 *i, 18, 18);
 		}
-		getFontRenderer().drawSplitString(EnumChatFormatting.UNDERLINE +"Mode"+ " : ", -62, 62, 70, 0x404040);
+		getFontRenderer().drawSplitString(EnumChatFormatting.UNDERLINE +StatCollector.translateToLocal("dc.block.eggSpawner.gui.run.mode")+ " : ", -62, 62, 70, 0x404040);
 
-		String str = te.isRepeatOn() ? (EnumChatFormatting.BLUE +""+EnumChatFormatting.ITALIC + "Repeat") : (EnumChatFormatting.YELLOW +"" +EnumChatFormatting.ITALIC + "Single run");
+		String str = te.isRepeatOn() ? (EnumChatFormatting.BLUE +""+EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.block.eggSpawner.gui.run.loop")) : (EnumChatFormatting.YELLOW +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.block.eggSpawner.gui.run.single"));
 		
 		getFontRenderer().drawSplitString(str, -70, 92,70, 0x404040);
 

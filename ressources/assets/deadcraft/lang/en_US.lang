@@ -36,6 +36,28 @@ dc.block.allowed=Allowed users
 
 dc.block.eggSpawner.gui.status=State
 dc.block.eggSpawner.gui.eggInStock=Egg in Stock
+dc.block.eggSpawner.gui.redstone.mode=Redstone
+dc.block.eggSpawner.gui.redstone.normal=Normal
+dc.block.eggSpawner.gui.redstone.inverted=Inverted
+dc.block.eggSpawner.gui.redstone.disable=Disable
+dc.block.eggSpawner.gui.run.mode=Run Mode
+dc.block.eggSpawner.gui.run.single=Single run
+dc.block.eggSpawner.gui.run.loop=On Loop
+dc.block.eggSpawner.gui.info.header=Infos
+dc.block.eggSpawner.gui.info.info=This bow is used to given information about the functions of the buttons
+dc.block.eggSpawner.gui.info.redstone.normal=The spawner will emit a short pulse when an egg is spawned in the world
+dc.block.eggSpawner.gui.info.redstone.inverted=The spawner will stop emiting a redstone signal when an egg spawns
+dc.block.eggSpawner.gui.info.redstone.off=The spawner will not emit redstone signals wheter it spawns an egg or not
+dc.block.eggSpawner.gui.info.single=The spawner will only produce one egg when you click on 'start'
+dc.block.eggSpawner.gui.info.loop=The spawner will produce egg as long as you don't click on the 'stop'
+
+dc.block.godBottler.gui.error.header=Problems
+dc.block.godBottler.gui.error.noPower=No Power
+dc.block.godBottler.gui.error.noRedstone=No Redstone
+dc.block.godBottler.gui.error.noEmptyCan=No empty Can
+dc.block.godBottler.gui.error.noRecipe=No matching recipe
+dc.block.godBottler.gui.error.noSpace=No free crafting space
+dc.block.godBottler.gui.error.sameId=Can has Already this effect
 
 dc.info.holdShift=-- Press Shift for info --
 dc.info.isCreative=Is creative spawned

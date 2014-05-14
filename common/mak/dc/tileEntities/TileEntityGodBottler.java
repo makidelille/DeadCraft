@@ -1,5 +1,6 @@
 package mak.dc.tileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,15 +11,25 @@ import mak.dc.items.ItemGodCan;
 import mak.dc.items.ItemCrystal;
 import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.IBTInfos;
+import mak.dc.network.packet.DeadCraftGodBottlerPacket;
+import mak.dc.tileEntities.TileEntityGodBottler.EnumBuildError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class TileEntityGodBottler extends TileEntityDeadCraft implements IInventory{
+public class TileEntityGodBottler extends TileEntityDeadCraft implements IInventory, ISidedInventory{
 	
 	private static final byte deadcraftId = 2;
+	private static final int[] slot_top = {1};
+	private static final int[] slot_bottom = {0,2};
+	private static final int[] slot_side = {3,4,5,6,7,8};
+	private static final int[] slot_back = {0};
+
+
+
 	
 	/**
 	 * manager used for recipes
@@ -60,6 +71,9 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	private ItemStack[] inventory ;
 	
 	private boolean hasIngredientsChanged;
+	
+	private ArrayList<EnumBuildError> buildErrors = new ArrayList<EnumBuildError>();
+	
 	/**sub construct
 	 * return this(false) = this(false,0)
 	 */
@@ -97,33 +111,119 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			if(this.isRSPowered() ) this.setClientTick(this.getClientTick() + 1);
 			else if(!this.isRSPowered()) this.setClientTick(this.getClientTick() - 1);			
 		}
-		if(!worldObj.isRemote) {
-			Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
-			ItemStack[] is = this.getItemStackFromMap(mapIs);
-			
-			int idMatchingrecipe = canCraftingManager.getMatchingRecipes(is);
+		if(!worldObj.isRemote) {			
 
+			if(this.isRSPowered()) {
+				this.idleDecharge();
+				if(buildErrors.contains(EnumBuildError.NOREDSTONE)) {
+					buildErrors.remove(EnumBuildError.NOREDSTONE);
+					isSync = false;
+				}
+			}else{
+				if(workedTime != 0){
+					this.workedTime = 0;
+					isSync = false;
+				}
+				if(!buildErrors.contains(EnumBuildError.NOREDSTONE)) {
+					buildErrors.add(EnumBuildError.NOREDSTONE);
+					isSync = false;
+				}
+			}
+			
 			if(this.getStackInSlot(0) != null) {
 				this.charge();
 			}
-			if(this.isRSPowered())
-				this.idleDecharge();
-					
-			if(this.hasEmptyCan() && idMatchingrecipe != -1 && this.hasPower() && this.isRSPowered()) {
+			
+			if(this.hasEmptyCan()) {
+				if(buildErrors.contains(EnumBuildError.NOEMMPTYCAN)){
+					buildErrors.remove(EnumBuildError.NOEMMPTYCAN);
+					isSync = false;
+				}
+			}else {
+				if(!buildErrors.contains(EnumBuildError.NOEMMPTYCAN)){
+					buildErrors.add(EnumBuildError.NOEMMPTYCAN);
+					isSync = false;
+				}
+			}
+			
+			int idMatchingrecipe =this.getMatchingRecipeId();
+			
+			if(idMatchingrecipe == -1) {
+				if(!buildErrors.contains(EnumBuildError.NORECIPE)) {
+					buildErrors.add(EnumBuildError.NORECIPE);
+					isSync = false;
+				}
+			}else{
+				if(buildErrors.contains(EnumBuildError.NORECIPE)) {
+					buildErrors.remove(EnumBuildError.NORECIPE);
+					isSync = false;
+				}
+			}
+			if(!hasPower()) {
+				if(!buildErrors.contains(EnumBuildError.NOPOWER)){
+					buildErrors.add(EnumBuildError.NOPOWER);
+					isSync = false;
+				}
+			}else{
+				if(buildErrors.contains(EnumBuildError.NOPOWER)){
+					buildErrors.remove(EnumBuildError.NOPOWER);
+					isSync = false;
+				}
+			}
+			if(!this.hasCraftingSpace()){
+				if(!buildErrors.contains(EnumBuildError.NOCRAFTSPACE)) {
+					buildErrors.add(EnumBuildError.NOCRAFTSPACE);
+					isSync = false;
+				}
+				if(this.workedTime != 0){
+					this.workedTime = 0;
+					isSync = false;
+				}
+			}else{
+				if(buildErrors.contains(EnumBuildError.NOCRAFTSPACE)) {
+					buildErrors.remove(EnumBuildError.NOCRAFTSPACE);
+					isSync = false;
+				}
+			}
+			
+			if(this.hasEmptyCan() && idMatchingrecipe != -1 && this.hasPower() && this.isRSPowered() && this.hasCraftingSpace()) {			
+				if(buildErrors.contains(EnumBuildError.NOCRAFTSPACE)) {
+					buildErrors.remove(EnumBuildError.NOCRAFTSPACE);
+					isSync =false;
+				}
 				ItemStack can = this.getEmptyCan();
 				if(!ItemGodCan.hasId(can, idMatchingrecipe)) {
-				
+					if(buildErrors.contains(EnumBuildError.SAMEID)) {
+						buildErrors.remove(EnumBuildError.SAMEID);
+						isSync = false;
+					}
 					if(workedTime >= BUILDTIME ) 
-						if(this.craftCan(can,mapIs)) this.workedTime = 0;			
+						if(this.craftCan(can)) this.workedTime = 0;			
 						else workedTime = BUILDTIME;
 					else{
+						if(workedTime == 1) isSync =false;
 						workedTime++;
 						this.decharge();
 					}
+				}else{
+					if(!buildErrors.contains(EnumBuildError.SAMEID)) {
+						buildErrors.add(EnumBuildError.SAMEID);
+						isSync = false;
+					}
 				}
 				
-			}else if(!this.hasEmptyCan()) this.workedTime = 0; 
-			else if(hasIngredientsChanged) this.workedTime = 0;
+			}else if(!this.hasEmptyCan()) {
+				if(this.workedTime != 0) {
+					this.workedTime = 0; 
+					isSync = false;
+				}
+			}
+			else if(hasIngredientsChanged){
+				if(this.workedTime != 0) {
+					this.workedTime = 0; 
+					isSync = false;
+				}
+			}
 		}
 	}
 	
@@ -150,8 +250,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		else this.power = 0;
 	}
 
-	private boolean  craftCan(ItemStack can, Map<Integer, ItemStack> mapIs) {
-		if(this.getStackInSlot(2) == null) {
+	private boolean  craftCan(ItemStack can) {
+		if(hasCraftingSpace()) {
+			Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
+
 			ItemStack[] iss = this.getItemStackFromMap(mapIs);
 			ItemStack newIs = canCraftingManager.craftCan(can, iss);
 
@@ -169,7 +271,9 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	        }while (iterator.hasNext());
 			isSync = false;
 	        return true;
-		}else return false;
+		}else{ 
+			return false;
+		}
 	}
 
 
@@ -183,9 +287,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		pair.allowed = this.allowed;
 		pair.owner = this.owner;
 		pair.locked = this.locked;
-
-		this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), this.worldObj.getWorldInfo().getVanillaDimension());
 		isSync = true;
 	}
 
@@ -317,7 +420,9 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	
 	
-	
+	public boolean hasCraftingSpace() {
+		return this.getStackInSlot(2) == null;
+	}
 	 
 	public boolean hasCustomInventoryName() {
 		return false;
@@ -346,13 +451,15 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	/**
 	 * here are the getters
 	 */
-	
+	public ArrayList<EnumBuildError> getBuildErrors()  {
+		return this.buildErrors;
+	}
 	
 	public int getDirection() {
 		if(pair == null) return 0;
 		return isTop() ? pair.getDirection() : this.blockMetadata;
 	}
-	private ItemStack getEmptyCan() {
+	public ItemStack getEmptyCan() {
 		return inventory[1];
 	}
 	private Map<Integer,ItemStack> getIngredientStacks() {
@@ -400,10 +507,21 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		return isTop() ? pair.getWorkedTime() : this.workedTime;
 	}
 	
+	public int getMatchingRecipeId() {
+		Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
+		ItemStack[] is = this.getItemStackFromMap(mapIs);
+		if(is == null) {
+			return -1;
+		}
+		return canCraftingManager.getMatchingRecipes(is);
+	}
+	
 	/**
 	 * here are the setters
 	 */
-	
+	public void setBuildErrors(ArrayList<EnumBuildError> buildErrorsWithIds) {
+		this.buildErrors = buildErrorsWithIds;
+	}
 	
 	public void setDirection(int i) {
 		this.blockMetadata = i;
@@ -467,6 +585,84 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	public boolean CLIENThasCan() {
 		return this.inventory[1] != null || this.inventory[2] != null;
 	}
+	
+	public enum EnumBuildError {
+		
+		NOPOWER("noPower",0),
+		NOREDSTONE("noRedstone",1),
+		NOEMMPTYCAN("noEmptyCan",2),
+		NORECIPE("noRecipe",3),
+		NOCRAFTSPACE("noSpace",4),
+		SAMEID("sameId",5);
+		
+		private String nid="";
+		private int id;
+		
+		
+		
+		EnumBuildError(String name, int id){
+			this.nid = name;
+			this.id = id;
+		}
+		
+		public String toString() {
+			return nid;
+		}
+		
+		public static EnumBuildError getBuilErrorWithId(int id) {
+			for(EnumBuildError erreur : EnumBuildError.values()) {
+				if(erreur.id == id) return erreur;
+			}
+			return null;
+		}
+		
+		public static int[] getIdsWithBuilError(ArrayList<EnumBuildError> errors) {
+			if(errors == null) return null;
+			int[] re  = new int[errors.size()];
+			for (int i = 0 ; i< errors.size(); i++) {
+				re[i] = errors.get(i).id;
+			}
+			return re;
+		}
+		
+		public static ArrayList<EnumBuildError> getBuildErrorsWithIds(int[] errorsId) {
+			ArrayList<EnumBuildError> re = new ArrayList<>();
+			for(int i=0; i< errorsId.length ; i++) {
+				re.add(getBuilErrorWithId(errorsId[i]));
+			}
+			return re;
+		}
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		switch(side) {
+		case 0 : return slot_bottom;
+		case 1 : return slot_top;
+		case 2 : side = 2;
+			break;
+		case 3 : side = 0;
+			break;
+		case 4 : side = 1;
+			break;
+		case 5 : side = 3;
+			break;
+		}
+		if(side == blockMetadata)return slot_back;
+		return slot_side;
+	}
+
+	@Override
+	public boolean canInsertItem(int var1, ItemStack var2, int var3) {
+		return this.isItemValidForSlot(var1, var2);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack var2, int side) {
+		return side == 0 && slot == 2 || (side == 0 && slot == 0 && ItemCrystal.isEmpty(var2));
+	}
+
+	
 
 
 

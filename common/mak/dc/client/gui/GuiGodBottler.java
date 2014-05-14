@@ -1,8 +1,12 @@
 package mak.dc.client.gui;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import mak.dc.client.gui.container.ContainerGodBottler;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
+import mak.dc.items.ItemGodCan;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityGodBottler;
@@ -21,8 +25,7 @@ public class GuiGodBottler extends GuiCustom {
 	private TileEntityGodBottler te;
 
 //FIXME client dupe bug on the crystal
-	//TODO info problems 
-
+	
 	public GuiGodBottler(InventoryPlayer inventory, TileEntityGodBottler te2,int iD) {
 		super(new ContainerGodBottler(inventory, te2),iD);
 		this.xSize = 176;
@@ -67,8 +70,8 @@ public class GuiGodBottler extends GuiCustom {
        GuiRectangle rect = new GuiRectangle(this, 16, 7, 18, 52);
        rect.drawHoverString(x, y, (StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo")));
        
-       String infoStr = "some text of a style dunno what to do but i'll write the problem";
-       this.drawInfoPanel(infoStr, "Info", -63, 8, 62);
+       if(!te.hasStarted())
+    	   this.drawInfoPanel(this.getProblems(), StatCollector.translateToLocal("dc.block.godbottler.gui.error.header"), -93, 8, 92);
        GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
@@ -111,6 +114,15 @@ public class GuiGodBottler extends GuiCustom {
 			default : return 0;
 			}
 		return 0; 
+	}
+	
+	private String getProblems() {
+		ArrayList errors = te.getBuildErrors(); 
+		String re = "";
+		for(int i=0; i< errors.size(); i++) {
+			re += ("-"  + StatCollector.translateToLocal("dc.block.godBottler.gui.error." + errors.get(i).toString()) + "\n");
+		}
+		return re;		
 	}
 
 }

@@ -99,6 +99,7 @@ public class ItemCrystal extends Item {
     }
     
     public static boolean isEmpty (ItemStack is) {
+    	if(is == null || !(is.getItem() instanceof ItemCrystal)) return false;
     	if(!is.hasTagCompound()) return false;
     	NBTTagCompound tag = is.getTagCompound();
     	return tag.getInteger("charge") == 0;

@@ -104,7 +104,7 @@ public class ItemWrench extends Item {
         if(!world.isRemote && world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
-             if (!player.isSneaking()) {
+            if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
                     	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z, side, hitX, hitY,hitZ);

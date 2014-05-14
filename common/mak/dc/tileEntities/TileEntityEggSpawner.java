@@ -8,22 +8,25 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import cpw.mods.fml.common.FMLLog;
 
-public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory {
+public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory,ISidedInventory {
 		
 	private static final byte deadcraftId = 1;
 
-	public static final int MAXPOWER = 12_000;
+	public static final int MAXPOWER = 100_000;
 
-	public static final int CHARGESPEED = 50;
-	public static final int POWERUSAGE = 1;
+	public static final int CHARGESPEED = 1_000;
+	public static final int POWERUSAGE = 5;
+
+	private static final int[] slots = {0,1,2,3,4,5,6,7};
 	
-	public static int _maxBuildTime = 8000;
+	public static int _maxBuildTime = 18_000;
 	
 	
 	private ItemStack[] invContent;
@@ -395,7 +398,7 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	}
 
 	private void charge() {
-		if(this.power >= this.MAXPOWER ) return;
+		if(this.power + CHARGESPEED > this.MAXPOWER ) return;
 		else if(this.invContent[6] != null){
 			ItemStack crystal = invContent[6];
 			if(crystal.getItem() instanceof ItemCrystal){
@@ -417,6 +420,22 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	public void setPower(int data) {
 		this.power = data;
 		
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		if(var1 == 0 || var1 == 1) return new int[0];
+		return slots;
+	}
+
+	@Override
+	public boolean canInsertItem(int var1, ItemStack var2, int var3) {
+		return isItemValidForSlot(var1, var2);
+	}
+
+	@Override
+	public boolean canExtractItem(int var1, ItemStack var2, int var3) {
+		return false;
 	}
 
 
