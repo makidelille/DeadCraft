@@ -1,5 +1,9 @@
 package mak.dc;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.config.ConfigHandler;
 import mak.dc.event.DeadCraftEvents;
@@ -30,6 +34,8 @@ public class DeadCraft {
 	    
 	    @Instance ("deadcraft")
 	    public static DeadCraft instance;
+	    
+	    public static final Logger logger = LogManager.getLogger("DeadCraft");
 	    
 	    public static final PacketPipeline packetPipeline = new PacketPipeline();
 	    public static final CanCraftingManager canCraftingManager = new CanCraftingManager();
@@ -79,5 +85,6 @@ public class DeadCraft {
 			 canCraftingManager.postInitialise();
 			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
 			
+			 logger.log(Level.INFO, "DeadCraft is loaded");
 		}
 }

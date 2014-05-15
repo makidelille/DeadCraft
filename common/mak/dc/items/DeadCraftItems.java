@@ -56,6 +56,7 @@ public class DeadCraftItems {
 		DeadCraftBlocks.eggSpawner.setCreativeTab(tabDeadCraft);
 		DeadCraftBlocks.enderPearlBlock.setCreativeTab(tabDeadCraft);
 		DeadCraftBlocks.godBottler.setCreativeTab(tabDeadCraft);
+		DeadCraftBlocks.enderConverter.setCreativeTab(tabDeadCraft);
 	}
 
 	public static void registerCraftRecipe() {
@@ -64,7 +65,7 @@ public class DeadCraftItems {
 		/**
 		 * craft of the crystal
 		 */
-    	is = new ItemStack(crystal);
+    	is = new ItemStack(crystal,1,0);
     	tag = new NBTTagCompound();
 		tag.setBoolean("creativeSpawn", false);
     	tag.setInteger("charge", 0);
@@ -75,6 +76,33 @@ public class DeadCraftItems {
 				" R ",
 				Character.valueOf('R'), Items.redstone,
 				Character.valueOf('N'), Items.nether_star
+		});
+		
+		is = new ItemStack(crystal, 1, 1);
+    	tag = new NBTTagCompound();
+		tag.setBoolean("creativeSpawn", false);
+    	tag.setInteger("charge", 0);
+    	is.setTagCompound(tag);
+		CraftingManager.getInstance().addRecipe(is, new Object[]{
+				" C ",
+				"CDC",
+				" C ",
+				Character.valueOf('C'), new ItemStack(crystal,1,0),
+				Character.valueOf('D'), Items.diamond
+		});
+		
+		is = new ItemStack(crystal,1,2);
+    	tag = new NBTTagCompound();
+		tag.setBoolean("creativeSpawn", false);
+    	tag.setInteger("charge", 0);
+    	is.setTagCompound(tag);
+		CraftingManager.getInstance().addRecipe(is, new Object[]{
+				"RCR",
+				"CDC",
+				"RCR",
+				Character.valueOf('R'), Blocks.redstone_block,
+				Character.valueOf('D'), Blocks.diamond_block,
+				Character.valueOf('C'), new ItemStack(crystal,1,1)
 		});
 		
 		/**

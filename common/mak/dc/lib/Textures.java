@@ -22,6 +22,7 @@ public class Textures {
 	public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";
 	public static final String GODBOTTLER_MODEL_TEXT_LOC = PATH_MODEL + "godbottlertexturemap.png";
 	public static final String GODCAN_MODEL_TEXT_LOC = PATH_MODEL + "godcantexturemap.png";
+	public static final String ENDERCONVERTER_TEXT_LOC = PATH_MODEL + "enderconvertertexturemap.png";
 	
 	/**Gui*/
 	public static final String EGGSPAWNER_GUI_TEXT_LOC = PATH_GUI + "eggspawner.png";

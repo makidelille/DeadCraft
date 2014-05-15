@@ -27,17 +27,9 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 	
 	
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float tick) {
-			this.renderTileEntityGodBottlerAt((TileEntityGodBottler) te, x, y, z, tick);
-	}
-
-	@Override
-	public void renderInventory(double x, double y, double z) {
-		this.renderTileEntityAt(null, x, y, z, 0.0f);
-	}
-	
-	int test;
-	public void renderTileEntityGodBottlerAt(TileEntityGodBottler te, double x, double y, double z, float tick) {	
+	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float tick) {
+		TileEntityGodBottler te = (TileEntityGodBottler) tile;
+		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -72,6 +64,11 @@ public class SpecialRenderTileEntityGodBottler extends TileEntitySpecialRenderer
 		this.bindTexture(textLoc);
 		this.model.render(0.0625F);
 		GL11.glPopMatrix();
+	}
+
+	@Override
+	public void renderInventory(double x, double y, double z) {
+		this.renderTileEntityAt(null, x, y, z, 0.0f);
 	}
 
 }

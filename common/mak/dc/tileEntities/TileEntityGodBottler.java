@@ -28,9 +28,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	private static final int[] slot_side = {3,4,5,6,7,8};
 	private static final int[] slot_back = {0};
 
-
-
-	
 	/**
 	 * manager used for recipes
 	 */
@@ -42,19 +39,19 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	public static final int ANIMATIONTIME = 20;
 	
 	/**
-	 * time to build (Server Side) && the max power usage buffer
+	 * time to build (Server Side) && the size of power buffer
 	 */
 	public static final int BUILDTIME = 100;
 	public static final int MAXPOWER = 5_000;
 	
 	/**
-	 * rate of the charge and of the usage
+	 * rate of the charge and of the decharge
 	 */
 	private static final int MAXCHARGESPEED = 100;
 	private static final int POWERUSAGE = 10;
 	
 	
-
+	
 	private TileEntityGodBottler pair;
 
 	private int clientTick = 0;
@@ -73,14 +70,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	private boolean hasIngredientsChanged;
 	
 	private ArrayList<EnumBuildError> buildErrors = new ArrayList<EnumBuildError>();
-	
-	/**sub construct
-	 * return this(false) = this(false,0)
-	 */
-	public TileEntityGodBottler() {
-		this(false);
-	}
-	
+		
 	/**Main constructor 
 	 * @param top
 	 */
@@ -107,6 +97,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			sync();
 			this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		}
+		if(pair == null) return;
 		if(worldObj.isRemote) {
 			if(this.isRSPowered() ) this.setClientTick(this.getClientTick() + 1);
 			else if(!this.isRSPowered()) this.setClientTick(this.getClientTick() - 1);			
@@ -288,6 +279,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 		pair.owner = this.owner;
 		pair.locked = this.locked;
 		
+
 		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), this.worldObj.getWorldInfo().getVanillaDimension());
 		isSync = true;
 	}
@@ -412,7 +404,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	 
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return isTop() ? pair.isUseableByPlayer(var1) : super.isUseableByPlayer(var1);
+		return (isTop() ? pair.isUseableByPlayer(var1) : super.isUseableByPlayer(var1)) && pair != null;
 	}
 	
 	
@@ -508,7 +500,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	}
 	
 	public int getMatchingRecipeId() {
-		Map<Integer,ItemStack> mapIs = this.getIngredientStacks() ;
+		Map<Integer,ItemStack> mapIs = this.getIngredientStacks();
 		ItemStack[] is = this.getItemStackFromMap(mapIs);
 		if(is == null) {
 			return -1;

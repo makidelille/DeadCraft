@@ -38,7 +38,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 
 
 	
-    protected BlockDeadCraft (Material par2Material) {
+    public BlockDeadCraft (Material par2Material) {
         super(par2Material);
         this.setBlockUnbreakable();
         this.setResistance(-1F);

@@ -25,8 +25,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockGodBottler extends BlockDeadCraft {
-
-	
 	
 	public BlockGodBottler() {
 		super(Material.iron);
@@ -41,7 +39,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 	
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileEntityGodBottler();
+		return new TileEntityGodBottler(var2 != 4);
 	}
 	
 	@Override

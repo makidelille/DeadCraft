@@ -25,56 +25,71 @@ public class ItemCrystal extends Item {
     /** handle by config */
 
     public static final int CRYSTALCOST = 100;
-    public static final int MAXCHARGE = 2_500;
+    public static final int[] MAXCHARGE = {2_500, 10_000, 40_000};
+    public static final String[] tiers={"1","2","3"};
+	private IIcon[] icons = new IIcon[3];
 
 
     public ItemCrystal () {
         super();
-        this.setHasSubtypes(false);
+        this.setHasSubtypes(true);
         this.setMaxStackSize(1);
     }
     
     @Override
     public void getSubItems(Item item, CreativeTabs tab ,List l) {
-    	ItemStack is = new ItemStack(item, 1, 0);
-    	NBTTagCompound tag = new NBTTagCompound();
-    	
-    	tag.setBoolean("creativeSpawn", false);
-    	tag.setInteger("charge", 0);
-    	is.setTagCompound(tag);
-    	l.add(is);
-    	
-    	is = new ItemStack(item, 1, 0);
-    	tag = new NBTTagCompound();
-    	tag.setBoolean("creativeSpawn", false);
-    	tag.setInteger("charge", MAXCHARGE); 
-    	is.setTagCompound(tag);
-    	l.add(is);
-    	
-    	is = new ItemStack(item, 1, 0);
-    	tag = new NBTTagCompound();
-    	tag.setBoolean("creativeSpawn", true);
-    	tag.setInteger("charge", MAXCHARGE);
-    	is.setTagCompound(tag);
-    	l.add(is);
-    	
+    	for(int i = 0 ; i < tiers.length ; i++) {
+	    	ItemStack is = new ItemStack(item, 1, i);
+	    	NBTTagCompound tag = new NBTTagCompound();
+	    	
+	    	tag.setBoolean("creativeSpawn", false);
+	    	tag.setInteger("charge", 0);
+	    	is.setTagCompound(tag);
+	    	l.add(is);
+	    	
+	    	is = new ItemStack(item, 1, i);
+	    	tag = new NBTTagCompound();
+	    	tag.setBoolean("creativeSpawn", false);
+	    	tag.setInteger("charge", MAXCHARGE[i]); 
+	    	is.setTagCompound(tag);
+	    	l.add(is);
+	    	
+	    	is = new ItemStack(item, 1, i);
+	    	tag = new NBTTagCompound();
+	    	tag.setBoolean("creativeSpawn", true);
+	    	tag.setInteger("charge", MAXCHARGE[i]);
+	    	is.setTagCompound(tag);
+	    	l.add(is);
+    	}
     }
     
     
     @SideOnly (Side.CLIENT)
     @Override
     public void registerIcons (IIconRegister registerIcon) {
-    	itemIcon = registerIcon.registerIcon(Textures.CRYSTAL_TEXT_LOC);
+    	for( int i = 0 ; i < tiers.length; i++)
+    	icons [i] = registerIcon.registerIcon(Textures.CRYSTAL_TEXT_LOC + ".tier" + i);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int par1) {
+    	return icons[par1];
     }
 
     @Override
     public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
     	if(is.hasTagCompound() && is.getTagCompound().hasKey("charge")){
     		if(is.getTagCompound().getBoolean("creativeSpawn")) {
+    			l.add("tier" + " : " + (is.getItemDamage() +1));
     			l.add(StatCollector.translateToLocal("dc.info.isCreative"));
     			l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.infinite") +EnumChatFormatting.RESET);
     		}
-    		else l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE + EnumChatFormatting.RESET);
+    		else {
+    			l.add("tier" + " : " + (is.getItemDamage()+1));
+
+    			l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE[is.getItemDamage()] + EnumChatFormatting.RESET);
+    		}
     	}
     }
     
@@ -87,7 +102,7 @@ public class ItemCrystal extends Item {
 	public double getDurabilityForDisplay(ItemStack stack) {
 		 NBTTagCompound tag = stack.getTagCompound();
 		 if(tag == null) return 0;
-		 return 1d - (double) tag.getInteger("charge") / MAXCHARGE;
+		 return 1d - (double) tag.getInteger("charge") / MAXCHARGE[stack.getItemDamage()];
 	  }	
     
     
@@ -95,7 +110,7 @@ public class ItemCrystal extends Item {
     public static boolean isFullyCharged (ItemStack is) {
     	if(!is.hasTagCompound()) return false;
     	NBTTagCompound tag = is.getTagCompound();
-    	return tag.getInteger("charge") == MAXCHARGE;
+    	return tag.getInteger("charge") == MAXCHARGE[is.getItemDamage()];
     }
     
     public static boolean isEmpty (ItemStack is) {
@@ -115,16 +130,16 @@ public class ItemCrystal extends Item {
     	if(!stack.hasTagCompound()) return chargeAmount;
     	NBTTagCompound tag = stack.getTagCompound();
     	if(tag.getBoolean("creativeSpawn")) {
-    		tag.setInteger("charge", MAXCHARGE);
+    		tag.setInteger("charge", MAXCHARGE[stack.getItemDamage()]);
     		stack.setTagCompound(tag);    	
     		return 0;
     	}
     	int curentCharge = tag.getInteger("charge");
-    	if(curentCharge >= MAXCHARGE) return chargeAmount;
-    	if(curentCharge  + chargeAmount > MAXCHARGE) {
-    		tag.setInteger("charge", MAXCHARGE);
+    	if(curentCharge >= MAXCHARGE[stack.getItemDamage()]) return chargeAmount;
+    	if(curentCharge  + chargeAmount > MAXCHARGE[stack.getItemDamage()]) {
+    		tag.setInteger("charge", MAXCHARGE[stack.getItemDamage()]);
     		stack.setTagCompound(tag);    		
-    		return curentCharge + chargeAmount - MAXCHARGE;
+    		return curentCharge + chargeAmount - MAXCHARGE[stack.getItemDamage()];
     	}else{
     		tag.setInteger("charge", curentCharge + chargeAmount);
     		stack.setTagCompound(tag);    
@@ -142,7 +157,7 @@ public class ItemCrystal extends Item {
     	if(!stack.hasTagCompound()) return dischargeAmount;
     	NBTTagCompound tag = stack.getTagCompound();
     	if(tag.getBoolean("creativeSpawn")) {
-    		tag.setInteger("charge", MAXCHARGE);
+    		tag.setInteger("charge", MAXCHARGE[stack.getItemDamage()]);
     		stack.setTagCompound(tag);    	
     		return 0;
     	}
