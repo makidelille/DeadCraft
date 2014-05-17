@@ -17,6 +17,7 @@ public class Textures {
 	public static final String MINDCONTROLLER_TEXT_LOC =  _TEXT_LOC + "mindcontroller";
 	public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base",_TEXT_LOC + "controller_lock",_TEXT_LOC + "controller_info" };
 	public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
+	public static final String CRYSTAL_TEXT_LOC = _TEXT_LOC + "crystal";
     
 	/** Models Textures localization */
 	public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";
@@ -29,8 +30,9 @@ public class Textures {
 	public static final String UTIL_GUI_TEXT_LOC = PATH_GUI +  "util.png";
     public static final String DEADCRAFTMAIN_GUI_TEXT_LOC = PATH_GUI + "deadcraftmain.png";
     public static final String GODBOTTLER_GUI_TEXT_LOC = PATH_GUI + "godbottler.png";
+    public static final String ENDERCONVERTER_GUI_TEXT_LOC = PATH_GUI + "enderconverter.png";
 
-	public static final String CRYSTAL_TEXT_LOC = _TEXT_LOC + "crystal";
+
 
 
 

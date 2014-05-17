@@ -1,5 +1,8 @@
 package mak.dc.tileEntities;
 
+import mak.dc.DeadCraft;
+import mak.dc.blocks.BlockEnderConverter;
+import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
 import net.minecraft.inventory.IInventory;
@@ -10,8 +13,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPowerSender,IInventory{
 
+	//TODO
 	
 	public static final int MAXPROCESSTIME = 200; // in ticks
+	public static final int MAXPOWER = 5000;
 	
 	private int power;
 	private int amountAsked;
@@ -20,6 +25,14 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	
 	public TileEntityEnderConverter() {
 		super(true);
+	}
+	
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		
+		this.power++;
+		if(power >= MAXPOWER) this.power = 0;
 	}
 	
 	@Override
@@ -75,7 +88,10 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	@Override
 	public void onAskedPower(int amount) {
 		if(worldObj.isRemote) {
-			this.amountAsked = amount;
+			if(power - amount >=0)
+				this.amountAsked = amount;
+			else
+				this.amountAsked = power;
 		}		
 		
 	}
@@ -140,6 +156,20 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
 		return true;
+	}
+	
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		BlockEnderConverter.renderPass = pass;
+		return pass == 0 || pass == 1 || pass == 2;
+	}
+
+	public int getPower() {
+		return power;
+	}
+
+	public void setPower(int power) {
+		this.power = power;
 	}
 
 }

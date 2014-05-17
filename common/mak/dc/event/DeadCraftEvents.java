@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -21,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class DeadCraftEvents {
 	
 	@SubscribeEvent
-	public void OnPlayerOpenGui(PlayerOpenContainerEvent e) {
+	public void onPlayerOpenGui(PlayerOpenContainerEvent e) {
 		InventoryPlayer playerInv = e.entityPlayer.inventory;
 		for(int i=0; i < playerInv.getSizeInventory(); i++) {
 			if(playerInv.getStackInSlot(i) != null && playerInv.getStackInSlot(i).getItem() instanceof ItemGodCan) {
@@ -35,7 +36,7 @@ public class DeadCraftEvents {
 	}
 	
 	@SubscribeEvent
-	public void OnPlayerToss(ItemTossEvent e) {
+	public void onPlayerToss(ItemTossEvent e) {
 		if(e.entityItem.getEntityItem().getItem() instanceof ItemGodCan) {
 			ItemStack is = e.entityItem.getEntityItem();
 			if(!is.hasTagCompound()) return;			
@@ -43,6 +44,11 @@ public class DeadCraftEvents {
 			boolean flag = tag.getBoolean("isActive");
 			ItemGodCan.pauseEffects(e.player.worldObj, is, e.player);
 		}
+	}
+	
+	@SubscribeEvent
+	public void onplayerjoined(EntityJoinWorldEvent e){
+		
 	}
 	
 }

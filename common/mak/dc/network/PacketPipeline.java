@@ -14,6 +14,7 @@ import java.util.List;
 
 import mak.dc.network.packet.DeadCraftAdminPacket;
 import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
+import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
 import mak.dc.util.AbstractPacket;
 import net.minecraft.client.Minecraft;
@@ -104,6 +105,7 @@ public class PacketPipeline extends
 		registerPacket(DeadCraftAdminPacket.class);
 		registerPacket(DeadCraftEggSpawnerPacket.class);
 		registerPacket(DeadCraftGodBottlerPacket.class);
+		registerPacket(DeadCraftEnderConverterPacket.class);
 	}
 
 	// Method to call from FMLPostInitializationEvent
