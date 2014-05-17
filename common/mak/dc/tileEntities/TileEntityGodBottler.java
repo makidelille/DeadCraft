@@ -7,20 +7,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mak.dc.DeadCraft;
-import mak.dc.items.ItemGodCan;
 import mak.dc.items.ItemCrystal;
+import mak.dc.items.ItemGodCan;
 import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.IBTInfos;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
-import mak.dc.tileEntities.TileEntityGodBottler.EnumBuildError;
+import mak.dc.util.IPowerReceiver;
+import mak.dc.util.IPowerSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityGodBottler extends TileEntityDeadCraft implements IInventory, ISidedInventory{
+public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory{
 	
 	private static final byte deadcraftId = 2;
 	private static final int[] slot_top = {1};
@@ -49,16 +51,18 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	 */
 	private static final int MAXCHARGESPEED = 100;
 	private static final int POWERUSAGE = 10;
+	private static final int powerSlot = 0;
 	
 	
-	
+	private IPowerSender powerSource;
 	private TileEntityGodBottler pair;
 
 	private int clientTick = 0;
 	private boolean isSync = false;
+//	private boolean hasReceive;
 	
 	private int workedTime;
-	private int power;
+//	private int power;
 
 	/**Slot 0 : Energy; 
 	 * Slot 1 : input can;
@@ -92,6 +96,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	
 	 
 	public void updateEntity() {
+		super.updateEntity();
 		if(pair == null || !(0 < this.blockMetadata && this.blockMetadata <= 4) ) isSync = false;
 		if(!isSync) {
 			sync();
@@ -103,7 +108,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 			else if(!this.isRSPowered()) this.setClientTick(this.getClientTick() - 1);			
 		}
 		if(!worldObj.isRemote) {			
-
 			if(this.isRSPowered()) {
 				this.idleDecharge();
 				if(buildErrors.contains(EnumBuildError.NOREDSTONE)) {
@@ -119,9 +123,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 					buildErrors.add(EnumBuildError.NOREDSTONE);
 					isSync = false;
 				}
-			}
-			
-			if(this.getStackInSlot(0) != null) {
+			}		
+			if(!hasReceive && this.getStackInSlot(powerSlot) != null) {
 				this.charge();
 			}
 			
@@ -221,8 +224,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 
 	private void charge() {
 		if(this.power >= this.MAXPOWER ) return;
-		else if(this.inventory[0] != null){
-			ItemStack crystal = inventory[0];
+		else if(this.inventory[powerSlot] != null){
+			ItemStack crystal = inventory[powerSlot];
 			if(crystal.getItem() instanceof ItemCrystal){
 				int toCharge = MAXCHARGESPEED;
 				if(power + MAXCHARGESPEED > MAXPOWER) toCharge = MAXPOWER - power;
@@ -314,7 +317,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 					setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 				}
 			}
-			this.power = nbtTagCompound.getInteger("power");
+	//		this.power = nbtTagCompound.getInteger("power");
 			this.workedTime = nbtTagCompound.getInteger("workTime");
 		}
 		this.isSync = false;
@@ -339,7 +342,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 				}
 			}
 			nbtTagCompound.setTag("Items", items);
-			nbtTagCompound.setInteger("power", this.power);
+	//		nbtTagCompound.setInteger("power", this.power);
 			nbtTagCompound.setInteger("workTime", workedTime);
 		}
 		this.isSync = false;
@@ -652,6 +655,19 @@ public class TileEntityGodBottler extends TileEntityDeadCraft implements IInvent
 	@Override
 	public boolean canExtractItem(int slot, ItemStack var2, int side) {
 		return side == 0 && slot == 2 || (side == 0 && slot == 0 && ItemCrystal.isEmpty(var2));
+	}
+
+	@Override
+	protected int getMaxChargeSpeed() {
+		return MAXCHARGESPEED;
+	}
+
+
+
+
+	@Override
+	protected int getMaxPower() {
+		return MAXPOWER;
 	}
 
 	

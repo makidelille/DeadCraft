@@ -1,45 +1,87 @@
 package mak.dc.tileEntities;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import mak.dc.DeadCraft;
 import mak.dc.blocks.BlockEnderConverter;
 import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
+import mak.dc.util.PowerManager;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPowerSender,IInventory{
 
-	//TODO
 	
-	public static final int MAXPROCESSTIME = 200; // in ticks
 	public static final int MAXPOWER = 5000;
 	
+	private static PowerManager powerManager = DeadCraft.powerManager.getInstance();
+	
 	private int power;
-	private int amountAsked;
 	private ItemStack inv;
-	private int processTime;
+	private boolean isSync;
+
+	private int activationTime;
+
+	private HashMap<IPowerReceiver, Integer> receivers;
 	
 	public TileEntityEnderConverter() {
 		super(true);
+		receivers = new HashMap<IPowerReceiver, Integer>();
 	}
 	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		
-		this.power++;
-		if(power >= MAXPOWER) this.power = 0;
+		if(!worldObj.isRemote) {
+			if(!isSync) sync();
+			
+			
+			ItemStack fuel = this.getStackInSlot(0);
+			if(fuel != null) {
+				if(activationTime <= 0) {
+				
+					if(powerManager.isFuel(fuel)){
+						int powerInItem = powerManager.getPowerProduce(fuel);
+						if(power + powerInItem <= MAXPOWER) {
+							power += powerInItem;
+							fuel.stackSize--;
+							if(fuel.stackSize <= 0) {
+								this.setInventorySlotContents(0, null);
+								isSync = false;
+							}
+						}
+					}else{ //is not a fuel
+						worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord +0.5d, yCoord +0.5d, zCoord+0.5d, fuel));
+						setInventorySlotContents(0, null);
+					}
+				}else{
+					activationTime--;
+				}
+			}else{
+				activationTime = 10;
+			}
+			if(!receivers.isEmpty()) sendPower();
+			
+		}
+	}
+	
+	public void sync() {
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftEnderConverterPacket(this), worldObj.getWorldInfo().getVanillaDimension());
+
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		this.power = nbtTagCompound.getInteger("power");
-		this.processTime = nbtTagCompound.getInteger("process");
 		NBTTagList items = (NBTTagList) nbtTagCompound.getTag("Items");
 		for (int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
@@ -55,8 +97,7 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("power", power);
-		nbtTagCompound.setInteger("process", processTime);
-		
+	
 		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < getSizeInventory(); i++) {		
 			ItemStack stack = getStackInSlot(i);
@@ -74,11 +115,18 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 
 
 	@Override
-	public void sendPowerTo(IPowerReceiver te) {
-		if(worldObj.isRemote) {
-			if(power >= amountAsked) {
-				te.recievePower(amountAsked);
-				this.power -= amountAsked;
+	public void sendPower() {
+		if(!worldObj.isRemote) {
+			Iterator it = receivers.entrySet().iterator();
+			while(it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				int amountAsked = (int) entry.getValue();
+				IPowerReceiver receiver = (IPowerReceiver) entry.getKey();
+				if(power >= amountAsked) {
+					receiver.recievePower(amountAsked);
+					this.power -= amountAsked;
+					receivers.remove(entry);
+				}
 			}
 		}
 		
@@ -86,13 +134,12 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 
 
 	@Override
-	public void onAskedPower(int amount) {
-		if(worldObj.isRemote) {
-			if(power - amount >=0)
-				this.amountAsked = amount;
-			else
-				this.amountAsked = power;
-		}		
+	public void onAskedPower(IPowerReceiver receiver,int amount) {
+		if(!worldObj.isRemote) {
+			if(power - amount <0)
+				amount = power;
+			if(receiver != null) this.receivers.put(receiver, amount);
+		}
 		
 	}
 

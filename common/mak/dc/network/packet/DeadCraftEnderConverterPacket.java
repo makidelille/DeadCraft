@@ -14,6 +14,7 @@ public class DeadCraftEnderConverterPacket extends AbstractPacket{
 
 	private int x,y,z;
 	private int stackID;
+	private int stackSize;
 	private int stackMeta;
 	
 	public DeadCraftEnderConverterPacket() {}
@@ -24,6 +25,7 @@ public class DeadCraftEnderConverterPacket extends AbstractPacket{
 		ItemStack is=te.getStackInSlot(0);
 		stackID = is == null ? 0 :Item.getIdFromItem(is.getItem());
 		stackMeta = is == null ? 0 : is.getItemDamage();
+		stackSize = is == null ? 0 :is.stackSize;
 	}
 	
 	@Override
@@ -32,7 +34,9 @@ public class DeadCraftEnderConverterPacket extends AbstractPacket{
 		buf.writeInt(y);
 		buf.writeInt(z);
 		buf.writeInt(stackID);
+		buf.writeInt(stackSize);
 		buf.writeInt(stackMeta);
+		
 		
 	}
 
@@ -42,6 +46,7 @@ public class DeadCraftEnderConverterPacket extends AbstractPacket{
 		y=buf.readInt();
 		z=buf.readInt();
 		stackID=buf.readInt();
+		stackSize = buf.readInt();
 		stackMeta= buf.readInt();
 	}
 
@@ -50,7 +55,7 @@ public class DeadCraftEnderConverterPacket extends AbstractPacket{
 		World world = DeadCraft.proxy.getClientWorld();
 		TileEntityEnderConverter te = (TileEntityEnderConverter) world.getTileEntity(x, y, z);
 		if(te == null) return;
-		if(stackID != 0 )te.setInventorySlotContents(0, new ItemStack(Item.getItemById(stackID),1, stackMeta ));
+		if(stackID != 0 )te.setInventorySlotContents(0, new ItemStack(Item.getItemById(stackID),stackSize, stackMeta ));
 		else te.setInventorySlotContents(0, null);
 	}
 

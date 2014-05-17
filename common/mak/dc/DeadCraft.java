@@ -1,9 +1,5 @@
 package mak.dc;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.config.ConfigHandler;
 import mak.dc.event.DeadCraftEvents;
@@ -12,7 +8,13 @@ import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.Lib;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
+import mak.dc.util.PowerManager;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -39,6 +41,7 @@ public class DeadCraft {
 	    
 	    public static final PacketPipeline packetPipeline = new PacketPipeline();
 	    public static final CanCraftingManager canCraftingManager = new CanCraftingManager();
+	    public static final PowerManager powerManager = new PowerManager();
 		
 		@EventHandler
 		public void PreInit (FMLPreInitializationEvent event) {
@@ -75,6 +78,7 @@ public class DeadCraft {
 			DeadCraftBlocks.registerCraftRecipe();
 			packetPipeline.initialise();
 			canCraftingManager.initialise();
+			powerManager.initialise();
 			
 		}
 		

@@ -67,7 +67,7 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		
-		if(a < 360) a +=0.8f;
+		if(a < 360) a +=0.3f;
 		else a =0;
 		
 	}
@@ -191,7 +191,7 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
 		Minecraft.getMinecraft().renderEngine.bindTexture(is.getItem() instanceof ItemBlock ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture);
 		
 		RenderBlocks renderBlock = new RenderBlocks();
-		if(!ForgeHooksClient.renderEntityItem(new EntityItem(te.getWorldObj(), te.xCoord, te.yCoord +2 , te.zCoord ,is ), is, 0f, 0f, te.getWorldObj().rand,Minecraft.getMinecraft().renderEngine, renderBlock  , 1)) {
+		if(!ForgeHooksClient.renderEntityItem(new EntityItem(te.getWorldObj(), te.xCoord, te.yCoord +2 , te.zCoord ,is ), is, 0f, 0f, te.getWorldObj().rand,Minecraft.getMinecraft().renderEngine, renderBlock  , is.stackSize)) {
 			GL11.glRotatef(a, 0, 1f, 0);
 			
 	        if (is.getItem() instanceof ItemBlock && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(is.getItem()).getRenderType())) {

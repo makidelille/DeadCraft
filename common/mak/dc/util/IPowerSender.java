@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public interface IPowerSender {
 	
-	public void sendPowerTo (IPowerReceiver te);
-	public void onAskedPower(int amount);
+	public void sendPower();
+	public void onAskedPower(IPowerReceiver te, int amount);
 	
 }

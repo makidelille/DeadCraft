@@ -7,6 +7,8 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+//TODO add shift clicks
+
 public class ContainerEnderConverter extends ContainerDeadCraft{
 	private TileEntityEnderConverter te;
 	

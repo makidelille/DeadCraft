@@ -3,6 +3,7 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
+import mak.dc.items.ItemWrench;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
@@ -109,22 +110,32 @@ public class BlockGodBottler extends BlockDeadCraft {
 	}
 	
 	@Override
-	public void onWrenched(World world, int x, int y, int z, int side,float hitX, float hitY, float hitZ) {
-		if(side <= 1) return;
+	public void onWrenched(World world, int x, int y, int z,EntityPlayer player, int side,float hitX, float hitY, float hitZ) {
 		TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 		if(world.getBlockMetadata(x, y, z) == 4) te = te.getPair();
-		switch(side) {
-		case 2 : side = 0;
-			break;
-		case 3 : side = 2;
-			break;
-		case 4 : side = 3;
-			break;
-		case 5 : side = 1;
-			break;
+		if(te == null) return;
+		if(player.isSneaking()) {
+			if(side <= 1) return;
+			switch(side) {
+			case 2 : side = 0;
+				break;
+			case 3 : side = 2;
+				break;
+			case 4 : side = 3;
+				break;
+			case 5 : side = 1;
+				break;
+			}
+			world.setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, side, 1|2);
+			world.notifyBlocksOfNeighborChange(te.xCoord,  te.yCoord+ 1, te.zCoord, this);
+		}else{
+			ItemStack wrench = player.inventory.getCurrentItem();
+			if(wrench == null) return; //should never execute
+			if(ItemWrench.hasBlockCoord(wrench)) {
+				te.setPowerSource(ItemWrench.getBlockCoord(wrench));
+				ItemWrench.removeBlockCoord(wrench);
+			}
 		}
-		world.setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, side, 1|2);
-		world.notifyBlocksOfNeighborChange(te.xCoord,  te.yCoord+ 1, te.zCoord, this);
 	}
 	
 	@Override

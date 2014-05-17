@@ -1,23 +1,20 @@
 package mak.dc.items;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import mak.dc.DeadCraft;
 import mak.dc.blocks.BlockDeadCraft;
-import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
@@ -42,14 +39,35 @@ public class ItemWrench extends Item {
     }
 
 
+    @Override
+    public boolean hasEffect(ItemStack par1ItemStack, int pass) {
+    	return hasBlockCoord(par1ItemStack);
+    }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
-    	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
+    	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+    		list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
+    		if(this.hasBlockCoord(is)){
+	    		int[] coords = getBlockCoord(is);
+	    		String head = "Bind to :";
+	    		String x = "X : " + coords[0];
+	    		String y = "Y : " + coords[1];
+	    		String z = "Z : " + coords[2];
+
+	    		list.add(head);
+	    		list.add(x);
+	    		list.add(y);
+	    		list.add(z);
+	    		
+	    	}
+    	}
     	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 	    	String infos0 = EnumChatFormatting.GREEN +StatCollector.translateToLocal("dc.wrench.info.change");
 	    	list.add(infos0);
+	    	
+	    	
     	}
     	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
     		String infos1 = EnumChatFormatting.GRAY + StatCollector.translateToLocal("dc.wrench.info.wrenchMode") + " : "+EnumChatFormatting.YELLOW + version[is.getItemDamage()];
@@ -107,7 +125,7 @@ public class ItemWrench extends Item {
             if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
-                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z, side, hitX, hitY,hitZ);
+                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z,player, side, hitX, hitY, hitZ);
                         break;
                     case 1: 
                     	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);
@@ -164,5 +182,47 @@ public class ItemWrench extends Item {
             is.setItemDamage(is.getItemDamage() < 2 ? (is.getItemDamage() + 1) : 0);
         }
         return is;
+    }
+    public static boolean hasBlockCoord(ItemStack is) {
+    	NBTTagCompound tag = is.getTagCompound();
+    	return tag == null ? false : tag.hasKey("coord");
+    }
+    
+    public static void removeBlockCoord(ItemStack is) {
+    	NBTTagCompound tag = is.getTagCompound();
+    	if(tag == null) return;
+    	if(tag.hasKey("coord")) tag.removeTag("coord");
+    	is.setTagCompound(tag);
+    }
+    
+    
+    public static void saveBlockCoord(ItemStack is, int x, int y, int z) {
+    	NBTTagCompound coord = new NBTTagCompound();
+    	NBTTagCompound tag = is.getTagCompound();
+    	if(tag == null) {
+    		tag = new NBTTagCompound();
+    	}if(tag.hasKey("coord")) {
+    		tag.removeTag("coord");
+    	}
+    	coord.setInteger("x", x);
+    	coord.setInteger("y", y);
+    	coord.setInteger("z", z);
+    	
+    	tag.setTag("coord", coord);
+    	
+    	is.setTagCompound(tag);
+    }
+    
+    public static int[] getBlockCoord(ItemStack is) {
+    	int[] re = new int[3];
+    	NBTTagCompound tag = is.getTagCompound();
+    	if(tag == null || !tag.hasKey("coord")) return re;
+    	NBTTagCompound coord = tag.getCompoundTag("coord");
+    	
+    	re[0] = coord.getInteger("x");
+    	re[1] = coord.getInteger("y");
+    	re[2] = coord.getInteger("z");
+    	
+    	return re;
     }
 }
