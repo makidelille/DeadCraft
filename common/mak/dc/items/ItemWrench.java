@@ -115,6 +115,7 @@ public class ItemWrench extends Item {
     public IIcon getIconFromDamage (int par1) {
         return par1 <= 2 && par1 >= 0 ? icons[par1] : icons[0];
     }
+    
 
 
     @Override
@@ -163,14 +164,10 @@ public class ItemWrench extends Item {
     	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA  + "" +EnumChatFormatting.BOLD + te.getBlockType().getLocalizedName()));
     	player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW  +"====" + StatCollector.translateToLocal("dc.wrench.header.allowed") +"===="));
 
-    	if(te instanceof TileEntityGodBottler) {
-    		if(((TileEntityGodBottler) te).isTop()) player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.wrench.isTop")));
-    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.power")+ " : " + ((TileEntityGodBottler) te).getPower() + "/" +  ((TileEntityGodBottler) te).MAXPOWER));
-    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.wrench.redstone")+ " : " + (((TileEntityGodBottler) te).isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) )));
-    	}
-    	if(te instanceof TileEntityEggSpawner) {
-    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.power")+ " : " + ((TileEntityEggSpawner) te).getPower() + "/" +  ((TileEntityEggSpawner) te).MAXPOWER));
-    		player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.progress")+ " : " + ((TileEntityEggSpawner) te).getProgress() + "%"));
+    	List<String> infos = te.getInfo();
+    	if(infos == null || infos.size() == 0) return;
+    	for(int i = 0; i< infos.size(); i++) {
+    		player.addChatComponentMessage(new ChatComponentText(infos.get(i)));
     	}
     }
 
@@ -180,6 +177,8 @@ public class ItemWrench extends Item {
     public ItemStack onItemRightClick (ItemStack is, World world, EntityPlayer player) {
         if(!world.isRemote && player.isSneaking()) {
             is.setItemDamage(is.getItemDamage() < 2 ? (is.getItemDamage() + 1) : 0);
+        }else if(!world.isRemote) {
+        	if(hasBlockCoord(is)) removeBlockCoord(is);
         }
         return is;
     }

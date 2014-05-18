@@ -1,8 +1,10 @@
 package mak.dc.tileEntities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,8 +22,6 @@ public class TileEntityDeadCraft extends TileEntity {
         this.locked = false;
         this.owner = "null";
         this.allowed = new ArrayList();
-        
-
     }
 
     public void setOwner(String username) {
@@ -139,6 +139,12 @@ public class TileEntityDeadCraft extends TileEntity {
 	public  boolean hasInventory() {
 		return this instanceof IInventory;
 	}
+	
+	public List<String> getInfo() {
+		return null;
+	}
+
+	public void syncWithplayer(EntityPlayerMP player) {}
 
 
 

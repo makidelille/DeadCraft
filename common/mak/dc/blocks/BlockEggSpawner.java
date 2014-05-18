@@ -3,9 +3,11 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
+import mak.dc.items.ItemWrench;
 import mak.dc.lib.IBTInfos;
 import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
+import mak.dc.tileEntities.TileEntityGodBottler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -108,6 +110,17 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		world.spawnParticle("portal", xCoord, yCoord, zCoord, vecX, vecY, vecZ);
 		}
 		
+	}
+	
+	@Override
+	public void onWrenched(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		TileEntityEggSpawner te = (TileEntityEggSpawner) world.getTileEntity(x, y, z);
+		if(te == null) return;
+		ItemStack wrench = player.inventory.getCurrentItem();
+		if(wrench == null) return; //should never execute
+		if(ItemWrench.hasBlockCoord(wrench)) {
+			te.setPowerSource(ItemWrench.getBlockCoord(wrench));
+		}
 	}
 	
 	

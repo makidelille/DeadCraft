@@ -1,8 +1,10 @@
 package mak.dc.tileEntities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mak.dc.items.DeadCraftItems;
 import mak.dc.items.ItemCrystal;
-import mak.dc.lib.IBTInfos;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -13,15 +15,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 import cpw.mods.fml.common.FMLLog;
 
-public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInventory,ISidedInventory {
+public class TileEntityEggSpawner extends TileEntityDeadCraftWithPower implements IInventory,ISidedInventory {
 		
 	private static final byte deadcraftId = 1;
 
 	public static final int MAXPOWER = 100_000;
 
-	public static final int CHARGESPEED = 1_000;
+	public static final int CHARGESPEED = 50;
 	public static final int POWERUSAGE = 5;
 
 	private static final int[] slots = {0,1,2,3,4,5,6,7};
@@ -41,11 +44,8 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	private byte redState = 0;
 	private byte mode = 1;
 
-	private int power;
-
-
 	public TileEntityEggSpawner() {
-		super(true);
+		super();
 		invContent = new ItemStack[8];
 		setStarted((byte) 0);
 		created = false;
@@ -55,8 +55,9 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 		if(!worldObj.isRemote) {
-			if(this.getStackInSlot(6) != null)
+			if(!hasReceive && this.getStackInSlot(6) != null)
 				charge();
 			if(hasStarted() && getProgress() < 100) {
 				if(this.power - POWERUSAGE > 0) {
@@ -212,7 +213,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		compound.setInteger("eggInStock", eggInStock);
 		compound.setByte("redState", redState);
 		compound.setByte("mode", mode);
-		compound.setInteger("power", power);
 	}
 	
 	@Override
@@ -236,7 +236,6 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 		eggInStock = compound.getInteger("eggInStock");
 		redState = compound.getByte("redState");
 		mode = compound.getByte("mode");
-		power = compound.getInteger("power");
 
 	}
 
@@ -436,6 +435,23 @@ public class TileEntityEggSpawner extends TileEntityDeadCraft implements IInvent
 	@Override
 	public boolean canExtractItem(int var1, ItemStack var2, int var3) {
 		return false;
+	}
+
+	@Override
+	protected int getMaxChargeSpeed() {
+		return CHARGESPEED;
+	}
+
+	@Override
+	protected int getMaxPower() {
+		return MAXPOWER;
+	}
+	
+	@Override
+	public List<String> getInfo() {
+		ArrayList<String> re = (ArrayList<String>) super.getInfo();
+		re.add(StatCollector.translateToLocal("dc.progress")+ " : " + this.getProgress() + "%");
+		return re;
 	}
 
 

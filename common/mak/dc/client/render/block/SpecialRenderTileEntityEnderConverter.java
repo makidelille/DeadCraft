@@ -24,7 +24,8 @@ import org.lwjgl.opengl.GL11;
 
 public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRenderer implements IInventoryRenderer{
 
-	public static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.ENDERCONVERTER_TEXT_LOC);
+	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID , Textures.ENDERCONVERTER_TEXT_LOC);
+    private static final ResourceLocation textureBeam = new ResourceLocation("textures/entity/beacon_beam.png");
 	private static final float hp = 1f/32f;
 	private static final float vp = 1f/192f;
 	private static final float p = 1f / 16f;
@@ -200,7 +201,7 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
 	        	renderBlock.renderBlockAsItem(Block.getBlockFromItem(is.getItem()), is.getItemDamage(), 1f);
 	        }else {
 	        	GL11.glScalef(0.4f, 0.4f, 0.4f);
-	        	GL11.glTranslatef(-0.5f, 0.6f ,0.05f);
+	        	GL11.glTranslatef(-0.475f, 0.6f ,0.05f);
 	        	
 	            for (int renderPass = 0; renderPass < is.getItem().getRenderPasses(is.getItemDamage()); renderPass++) {
 	                IIcon icon = is.getItem().getIcon(is, renderPass);
@@ -224,6 +225,36 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
+		
+		
+		GL11.glPushMatrix();	
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glColor4f(1f, 1f, 1f, 0.8f);
+		Minecraft.getMinecraft().renderEngine.bindTexture(textureBeam);
+		GL11.glTranslatef(0, 0.25f, 0);
+		GL11.glScalef(0.07f, 0.5f, 0.07f);
+		GL11.glRotatef(a *1.5f, 0, 1f, 0);
+		for(int i = 0; i< 4 ; i++) {
+			GL11.glRotatef(90f, 0, 1f, 0);
+			GL11.glTranslatef(-0.5f, 0, 0);
+			Tessellator tess = Tessellator.instance;
+			tess.startDrawingQuads();
+				tess.addVertexWithUV(0, 1, 0.5f, 0, 0);
+				tess.addVertexWithUV(0, 0, 0.5f, 0, 1);
+				tess.addVertexWithUV(1, 0, 0.5f, 1, 1);
+				tess.addVertexWithUV(1, 1, 0.5f, 1, 0);
+			tess.draw();
+			GL11.glTranslatef(0.5f, 0, 0);
+
+		}
+		GL11.glColor4f(1f, 1f, 1f, 1f);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
+		
+		
+		
 	}
 
 }

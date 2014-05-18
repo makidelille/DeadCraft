@@ -11,7 +11,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerGodBottler extends ContainerDeadCraft{
+	//FIXME client dupe bug on the crystal
 
+	
 	private TileEntityGodBottler te;
 	private InventoryPlayer invPlayer;
 	

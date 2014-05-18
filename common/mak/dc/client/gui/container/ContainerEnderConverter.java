@@ -24,6 +24,7 @@ public class ContainerEnderConverter extends ContainerDeadCraft{
 
 		for (Object player : crafters) {
 			((ICrafting)player).sendProgressBarUpdate(this, 0, te.getPower());
+			((ICrafting)player).sendProgressBarUpdate(this, 1, te.getPowerLeft());
         }
     }
     
@@ -31,6 +32,8 @@ public class ContainerEnderConverter extends ContainerDeadCraft{
     public void addCraftingToCrafters (ICrafting crafter) {
         super.addCraftingToCrafters(crafter);
 		crafter.sendProgressBarUpdate(this, 0, te.getPower());
+		crafter.sendProgressBarUpdate(this, 1, te.getPowerLeft());
+
     }
     
     @Override
@@ -38,6 +41,8 @@ public class ContainerEnderConverter extends ContainerDeadCraft{
     	super.updateProgressBar(id, data);
     	switch(id) {
     	case 0: te.setPower(data);
+    	break;
+    	case 1 : te.setPowerLeft(data);
     	break;
     	}
     }

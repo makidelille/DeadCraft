@@ -3,6 +3,7 @@ package mak.dc.tileEntities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,15 +13,17 @@ import mak.dc.items.ItemGodCan;
 import mak.dc.items.crafting.CanCraftingManager;
 import mak.dc.lib.IBTInfos;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
-import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory{
 	
@@ -49,7 +52,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	/**
 	 * rate of the charge and of the decharge
 	 */
-	private static final int MAXCHARGESPEED = 100;
+	private static final int MAXCHARGESPEED = 10;
 	private static final int POWERUSAGE = 10;
 	private static final int powerSlot = 0;
 	
@@ -74,20 +77,15 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	private boolean hasIngredientsChanged;
 	
 	private ArrayList<EnumBuildError> buildErrors = new ArrayList<EnumBuildError>();
-		
-	/**Main constructor 
-	 * @param top
-	 */
-	public TileEntityGodBottler(boolean top) {
-		super(true);
+	
+	
+	public TileEntityGodBottler() {
+		super();
 		inventory = new ItemStack[9];
 		this.clientTick = 0;
 		this.workedTime = 0;
 	}
-	
-	
-	
-	 
+		 
 	public boolean canUpdate() {
 		return true;
 	}	
@@ -102,7 +100,10 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 			sync();
 			this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		}
-		if(pair == null) return;
+		if(pair == null) {
+			isSync = false;
+			return;
+		}
 		if(worldObj.isRemote) {
 			if(this.isRSPowered() ) this.setClientTick(this.getClientTick() + 1);
 			else if(!this.isRSPowered()) this.setClientTick(this.getClientTick() - 1);			
@@ -286,6 +287,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 		DeadCraft.packetPipeline.sendToDimension(new DeadCraftGodBottlerPacket(this), this.worldObj.getWorldInfo().getVanillaDimension());
 		isSync = true;
 	}
+	
+	@Override
+	public void syncWithplayer(EntityPlayerMP player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftGodBottlerPacket(this), player);
+	}
 
 
 	public ItemStack decrStackSize(int slot, int nb) {
@@ -317,7 +323,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 					setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 				}
 			}
-	//		this.power = nbtTagCompound.getInteger("power");
 			this.workedTime = nbtTagCompound.getInteger("workTime");
 		}
 		this.isSync = false;
@@ -342,7 +347,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 				}
 			}
 			nbtTagCompound.setTag("Items", items);
-	//		nbtTagCompound.setInteger("power", this.power);
 			nbtTagCompound.setInteger("workTime", workedTime);
 		}
 		this.isSync = false;
@@ -662,12 +666,17 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 		return MAXCHARGESPEED;
 	}
 
-
-
-
 	@Override
 	protected int getMaxPower() {
 		return MAXPOWER;
+	}
+	
+	@Override
+	public List<String> getInfo() {
+		ArrayList<String> re = (ArrayList<String>) (this.isTop() ?pair.getInfo() :  super.getInfo());
+		if(this.isTop()) re.add(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.wrench.isTop"));
+		if(!this.isTop())re.add(StatCollector.translateToLocal("dc.wrench.redstone")+ " : " + (this.isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) ));
+		return re;
 	}
 
 	

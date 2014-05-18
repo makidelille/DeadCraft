@@ -1,23 +1,20 @@
 package mak.dc.event;
 
 
-import mak.dc.entity.ai.EntityAITemptMindController;
+import java.util.List;
+
 import mak.dc.items.ItemGodCan;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import mak.dc.tileEntities.TileEntityDeadCraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class DeadCraftEvents {
 	
@@ -48,7 +45,17 @@ public class DeadCraftEvents {
 	
 	@SubscribeEvent
 	public void onplayerjoined(EntityJoinWorldEvent e){
-		
+		//TODO sync with one player create a method in tileDC
+		if (!(e.entity instanceof EntityPlayer)) return;
+		World world = e.world;
+		if(world != null) {
+			List tes = world.loadedTileEntityList;
+			for (int i = 0; i<tes.size(); i++) {
+				if(tes.get(i) instanceof TileEntityDeadCraft) {
+					((TileEntityDeadCraft)tes.get(i)).syncWithplayer((EntityPlayerMP) e.entity);
+				}
+			}
+		}
 	}
 	
 }

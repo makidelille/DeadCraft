@@ -2,18 +2,18 @@ package mak.dc.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import mak.dc.DeadCraft;
 import mak.dc.items.ItemWrench;
-import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityEnderConverter;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
 public class BlockEnderConverter extends BlockDeadCraft{
 
@@ -21,6 +21,7 @@ public class BlockEnderConverter extends BlockDeadCraft{
 
 	public BlockEnderConverter() {
 		super(Material.iron);
+		this.setBlockTextureName("stone");
 	}
 	
 	@Override
@@ -54,9 +55,11 @@ public class BlockEnderConverter extends BlockDeadCraft{
 						te.setInventorySlotContents(0, is);
 						player.setCurrentItemOrArmor(0, null);
 						return true;
-					}else{
-						FMLNetworkHandler.openGui(player, DeadCraft.instance, 3, world, x, y, z);
 					}
+				}
+				if(player != null){
+					FMLNetworkHandler.openGui(player, DeadCraft.instance, 3, world, x, y, z);
+					return true;
 				}
 			}
 			
@@ -72,9 +75,26 @@ public class BlockEnderConverter extends BlockDeadCraft{
 	
 	
 	@Override
-	public void randomDisplayTick(World world, int x,int y, int z, Random rand) {
-		//TODO particles
-		
+	public void randomDisplayTick(World world, int x,int y, int z, Random ran) {
+		TileEntityEnderConverter te = (TileEntityEnderConverter) world.getTileEntity(x, y, z);
+		if(te != null && te.getStackInSlot(0) != null) {
+			for (int i = 0; i < 250; i++) {
+				double vx;
+				double vz;
+				double coef = ran.nextDouble();
+				if(ran.nextBoolean()) {
+					 vx = ran.nextDouble() - 0.5d;
+					 vz =  0;
+				}else{
+					 vx =  0;
+					 vz = ran.nextDouble() - 0.5d;
+				}
+				EntitySmokeFX fx = new EntitySmokeFX(world, x +0.5, y +0.4 , z + 0.5, vx * coef, 0, vz * coef,0.5f);
+	
+				fx.setRBGColorF(0.8f + ran.nextFloat()/10, 1f, 0.8f + ran.nextFloat()/10);
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);		
+			}
+		}
 		
 }
 

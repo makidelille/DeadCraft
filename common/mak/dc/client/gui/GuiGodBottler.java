@@ -23,8 +23,6 @@ public class GuiGodBottler extends GuiCustom {
 	private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.GODBOTTLER_GUI_TEXT_LOC);
 	private static final ResourceLocation textUtil = new ResourceLocation(Lib.MOD_ID, Textures.UTIL_GUI_TEXT_LOC);
 	private TileEntityGodBottler te;
-
-//FIXME client dupe bug on the crystal
 	
 	public GuiGodBottler(InventoryPlayer inventory, TileEntityGodBottler te2,int iD) {
 		super(new ContainerGodBottler(inventory, te2),iD);
@@ -71,7 +69,7 @@ public class GuiGodBottler extends GuiCustom {
        rect.drawHoverString(x, y, (StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getPower() + "/" + te.MAXPOWER/1000f + StatCollector.translateToLocal("dc.kilo")));
        
        if(!te.hasStarted())
-    	   this.drawInfoPanel(this.getProblems(), StatCollector.translateToLocal("dc.block.godbottler.gui.error.header"), -93, 8, 92);
+    	   this.drawInfoPanel(this.getProblems(), StatCollector.translateToLocal("dc.block.godBottler.gui.error.header"), -93, 8, 92);
        GL11.glEnable(GL11.GL_LIGHTING);
 	}
 

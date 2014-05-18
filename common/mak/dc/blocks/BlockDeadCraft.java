@@ -1,5 +1,7 @@
 package mak.dc.blocks;
 
+import java.util.List;
+
 import mak.dc.items.ItemWrench;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.Block;
@@ -67,41 +69,49 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
     	if(!world.isRemote) {
 	    	if(world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
-	            if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserAllowed(player.getCommandSenderName())) return ;
-	            if(player.isSneaking() && ((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName()) && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWrench) {
+	    		if(!((TileEntityDeadCraft)world.getTileEntity(x, y, z)).isUserCreator(player.getCommandSenderName())) return ;
+	           
+	    		if(player.isSneaking() && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWrench) {
 	            	this.breakBlock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 	            	return;
 	            	}
 	    }}
         return ;
 	}
+    
   
     
     @Override
     public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
-    	ItemStack is = new ItemStack(this);
-    	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
-    	is.setTagCompound(te.writeNBTData());
-    	this.dropBlockAsItem(world, x, y, z, is);   
+    	//FIXME DUPE BUG
     	
-    	if(te.hasInventory() ) {
-    		IInventory teinv = ((IInventory) te);
-    		for (int i=0 ; i < ((IInventory) te).getSizeInventory(); i++) {
-    			ItemStack stack = teinv.getStackInSlotOnClosing(i);
-				
-				if (stack != null) {
-					float spawnX = x + world.rand.nextFloat();
-					float spawnY = y + world.rand.nextFloat();
-					float spawnZ = z + world.rand.nextFloat();
-					
-					EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);				
-					world.spawnEntityInWorld(droppedItem);
-				}}
-    			
+    	if(!world.isRemote) {
+	    	ItemStack is = new ItemStack(block);
+	    	is.stackSize = 1;
+	    	TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
+	    	if(te != null){
+	    		NBTTagCompound info = te.writeNBTData();
+	    		is.setTagCompound(info);   	
+		    	if(te.hasInventory() ) {
+		    		IInventory teinv = ((IInventory) te);
+		    		for (int i=0 ; i < teinv.getSizeInventory(); i++) {
+		    			ItemStack stack = teinv.getStackInSlotOnClosing(i);
+						
+						if (stack != null) {
+							float spawnX = x + world.rand.nextFloat();
+							float spawnY = y + world.rand.nextFloat();
+							float spawnZ = z + world.rand.nextFloat();
+							
+							EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);				
+							world.spawnEntityInWorld(droppedItem);
+						}}
+		    	}
+	    			
+	    	}
+	    	this.dropBlockAsItem(world, x, y, z, is);   
+	    	world.removeTileEntity(x, y, z);
+	    	world.setBlock(x, y, z, Blocks.air);
     	}
-    	
-    	world.removeTileEntity(x, y, z);
-    	world.setBlock(x, y, z, Blocks.air);
     }
     
     @Override
@@ -113,9 +123,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
         return false;
     }
   
-    public void onWrenched(World world,int x, int y, int z,EntityPlayer player, int side, float hitX, float hitY, float hitZ){
-    	
-    }
+    public void onWrenched(World world,int x, int y, int z,EntityPlayer player, int side, float hitX, float hitY, float hitZ){}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {

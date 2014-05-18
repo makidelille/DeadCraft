@@ -2,6 +2,8 @@ package mak.dc.util;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +32,12 @@ public class PowerManager {
 	}
 	
 	public void initialise(){
-		registerAsFuel(new ItemStack(Items.redstone), 10);
+		registerAsFuel(new ItemStack(Items.redstone), 100);
+		registerAsFuel(new ItemStack(Items.nether_star), 50_000);
+		registerAsFuel(new ItemStack(Blocks.dragon_egg), 150_000);
+
+		//TODO add fuels
+
 	}
 	
 }

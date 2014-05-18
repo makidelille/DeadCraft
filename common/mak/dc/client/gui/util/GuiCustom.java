@@ -136,7 +136,7 @@ public abstract class GuiCustom extends GuiContainer {
 	       int height = fontRendererObj.listFormattedStringToWidth(infoStr, max).size() +1;
 	       if(infoStr.isEmpty()) height =1;
 	       this.drawHoverRect(x, y, x + max -3, y + height * fontRendererObj.FONT_HEIGHT );
-	       this.drawInfoString(infoStr, "Infos", x, y, max);
+	       this.drawInfoString(infoStr, header, x, y, max);
 	}
 
 	

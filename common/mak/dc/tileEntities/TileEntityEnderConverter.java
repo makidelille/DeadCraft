@@ -1,7 +1,9 @@
 package mak.dc.tileEntities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import mak.dc.DeadCraft;
@@ -11,6 +13,7 @@ import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
 import mak.dc.util.PowerManager;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,15 +23,15 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 
 	
 	public static final int MAXPOWER = 5000;
-	
+	private static final int CHARGERATE = 50;
+
 	private static PowerManager powerManager = DeadCraft.powerManager.getInstance();
 	
 	private int power;
 	private ItemStack inv;
 	private boolean isSync;
 
-	private int activationTime;
-
+	private int powerInItem;
 	private HashMap<IPowerReceiver, Integer> receivers;
 	
 	public TileEntityEnderConverter() {
@@ -43,45 +46,51 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 		if(!worldObj.isRemote) {
 			if(!isSync) sync();
 			
-			
 			ItemStack fuel = this.getStackInSlot(0);
-			if(fuel != null) {
-				if(activationTime <= 0) {
-				
-					if(powerManager.isFuel(fuel)){
-						int powerInItem = powerManager.getPowerProduce(fuel);
-						if(power + powerInItem <= MAXPOWER) {
-							power += powerInItem;
-							fuel.stackSize--;
-							if(fuel.stackSize <= 0) {
-								this.setInventorySlotContents(0, null);
-								isSync = false;
-							}
-						}
-					}else{ //is not a fuel
-						worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord +0.5d, yCoord +0.5d, zCoord+0.5d, fuel));
-						setInventorySlotContents(0, null);
+			if(fuel != null && powerInItem <= 0) {
+				if(powerManager.isFuel(fuel)){
+					this.powerInItem = powerManager.getPowerProduce(fuel);
+					fuel.stackSize--;
+					if(fuel.stackSize <= 0) {
+						this.setInventorySlotContents(0, null);
+						isSync = false;
 					}
-				}else{
-					activationTime--;
 				}
-			}else{
-				activationTime = 10;
+				if(!powerManager.isFuel(fuel)){ //is not a fuel
+					worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord +0.5d, yCoord +0.5d, zCoord+0.5d, fuel));
+					setInventorySlotContents(0, null);
+				}
 			}
-			if(!receivers.isEmpty()) sendPower();
+			if(powerInItem > 0) {
+				if(power + CHARGERATE < MAXPOWER) {
+					powerInItem -= CHARGERATE;
+					power +=CHARGERATE;			
+				}else{
+					int space = MAXPOWER - power;
+					powerInItem -= space;
+					power += space;
+				}
+			}
+					
+		if(!receivers.isEmpty()) sendPower();
 			
 		}
 	}
 	
 	public void sync() {
 		DeadCraft.packetPipeline.sendToDimension(new DeadCraftEnderConverterPacket(this), worldObj.getWorldInfo().getVanillaDimension());
-
 	}
 	
+	@Override
+	public void syncWithplayer(EntityPlayerMP player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftEnderConverterPacket(this), player);
+	}
+		
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		this.power = nbtTagCompound.getInteger("power");
+		this.powerInItem = nbtTagCompound.getInteger("powerItem");
 		NBTTagList items = (NBTTagList) nbtTagCompound.getTag("Items");
 		for (int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
@@ -97,6 +106,7 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("power", power);
+		nbtTagCompound.setInteger("powerItem", powerInItem);
 	
 		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < getSizeInventory(); i++) {		
@@ -217,6 +227,24 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 
 	public void setPower(int power) {
 		this.power = power;
+	}
+	
+	public int getPowerLeft() {
+		return this.powerInItem;
+	}
+
+	public void setPowerLeft(int data) {
+		this.powerInItem = data;
+		
+	}
+	
+	@Override
+	public List<String> getInfo() {
+		ArrayList<String> re = new ArrayList();
+		re.add("power : " + this.power);
+		re.add("power left in item :" + this.powerInItem);
+		re.add("connections :"  + this.receivers.size());
+		return re;
 	}
 
 }

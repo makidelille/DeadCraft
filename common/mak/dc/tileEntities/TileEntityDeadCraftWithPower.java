@@ -1,21 +1,27 @@
 package mak.dc.tileEntities;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import java.util.ArrayList;
+import java.util.List;
+
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft implements IPowerReceiver{
 
-	protected IPowerSender powerSource;
+	protected ArrayList<IPowerSender> powerSources;
 	protected int power;
 	protected boolean hasReceive;
+	private NBTTagCompound coords;
 
 
 
 
-	public TileEntityDeadCraftWithPower(boolean isManagable) {
-		super(isManagable);
+	public TileEntityDeadCraftWithPower() {
+		super(true);
+		powerSources = new ArrayList<IPowerSender>();
 	}
 
 	
@@ -23,34 +29,42 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		this.power = nbtTagCompound.getInteger("power");
-		NBTTagCompound coord = (NBTTagCompound) nbtTagCompound.getTag("coord");
-		if(coord != null) {
-			int[] coords = {coord.getInteger("x"),coord.getInteger("y"),coord.getInteger("z")};
-			this.setPowerSource(coords);
-		}
+		this.coords = (NBTTagCompound) nbtTagCompound.getTag("coord");
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 		nbtTagCompound.setInteger("power", power);
-		if(powerSource != null) {
-			NBTTagCompound coord = new NBTTagCompound();
-			coord.setInteger("x", ((TileEntity)powerSource).xCoord);
-			coord.setInteger("y", ((TileEntity)powerSource).yCoord);
-			coord.setInteger("z", ((TileEntity)powerSource).zCoord);
-			nbtTagCompound.setTag("coord", coord);
+		if(!powerSources.isEmpty()) {
+			NBTTagCompound coords = new NBTTagCompound();
+			coords.setInteger("size", powerSources.size());
+			for(int i = 0; i< powerSources.size(); i++) {
+				IPowerSender powerSource = powerSources.get(i);
+				int[] coord = {((TileEntity)powerSource).xCoord,((TileEntity)powerSource).yCoord,((TileEntity)powerSource).zCoord};
+				coords.setIntArray("" +  i, coord);
+			}
+			nbtTagCompound.setTag("coord", coords);
 		}
 	}
 
 
 	@Override
 	public void updateEntity() {
-		if(power < this.getMaxPower()) {
-			int dif = this.getMaxPower() - power <= this.getMaxChargeSpeed() ? this.getMaxPower() - power : getMaxChargeSpeed();
-			this.askPower(dif);				
+		if(!worldObj.isRemote) {
+			if(power <= this.getMaxPower()) {
+				int dif = this.getMaxPower() - power <= this.getMaxChargeSpeed() ? this.getMaxPower() - power : getMaxChargeSpeed();
+				this.askPower(dif);				
+			}if(coords != null && (this.powerSources == null || this.powerSources.isEmpty()) ) {
+					int size = coords.getInteger("size");
+					for(int i = 0; i< size; i++) {
+						int[] coord = coords.getIntArray("" + i);
+						setPowerSource(coord);
+					}
+					coords = null;
+			}
+			
 		}
-		//TODO same bug of paring as always :d
 
 	}
 
@@ -67,7 +81,7 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 		
 		TileEntity te = worldObj.getTileEntity(x, y, z);
 		if(te == null) return;
-		if(te instanceof IPowerSender) this.powerSource = (IPowerSender) te;
+		if(te instanceof IPowerSender) this.powerSources.add((IPowerSender) te);
 				
 	}
 
@@ -83,14 +97,28 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 		
 	}
 
-
-
-
 	@Override
 	public void askPower(int amount) {
-		if(this.powerSource == null) return;
-		this.powerSource.onAskedPower(this, amount);
+		if(powerSources != null && !powerSources.isEmpty() ) {
+			int size = powerSources.size();
+			for(int i=0; i< powerSources.size(); i++) {
+				IPowerSender powerSource = powerSources.get(i);
+				if(this.powerSources == null) continue;
+				powerSource.onAskedPower(this, amount/size);
+			}
+		}
 		
+	}
+	
+	
+	@Override
+	public List<String> getInfo() {
+		ArrayList<String> re = new ArrayList<>();
+		re.add(StatCollector.translateToLocal("dc.power")+ " : " + this.power + "/" +  this.getMaxPower());
+		if(powerSources != null && !powerSources.isEmpty()) {
+			re.add("conection number" + " : " + powerSources.size());
+		}
+		return re;
 	}
 
 }

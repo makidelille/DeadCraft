@@ -40,7 +40,7 @@ public class BlockGodBottler extends BlockDeadCraft {
 	
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileEntityGodBottler(var2 != 4);
+		return new TileEntityGodBottler();
 	}
 	
 	@Override
@@ -77,7 +77,10 @@ public class BlockGodBottler extends BlockDeadCraft {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
 			TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
-			if(te.isTop()) te = te.getPair();			
+			if(te.isTop()) {
+				te = te.getPair();		
+				if(te == null) return false;
+			}
 			if(!super.onBlockActivated(world, te.xCoord, te.yCoord, te.zCoord, player, side, hitX, hitY, hitZ)) {
 				 if(player.getCurrentEquippedItem() == null){
 					 FMLNetworkHandler.openGui(player, DeadCraft.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
@@ -133,7 +136,6 @@ public class BlockGodBottler extends BlockDeadCraft {
 			if(wrench == null) return; //should never execute
 			if(ItemWrench.hasBlockCoord(wrench)) {
 				te.setPowerSource(ItemWrench.getBlockCoord(wrench));
-				ItemWrench.removeBlockCoord(wrench);
 			}
 		}
 	}
