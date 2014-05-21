@@ -3,8 +3,12 @@ package mak.dc.tileEntities;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import mak.dc.DeadCraft;
+import mak.dc.network.packet.DeadCraftPowerSourcesPacket;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
@@ -15,6 +19,8 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	protected int power;
 	protected boolean hasReceive;
 	private NBTTagCompound coords;
+	private boolean isSync;
+	private boolean sourceChanged;
 
 
 
@@ -52,6 +58,8 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
+			if(sourceChanged) checkSources();
+			if(!isSync) sync();
 			if(power <= this.getMaxPower()) {
 				int dif = this.getMaxPower() - power <= this.getMaxChargeSpeed() ? this.getMaxPower() - power : getMaxChargeSpeed();
 				this.askPower(dif);				
@@ -63,30 +71,82 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 					}
 					coords = null;
 			}
-			
+			this.hasReceive = false;
 		}
 
 	}
-
-	protected abstract int getMaxChargeSpeed();
-	protected abstract int getMaxPower();
-
-
 
 	public void setPowerSource(int[] blockCoord) {
 		int x = blockCoord[0];
 		int y = blockCoord[1];
 		int z = blockCoord[2];
 		
-		
-		TileEntity te = worldObj.getTileEntity(x, y, z);
+		TileEntity te = worldObj.getTileEntity(x, y, z);		
 		if(te == null) return;
-		if(te instanceof IPowerSender) this.powerSources.add((IPowerSender) te);
-				
+		if(te instanceof IPowerSender && !this.powerSources.contains(te)) this.powerSources.add((IPowerSender) te);
+		isSync = false;
+		
 	}
 
 
+	private void checkSources() {
+		for(int i = 0; i< this.powerSources.size(); i++) {
+			TileEntity source  = (TileEntity) this.powerSources.get(i);
+			if(source == null) {
+				this.powerSources.remove(i);
+				isSync= false;
+				continue;
+			}
+			TileEntity te = worldObj.getTileEntity(source.xCoord, source.yCoord, source.zCoord);
+			if(source != te) {
+				this.powerSources.remove(i);
+				isSync= false;
+				continue;
+			}
+			
+		}
+		sourceChanged = false;
+		
+	}
 
+
+	private void sync() {
+		DeadCraft.packetPipeline.sendToDimension(new DeadCraftPowerSourcesPacket(this), worldObj.getWorldInfo().getVanillaDimension());
+		isSync = true;
+	}
+	
+	@Override
+	public void syncWithplayer(EntityPlayerMP player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftPowerSourcesPacket(this), player);
+	}
+
+
+	protected abstract int getMaxChargeSpeed();
+	protected abstract int getMaxPower();
+
+	@Override
+	public void resetPowerSource() {
+		this.powerSources = new ArrayList<IPowerSender>();		
+	}
+	
+	@Override
+	public void updatePowerSource(int[] blockCoord) {
+		int x = blockCoord[0];
+		int y = blockCoord[1];
+		int z = blockCoord[2];
+		
+		TileEntity te = worldObj.getTileEntity(x, y, z);		
+		if(te == null) return;
+		if(te instanceof IPowerSender && !this.powerSources.contains(te)) this.powerSources.add((IPowerSender) te);
+		if(te instanceof IPowerSender && this.powerSources.contains(te)) this.powerSources.remove((IPowerSender) te);
+		isSync = false;
+	}
+	
+	@Override
+	public List<IPowerSender> getPowerSource() {
+		return powerSources == null ? new ArrayList() : this.powerSources;
+		
+	}
 
 	@Override
 	public void recievePower(int amount) {
@@ -94,6 +154,7 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 			this.power += amount;
 			this.hasReceive = true;
 		}
+		if(amount == 0) this.hasReceive = false;		
 		
 	}
 
@@ -119,6 +180,11 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 			re.add("conection number" + " : " + powerSources.size());
 		}
 		return re;
+	}
+	
+	@Override
+	public void setSourceChange() {
+		this.sourceChanged  = true;
 	}
 
 }

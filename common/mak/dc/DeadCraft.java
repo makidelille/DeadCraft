@@ -2,6 +2,7 @@ package mak.dc;
 
 import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.config.ConfigHandler;
+import mak.dc.event.DeadCraftClientEvent;
 import mak.dc.event.DeadCraftEvents;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.items.crafting.CanCraftingManager;
@@ -88,6 +89,7 @@ public class DeadCraft {
 			 packetPipeline.postInitialise();
 			 canCraftingManager.postInitialise();
 			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
+			 if(event.getSide().isClient() )MinecraftForge.EVENT_BUS.register(new DeadCraftClientEvent());
 			
 			 logger.log(Level.INFO, "DeadCraft is loaded");
 		}

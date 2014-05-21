@@ -111,21 +111,5 @@ public class BlockEggSpawner extends BlockDeadCraft {
 		}
 		
 	}
-	
-	@Override
-	public void onWrenched(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		TileEntityEggSpawner te = (TileEntityEggSpawner) world.getTileEntity(x, y, z);
-		if(te == null) return;
-		ItemStack wrench = player.inventory.getCurrentItem();
-		if(wrench == null) return; //should never execute
-		if(ItemWrench.hasBlockCoord(wrench)) {
-			te.setPowerSource(ItemWrench.getBlockCoord(wrench));
-		}
-	}
-	
-	
-	
-	
-	
 
 }

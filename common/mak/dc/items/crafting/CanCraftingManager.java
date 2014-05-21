@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLLog;
 import mak.dc.util.canEffects.CanEffect;
+import mak.dc.util.canEffects.CanEffectDragon;
 import mak.dc.util.canEffects.CanEffectFly;
 import mak.dc.util.canEffects.CanEffectPotion;
 import net.minecraft.init.Blocks;
@@ -111,7 +112,8 @@ public class CanCraftingManager {
 		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.dirt), new ItemStack(Blocks.diamond_block)}, new CanEffectPotion(getNextAvailableId(), 20, "potion_speed", new PotionEffect[] {new PotionEffect(1, 1, 5),new PotionEffect(8, 1, 5)}));
 		this.addRecipe(new ItemStack[] { new ItemStack(Items.apple)	}, new CanEffectPotion(getNextAvailableId(), 20, "potion_resistance", new PotionEffect[] {new PotionEffect(11,1,5) ,new PotionEffect(12,1,5)}));
 		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.acacia_stairs) }, new CanEffectPotion(getNextAvailableId(), 20, "potion_haste", new PotionEffect[] {new PotionEffect(3,1,1000) ,new PotionEffect(3,1,1000)}));
-
+		
+		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.dragon_egg)}, new CanEffectDragon(getNextAvailableId()));
 		//TODO addRecipes
 		
 	}

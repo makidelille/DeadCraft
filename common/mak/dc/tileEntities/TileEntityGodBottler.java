@@ -54,7 +54,6 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	 */
 	private static final int MAXCHARGESPEED = 10;
 	private static final int POWERUSAGE = 10;
-	private static final int powerSlot = 0;
 	
 	
 	private IPowerSender powerSource;
@@ -125,7 +124,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 					isSync = false;
 				}
 			}		
-			if(!hasReceive && this.getStackInSlot(powerSlot) != null) {
+			if(!hasReceive && this.getStackInSlot(0) != null) {
 				this.charge();
 			}
 			
@@ -225,8 +224,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 
 	private void charge() {
 		if(this.power >= this.MAXPOWER ) return;
-		else if(this.inventory[powerSlot] != null){
-			ItemStack crystal = inventory[powerSlot];
+		else if(this.inventory[0] != null){
+			ItemStack crystal = inventory[0];
 			if(crystal.getItem() instanceof ItemCrystal){
 				int toCharge = MAXCHARGESPEED;
 				if(power + MAXCHARGESPEED > MAXPOWER) toCharge = MAXPOWER - power;
@@ -290,6 +289,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	
 	@Override
 	public void syncWithplayer(EntityPlayerMP player) {
+		super.syncWithplayer(player);
 		DeadCraft.packetPipeline.sendTo(new DeadCraftGodBottlerPacket(this), player);
 	}
 

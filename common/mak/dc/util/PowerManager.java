@@ -33,11 +33,9 @@ public class PowerManager {
 	
 	public void initialise(){
 		registerAsFuel(new ItemStack(Items.redstone), 100);
+		registerAsFuel(new ItemStack(Blocks.redstone_block), 990);
 		registerAsFuel(new ItemStack(Items.nether_star), 50_000);
 		registerAsFuel(new ItemStack(Blocks.dragon_egg), 150_000);
-
-		//TODO add fuels
-
 	}
 	
 }

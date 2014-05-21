@@ -45,7 +45,6 @@ public class DeadCraftEvents {
 	
 	@SubscribeEvent
 	public void onplayerjoined(EntityJoinWorldEvent e){
-		//TODO sync with one player create a method in tileDC
 		if (!(e.entity instanceof EntityPlayer)) return;
 		World world = e.world;
 		if(world != null) {

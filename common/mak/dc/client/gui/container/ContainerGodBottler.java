@@ -46,10 +46,11 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		ItemStack re  = null;
 		Slot slot = getSlot(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
-			
+			re = stack.copy();
 			if (i < te.getSizeInventory() - 1) {
 				if (!mergeItemStack(stack, 9, 44, false)) {
 					return null;
@@ -74,10 +75,12 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 			}else{
 				slot.onSlotChanged();
 			}
+			slot.onPickupFromSlot(player, stack);
+
 		}
 		
 		
-		return null;
+		return re;
 	}
 	
 	

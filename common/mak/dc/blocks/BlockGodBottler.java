@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -24,6 +25,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+//TODO fix bounding box
 
 public class BlockGodBottler extends BlockDeadCraft {
 	
@@ -106,9 +109,6 @@ public class BlockGodBottler extends BlockDeadCraft {
 				world.setBlockToAir(te.xCoord,te.yCoord + 1, te.zCoord);
 				super.breakBlock(world, te.xCoord, te.yCoord, te.zCoord, block, meta);
 			}
-		    	
-			
-			
 		}
 	}
 	
@@ -117,7 +117,6 @@ public class BlockGodBottler extends BlockDeadCraft {
 		TileEntityGodBottler te = (TileEntityGodBottler) world.getTileEntity(x, y, z);
 		if(world.getBlockMetadata(x, y, z) == 4) te = te.getPair();
 		if(te == null) return;
-		if(player.isSneaking()) {
 			if(side <= 1) return;
 			switch(side) {
 			case 2 : side = 0;
@@ -131,13 +130,6 @@ public class BlockGodBottler extends BlockDeadCraft {
 			}
 			world.setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, side, 1|2);
 			world.notifyBlocksOfNeighborChange(te.xCoord,  te.yCoord+ 1, te.zCoord, this);
-		}else{
-			ItemStack wrench = player.inventory.getCurrentItem();
-			if(wrench == null) return; //should never execute
-			if(ItemWrench.hasBlockCoord(wrench)) {
-				te.setPowerSource(ItemWrench.getBlockCoord(wrench));
-			}
-		}
 	}
 	
 	@Override
@@ -205,6 +197,11 @@ public class BlockGodBottler extends BlockDeadCraft {
 	@Override
 	public int getRenderType() {
 		return ClientProxy.renderInventoryTESRId;
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world,	int x, int y, int z) {
+		return world.getBlockMetadata(x, y, z) == 4 ? AxisAlignedBB.getAABBPool().getAABB(x,  y, z, x + 1, y-2, z+1) : AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+2, z+1) ;
 	}
 	
 }

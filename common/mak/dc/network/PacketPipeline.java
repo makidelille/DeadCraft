@@ -16,6 +16,7 @@ import mak.dc.network.packet.DeadCraftAdminPacket;
 import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
+import mak.dc.network.packet.DeadCraftPowerSourcesPacket;
 import mak.dc.util.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -106,6 +107,7 @@ public class PacketPipeline extends
 		registerPacket(DeadCraftEggSpawnerPacket.class);
 		registerPacket(DeadCraftGodBottlerPacket.class);
 		registerPacket(DeadCraftEnderConverterPacket.class);
+		registerPacket(DeadCraftPowerSourcesPacket.class);
 	}
 
 	// Method to call from FMLPostInitializationEvent

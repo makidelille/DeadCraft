@@ -9,6 +9,8 @@ import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityGodBottler;
+import mak.dc.util.IPowerReceiver;
+import mak.dc.util.IPowerSender;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -126,7 +128,14 @@ public class ItemWrench extends Item {
             if (!player.isSneaking()) {
                 switch (stack.getItemDamage()) {
                     case 0:
-                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z,player, side, hitX, hitY, hitZ);
+                    	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) {
+                    		if(te instanceof IPowerReceiver) {
+                    			((IPowerReceiver) te).setPowerSource(this.getBlockCoord(stack));
+                    			this.removeBlockCoord(stack);
+                    		}else if(te instanceof IPowerSender) {
+                    			this.saveBlockCoord(stack, x, y, z);                    		}
+                    		if(player.isSneaking()) ((BlockDeadCraft)world.getBlock(x, y, z)).onWrenched(world, x, y, z,player, side, hitX, hitY, hitZ);
+                    	}
                         break;
                     case 1: 
                     	if(te.isUserCreator(username)) FMLNetworkHandler.openGui(player, DeadCraft.instance, 0, world, x, y, z);

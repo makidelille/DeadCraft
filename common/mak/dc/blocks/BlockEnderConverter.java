@@ -6,6 +6,7 @@ import mak.dc.DeadCraft;
 import mak.dc.items.ItemWrench;
 import mak.dc.proxy.ClientProxy;
 import mak.dc.tileEntities.TileEntityEnderConverter;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntitySmokeFX;
@@ -66,6 +67,15 @@ public class BlockEnderConverter extends BlockDeadCraft{
 		}
 		return true;
 	}
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		TileEntityEnderConverter te = (TileEntityEnderConverter) world.getTileEntity(x, y, z);
+		if(te == null) super.breakBlock(world, x, y, z, block, meta);
+		te.delete();
+		super.breakBlock(world, x, y, z, block, meta);
+	}
+	
 	@Override
 	public void onWrenched(World world, int x, int y, int z,EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ItemStack wrench = player.inventory.getCurrentItem();

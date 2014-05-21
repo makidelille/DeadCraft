@@ -247,4 +247,21 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 		return re;
 	}
 
+	@Override
+	public int[] getCoord() {
+		return new int[]{xCoord,yCoord,zCoord};
+	}
+	
+	
+
+	@Override
+	public void delete() {
+		Iterator it = receivers.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			((IPowerReceiver) entry.getKey()).setSourceChange();
+		}
+		
+	}
+
 }
