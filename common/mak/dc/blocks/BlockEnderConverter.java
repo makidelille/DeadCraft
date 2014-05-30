@@ -72,7 +72,7 @@ public class BlockEnderConverter extends BlockDeadCraft{
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		TileEntityEnderConverter te = (TileEntityEnderConverter) world.getTileEntity(x, y, z);
 		if(te == null) super.breakBlock(world, x, y, z, block, meta);
-		te.delete();
+		if (te instanceof TileEntityEnderConverter) te.delete();
 		super.breakBlock(world, x, y, z, block, meta);
 	}
 	

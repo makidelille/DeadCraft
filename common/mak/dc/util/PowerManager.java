@@ -2,6 +2,8 @@ package mak.dc.util;
 
 import java.util.HashMap;
 
+import mak.dc.items.DeadCraftItems;
+import mak.dc.items.ItemCrystal;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,11 +25,12 @@ public class PowerManager {
 	}
 	
 	public boolean isFuel(ItemStack stack) {
-		return powerProductionAmount.containsKey(stack.getItem());
+		return powerProductionAmount.containsKey(stack.getItem()) || stack.getItem() instanceof ItemCrystal;
 	}
 	
 	public int getPowerProduce(ItemStack stack) {
-		if(isFuel(stack)) return powerProductionAmount.get(stack.getItem());
+		if(isFuel(stack) && !(stack.getItem() instanceof ItemCrystal)) return powerProductionAmount.get(stack.getItem());
+		else if(stack.getItem() instanceof ItemCrystal) return ItemCrystal.getCharge(stack);
 		else return 0;
 	}
 	

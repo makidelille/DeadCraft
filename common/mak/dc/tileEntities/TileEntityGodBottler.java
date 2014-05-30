@@ -61,10 +61,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 
 	private int clientTick = 0;
 	private boolean isSync = false;
-//	private boolean hasReceive;
 	
 	private int workedTime;
-//	private int power;
 
 	/**Slot 0 : Energy; 
 	 * Slot 1 : input can;
@@ -289,8 +287,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	
 	@Override
 	public void syncWithplayer(EntityPlayerMP player) {
-		super.syncWithplayer(player);
 		DeadCraft.packetPipeline.sendTo(new DeadCraftGodBottlerPacket(this), player);
+		super.syncWithplayer(player);
 	}
 
 
@@ -678,7 +676,14 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 		if(!this.isTop())re.add(StatCollector.translateToLocal("dc.wrench.redstone")+ " : " + (this.isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) ));
 		return re;
 	}
+	
+	@Override
+	public void updatePowerSource(int[] blockCoord) {
+		if(isTop()) pair.updatePowerSource(blockCoord);
+		else super.updatePowerSource(blockCoord);
+	}
 
+	
 	
 
 

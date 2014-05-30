@@ -11,8 +11,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerGodBottler extends ContainerDeadCraft{
-	//FIXME client dupe bug on the crystal
-
 	
 	private TileEntityGodBottler te;
 	private InventoryPlayer invPlayer;
@@ -56,17 +54,24 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 					return null;
 				}
 			}else{
-				if(stack.getItem() instanceof ItemCrystal) {
-					if(!mergeItemStack(stack, 0, 1, false)) {
-						return null;
-					}
-				}if(stack.getItem() instanceof ItemGodCan ) {
-					if(!mergeItemStack(stack, 1, 2, false)) {
-						return null;
-					}
-				}else{
-					if(!mergeItemStack(stack, 3, 9, false)){
-						return null;
+				int slotNb = this.getSlotvalidForStack(stack);
+				if(slotNb != -1) { 
+					switch (slotNb) {
+					case 0 :
+						if(!mergeItemStack(stack, slotNb, slotNb +1, false)){
+							return null;
+						}
+						break;
+					case 1:
+						if(!mergeItemStack(stack, slotNb, slotNb +1, false)){
+							return null;
+						}
+						break;
+					case 3 :
+						if(!mergeItemStack(stack, slotNb, slotNb +6, false)){
+							return null;
+						}
+						break;		
 					}
 				}
 			}
@@ -75,16 +80,20 @@ public class ContainerGodBottler extends ContainerDeadCraft{
 			}else{
 				slot.onSlotChanged();
 			}
-			slot.onPickupFromSlot(player, stack);
-
 		}
-		
-		
 		return re;
 	}
 	
 	
 	
+	private int getSlotvalidForStack(ItemStack stack) {
+		for(int i = 0; i< te.getSizeInventory(); i++) {
+			if(te.isItemValidForSlot(i, stack))
+				return i;
+		}
+		return -1;
+	}
+
 	@Override
 	public void addCraftingToCrafters(ICrafting crafter) {
 		super.addCraftingToCrafters(crafter);

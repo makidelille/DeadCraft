@@ -106,11 +106,11 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
 	private int ValidForASlot(ItemStack stack) {
 		for (int i=0; i< te.getSizeInventory(); i++) {
 			if(te.isItemValidForSlot(i, stack)) {
-				return i +1;
+				return i+1;
 				}
 		}for(int j =0; j < inv.getSizeInventory();j++) {
 			if(inv.isItemValidForSlot(j, stack)){
-				return -j -1 ;
+				return -(j+1) ;
 			}
 		}
 		

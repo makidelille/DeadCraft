@@ -82,9 +82,7 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
   
     
     @Override
-    public void breakBlock(World world, int x, int y,int z, Block block, int meta) {
-    	//FIXME DUPE BUG
-    	
+    public void breakBlock(World world, int x, int y,int z, Block block, int meta) {    	
     	if(!world.isRemote) {
 	    	ItemStack is = new ItemStack(block);
 	    	is.stackSize = 1;
@@ -106,11 +104,10 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
 							world.spawnEntityInWorld(droppedItem);
 						}}
 		    	}
-	    			
+	    		world.spawnEntityInWorld(new EntityItem(world, x+0.5D, y+0.5D, z+0.5D, is));
+		    	world.removeTileEntity(x, y, z);
 	    	}
-	    	this.dropBlockAsItem(world, x, y, z, is);   
-	    	world.removeTileEntity(x, y, z);
-	    	world.setBlock(x, y, z, Blocks.air);
+	    	world.setBlock(x, y, z, Blocks.air,0,2);
     	}
     }
     

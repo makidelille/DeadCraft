@@ -47,10 +47,7 @@ public class GuiEnderConverter extends GuiCustom{
 		if(x <= 80 +16 && x >= 80  && y >= 61 && y <=61 +16)
 			this.drawInfoPanel("" + te.getPowerLeft(), "Power left : ", 17, 60, 60);
 		if(x <= 79 + 18 && x>=79 && y <= 6 +52 && y>=6)
-			this.drawInfoPanel("" + te.getPower()  + "/" + te.MAXPOWER, "Power : ", 17, y, 60);
-
-		//TODO add loc
-		
+			this.drawInfoPanel("" + te.getPower()  + "/" + te.MAXPOWER/1000 + "K", "Power : ", 17, y, 60);		
 	}
 
 	@Override

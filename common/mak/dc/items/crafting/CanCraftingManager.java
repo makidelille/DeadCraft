@@ -106,16 +106,16 @@ public class CanCraftingManager {
 	public void postInitialise() { 
 		if(!hasInit) return;
 		
-		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)}, new CanEffectFly(getNextAvailableId()));
-		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.diamond_block)},new CanEffectFly(getNextAvailableId()).setDuration(90));
-		
-		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.dirt), new ItemStack(Blocks.diamond_block)}, new CanEffectPotion(getNextAvailableId(), 20, "potion_speed", new PotionEffect[] {new PotionEffect(1, 1, 5),new PotionEffect(8, 1, 5)}));
-		this.addRecipe(new ItemStack[] { new ItemStack(Items.apple)	}, new CanEffectPotion(getNextAvailableId(), 20, "potion_resistance", new PotionEffect[] {new PotionEffect(11,1,5) ,new PotionEffect(12,1,5)}));
-		this.addRecipe(new ItemStack[] { new ItemStack(Blocks.acacia_stairs) }, new CanEffectPotion(getNextAvailableId(), 20, "potion_haste", new PotionEffect[] {new PotionEffect(3,1,1000) ,new PotionEffect(3,1,1000)}));
-		
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.diamond)}, new CanEffectPotion(getNextAvailableId(), 20, "potion_resistance", new PotionEffect[] {new PotionEffect(11,1,2)}));
+		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.diamond_block)},new CanEffectPotion(getNextAvailableId(), 200, "potion_resistance", new PotionEffect[] {new PotionEffect(11,1,4)}));
+		this.addRecipe(new ItemStack[] {new ItemStack(Items.blaze_rod), new ItemStack(Items.ghast_tear)}, new CanEffectPotion(getNextAvailableId(), 200, "potion_resistance", new PotionEffect[] {new PotionEffect(12,1,2)}));
 		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.dragon_egg)}, new CanEffectDragon(getNextAvailableId()));
-		//TODO addRecipes
-		
+		this.addRecipe(new ItemStack[] {new ItemStack(Blocks.dragon_egg),new ItemStack(Blocks.dragon_egg),new ItemStack(Blocks.dragon_egg),
+										new ItemStack(Blocks.dragon_egg),new ItemStack(Blocks.dragon_egg),new ItemStack(Blocks.dragon_egg)}, new CanEffectDragon(getNextAvailableId()).setDuration(CanEffectDragon.duration * 10));
+		this.addRecipe(new ItemStack[] { new ItemStack(Items.speckled_melon), new ItemStack(Items.cookie)}, new CanEffectPotion(getNextAvailableId(), 20, "potion_speed", new PotionEffect[] {new PotionEffect(1, 1, 2),new PotionEffect(8, 1, 2)}));
+		this.addRecipe(new ItemStack[] { new ItemStack(Items.speckled_melon), new ItemStack(Items.cookie), new ItemStack(Items.nether_star)}, new CanEffectPotion(getNextAvailableId(), 200, "potion_speed", new PotionEffect[] {new PotionEffect(1, 1, 10),new PotionEffect(8, 1, 10)}));
+		this.addRecipe(new ItemStack[] { new ItemStack(Items.diamond_pickaxe), new ItemStack(Items.diamond_shovel)}, new CanEffectPotion(getNextAvailableId(), 200, "potion_haste", new PotionEffect[] {new PotionEffect(3,1,1000)}));
+			
 	}
 
 	public CanEffect getCraftedEffects(int idMatchingrecipe) {

@@ -130,7 +130,7 @@ public class ItemWrench extends Item {
                     case 0:
                     	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) {
                     		if(te instanceof IPowerReceiver) {
-                    			((IPowerReceiver) te).setPowerSource(this.getBlockCoord(stack));
+                    			((IPowerReceiver) te).updatePowerSource(this.getBlockCoord(stack));
                     			this.removeBlockCoord(stack);
                     		}else if(te instanceof IPowerSender) {
                     			this.saveBlockCoord(stack, x, y, z);                    		}

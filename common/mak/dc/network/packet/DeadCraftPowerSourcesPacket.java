@@ -21,10 +21,10 @@ public class DeadCraftPowerSourcesPacket extends AbstractPacket {
 	private ArrayList<int[]> coords;
 	
 	public DeadCraftPowerSourcesPacket(){}
-	public DeadCraftPowerSourcesPacket(TileEntityDeadCraftWithPower te){
-		this.x = te.xCoord;
-		this.y = te.yCoord;
-		this.z = te.zCoord;
+	public DeadCraftPowerSourcesPacket(IPowerReceiver te, int x, int y, int z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
 		coords = new ArrayList<>();
 		List<IPowerSender> pSource = te.getPowerSource();
 		for(int i=0; i< pSource.size(); i++) {
@@ -32,9 +32,9 @@ public class DeadCraftPowerSourcesPacket extends AbstractPacket {
 			coord = pSource.get(i).getCoord();
 			coords.add(coord);
 		}
-		
-		
-		
+	}
+	public DeadCraftPowerSourcesPacket(TileEntity te) {
+		this((IPowerReceiver) te, te.xCoord,te.yCoord, te.zCoord);
 	}
 	
 	@Override

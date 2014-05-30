@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
+import net.minecraftforge.event.world.WorldEvent.Load;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DeadCraftEvents {
@@ -52,9 +54,15 @@ public class DeadCraftEvents {
 			for (int i = 0; i<tes.size(); i++) {
 				if(tes.get(i) instanceof TileEntityDeadCraft) {
 					((TileEntityDeadCraft)tes.get(i)).syncWithplayer((EntityPlayerMP) e.entity);
+					//FIXME sync bug on powerlines
 				}
 			}
 		}
+	}
+	@SubscribeEvent
+	public void onLoad(Load e) {
+		System.out.println("test");
+		System.out.println(e.world.isRemote);
 	}
 	
 }

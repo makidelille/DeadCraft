@@ -26,8 +26,6 @@ import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-//TODO fix bounding box
-
 public class BlockGodBottler extends BlockDeadCraft {
 	
 	public BlockGodBottler() {
@@ -198,10 +196,11 @@ public class BlockGodBottler extends BlockDeadCraft {
 	public int getRenderType() {
 		return ClientProxy.renderInventoryTESRId;
 	}
-	
+		
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world,	int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) == 4 ? AxisAlignedBB.getAABBPool().getAABB(x,  y, z, x + 1, y-2, z+1) : AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+2, z+1) ;
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world,int x, int y, int z) {
+		return world.getBlockMetadata(x, y, z) == 4 ? AxisAlignedBB.getAABBPool().getAABB(x,  y-1, z, x + 1, y+1, z+1) : AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+2, z+1) ;
 	}
+	
 	
 }

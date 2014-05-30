@@ -47,17 +47,18 @@ public class DeadCraftClientEvent {
 					
 					GL11.glColor4f(0f, 1f, 0f, 1f); 
 					RenderGlobal.drawOutlinedBoundingBox(bounds.copy().expand(0.0075, 0.0075, 0.0075).offset(-x, -y, -z),-1);
-					bounds = bounds.expand(-x, -y, -z);
+					bounds = bounds.copy().offset(-x, -y, -z);
 					
 					if(te instanceof IPowerReceiver) {
 						List<IPowerSender> sources = ((IPowerReceiver)te).getPowerSource();
 						for(IPowerSender source : sources){
 							
-							AxisAlignedBB sourcebounds = block.getSelectedBoundingBoxFromPool(world, ((TileEntity)source).xCoord, ((TileEntity)source).yCoord, ((TileEntity)source).zCoord); //.expand(-x, -y, -z);
+							AxisAlignedBB sourcebounds = ((TileEntity) source).getBlockType().getSelectedBoundingBoxFromPool(world, ((TileEntity)source).xCoord, ((TileEntity)source).yCoord, ((TileEntity)source).zCoord); //.expand(-x, -y, -z);
 							
 							GL11.glColor4f(1f, 0, 0, 0.4f);
 							RenderGlobal.drawOutlinedBoundingBox(sourcebounds.copy().expand(0.0075, 0.0075, 0.0075).offset(-x, -y, -z),-1);
-							sourcebounds = sourcebounds.expand(-x, -y, -z);
+							sourcebounds = sourcebounds.copy().offset(-x, -y, -z);
+							
 							
 							GL11.glColor4f(0.3f, 0.3f, 0.3f, 0.4f);
 							
@@ -66,8 +67,8 @@ public class DeadCraftClientEvent {
 							tess.startDrawing(GL11.GL_LINES);
 							tess.setColorRGBA(0, 0, 255, 156);
 						
-							tess.addVertex(bounds.maxX -0.5d, bounds.maxY - 0.5d, bounds.maxZ-0.5d);
-							tess.addVertex(sourcebounds.maxX - 0.5d, sourcebounds.maxY-0.5d, sourcebounds.maxZ-0.5d);
+							tess.addVertex(bounds.maxX - (bounds.maxX - bounds.minX)/2d, bounds.maxY - (bounds.maxY - bounds.minY)/2d, bounds.maxZ - (bounds.maxZ - bounds.minZ)/2d);
+							tess.addVertex( sourcebounds.maxX - (sourcebounds.maxX - sourcebounds.minX)/2d ,sourcebounds.maxY - (sourcebounds.maxY - sourcebounds.minY)/2d,sourcebounds.maxZ - (sourcebounds.maxZ - sourcebounds.minZ)/2d);
 							
 							tess.draw();
 						}	

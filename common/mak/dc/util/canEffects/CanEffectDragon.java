@@ -14,11 +14,11 @@ import net.minecraft.world.World;
 public class CanEffectDragon extends CanEffect{
 
 	
-	private static final int duration = 60;
+	public static final int duration = 60;
 	private static CanEffect[] effects = new CanEffect[] {
 		new CanEffectFly(0).setDuration(duration),
 		new CanEffectPotion(0, duration, "subEffect", new PotionEffect[] {new PotionEffect(1, 1, 5),new PotionEffect(8, 1, 0)}),
-		new CanEffectPotion(0, duration, "subEffect", new PotionEffect[] {new PotionEffect(11,1, 50),new PotionEffect(12,1, 50)}),
+		new CanEffectPotion(0, duration, "subEffect", new PotionEffect[] {new PotionEffect(11,1, 50)}),
 		new CanEffectPotion(0, duration, "subEffect", new PotionEffect[] {new PotionEffect(3,1,1000) ,new PotionEffect(3,1,1000)}),
 		new CanEffectPotion(0, duration, "subEffect", new PotionEffect[] {new PotionEffect(5,1,500)})
 	};

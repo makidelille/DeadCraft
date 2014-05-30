@@ -105,7 +105,11 @@ public class ItemCrystal extends Item {
 		 return 1d - (double) tag.getInteger("charge") / MAXCHARGE[stack.getItemDamage()];
 	  }	
     
-    
+    public static int getCharge(ItemStack is) {
+    	if(!is.hasTagCompound()) return 0;
+    	NBTTagCompound tag = is.getTagCompound();
+    	return tag.getInteger("charge");
+    }
     
     public static boolean isFullyCharged (ItemStack is) {
     	if(!is.hasTagCompound()) return false;

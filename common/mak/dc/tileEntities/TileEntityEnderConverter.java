@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import mak.dc.DeadCraft;
 import mak.dc.blocks.BlockEnderConverter;
+import mak.dc.items.ItemCrystal;
 import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
@@ -22,7 +23,7 @@ import net.minecraft.nbt.NBTTagList;
 public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPowerSender,IInventory{
 
 	
-	public static final int MAXPOWER = 5000;
+	public static final int MAXPOWER = 50_000;
 	private static final int CHARGERATE = 50;
 
 	private static PowerManager powerManager = DeadCraft.powerManager.getInstance();
@@ -48,15 +49,16 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 			
 			ItemStack fuel = this.getStackInSlot(0);
 			if(fuel != null && powerInItem <= 0) {
-				if(powerManager.isFuel(fuel)){
+				if(powerManager.isFuel(fuel) && power < MAXPOWER - CHARGERATE){
 					this.powerInItem = powerManager.getPowerProduce(fuel);
-					fuel.stackSize--;
+					if((fuel.getItem() instanceof ItemCrystal)){
+						ItemCrystal.dischargeItem(fuel, powerInItem);						
+					}else fuel.stackSize--;
 					if(fuel.stackSize <= 0) {
 						this.setInventorySlotContents(0, null);
-						isSync = false;
 					}
 				}
-				if(!powerManager.isFuel(fuel)){ //is not a fuel
+				if(!powerManager.isFuel(fuel)){
 					worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord +0.5d, yCoord +0.5d, zCoord+0.5d, fuel));
 					setInventorySlotContents(0, null);
 				}
@@ -183,8 +185,9 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack itemstack) {
 		inv = itemstack;
-		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
+		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
 	            itemstack.stackSize = getInventoryStackLimit();
+		}
 		
 		
 	}
@@ -205,10 +208,14 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory() {
+		this.isSync = false;
+	}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory() {
+		this.isSync = false;
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {

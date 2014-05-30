@@ -30,33 +30,36 @@ public class ContainerEnderConverter extends ContainerDeadCraft{
 	}
 	
 	
-	//FIXME dupe bug
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int i) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		ItemStack re = null;
     	Slot slot = getSlot(i);
-		if (slot != null && slot.getHasStack()) {
+    	if (slot != null && slot.getHasStack()) {
 			ItemStack stack = slot.getStack();
 			re = stack.copy();
-			if(DeadCraft.powerManager.isFuel(stack)) {
-				if(!mergeItemStack(stack, 0, 1, false))
+			if(i==0) return null;
+			if(i >= 27 ){
+				if (!mergeItemStack(stack, 1,28, false))
 					return null;
-				else {
+			}
+			
+			if(DeadCraft.powerManager.isFuel(stack)) {
+				if(te.isItemValidForSlot(0, stack)){
+					if(!mergeItemStack(stack, 0, 1, false)){
+						return null;
+					}}else {
 					if(i >= 27 ){
 						if (!mergeItemStack(stack, 1,28, false)) { 
 								return null;
-							}
+						}
 					}else if (i < 27 && i> 0){
 						if(!mergeItemStack(stack, 28, 37, false))
 							return null;
 					}
 				}
 			}
-			if(i >= 27 ){
-				if (!mergeItemStack(stack, 1,28, false)) { 
-						return null;
-					}
-			}else if (i < 27 && i> 0){
+			
+			else if (i < 27 && i> 0){
 				if(!mergeItemStack(stack, 28, 37, false))
 					return null;
 			}
@@ -65,7 +68,6 @@ public class ContainerEnderConverter extends ContainerDeadCraft{
 			}else{
 				slot.onSlotChanged();
 			}
-			slot.onPickupFromSlot(par1EntityPlayer, stack);
 		}
     	return re;
 	}

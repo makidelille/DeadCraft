@@ -118,6 +118,7 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	@Override
 	public void syncWithplayer(EntityPlayerMP player) {
 		DeadCraft.packetPipeline.sendTo(new DeadCraftPowerSourcesPacket(this), player);
+		super.syncWithplayer(player);
 	}
 
 
@@ -136,15 +137,15 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 		int z = blockCoord[2];
 		
 		TileEntity te = worldObj.getTileEntity(x, y, z);		
-		if(te == null) return;
-		if(te instanceof IPowerSender && !this.powerSources.contains(te)) this.powerSources.add((IPowerSender) te);
-		if(te instanceof IPowerSender && this.powerSources.contains(te)) this.powerSources.remove((IPowerSender) te);
+		if(te == null || !(te instanceof IPowerSender)) return;
+		if(powerSources.contains(te)) powerSources.remove(te);
+		else powerSources.add((IPowerSender) te);
 		isSync = false;
 	}
 	
 	@Override
 	public List<IPowerSender> getPowerSource() {
-		return powerSources == null ? new ArrayList() : this.powerSources;
+		return this.powerSources;
 		
 	}
 
@@ -161,11 +162,9 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	@Override
 	public void askPower(int amount) {
 		if(powerSources != null && !powerSources.isEmpty() ) {
-			int size = powerSources.size();
-			for(int i=0; i< powerSources.size(); i++) {
-				IPowerSender powerSource = powerSources.get(i);
+			for(IPowerSender powerSource : powerSources) {
 				if(this.powerSources == null) continue;
-				powerSource.onAskedPower(this, amount/size);
+				powerSource.onAskedPower(this, amount);
 			}
 		}
 		

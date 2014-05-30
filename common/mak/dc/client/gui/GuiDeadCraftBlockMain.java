@@ -9,6 +9,7 @@ import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.lib.Lib;
 import mak.dc.lib.Textures;
 import mak.dc.network.packet.DeadCraftAdminPacket;
+import mak.dc.network.packet.DeadCraftDebugForcePakcet;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -213,10 +214,13 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         GuiButton down = new GuiButton(3,guiLeft + 108, guiTop + 55, 10,20, null);
         down.enabled = firstInList < allowed.size() - 1;
         
+        GuiButton sync = new GuiButton(4, guiLeft + 125, guiTop + 30, 40, 10,"Sync");
+        
         this.buttonList.add(b0);
         this.buttonList.add(b1);
         this.buttonList.add(up);
         this.buttonList.add(down);
+        this.buttonList.add(sync);
 
         this.entername = new GuiTextField(getFontRenderer(), 7,10, 112, 12); //BUG
         this.entername.setFocused(true);
@@ -247,17 +251,16 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
     @Override
     public void actionPerformed (GuiButton button) {
         String s = entername.getText();        
-        if(s == "") return;
         switch (button.id) {
         case 0 : 
-        	if(allowed.contains(s)) return;        	
+        	if(allowed.contains(s) || s == "") return;        	
         	allowed.add(s);
         	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
         	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
         	hasToSend = true;
         	break;
         case 1 :
-        	if(!allowed.contains(s)) return;
+        	if(!allowed.contains(s) || s == "") return;
         	allowed.remove(s);
         	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
         	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
@@ -277,7 +280,11 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         	((GuiButton) this.buttonList.get(2)).enabled = firstInList > 0 ;
         	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
         	break;
+        case 4 :
+        	DeadCraft.packetPipeline.sendToServer(new DeadCraftDebugForcePakcet(te.xCoord, te.yCoord, te.zCoord));
+        	break;
         }
+       
         this.haschange = true;
         
         
