@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 
 public class EntityAITemptMindController extends EntityAITempt {
 
+	//TODO work on it later
+	
 	private EntityPlayer player;
 	private EntityPlayer temptingPlayer;
 	private EntityCreature temptedEntity;

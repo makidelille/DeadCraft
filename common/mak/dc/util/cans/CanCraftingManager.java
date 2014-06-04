@@ -1,4 +1,4 @@
-package mak.dc.items.crafting;
+package mak.dc.util.cans;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLLog;
-import mak.dc.util.canEffects.CanEffect;
-import mak.dc.util.canEffects.CanEffectDragon;
-import mak.dc.util.canEffects.CanEffectFly;
-import mak.dc.util.canEffects.CanEffectPotion;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

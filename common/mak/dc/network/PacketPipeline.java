@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import mak.dc.network.packet.DeadCraftAdminPacket;
-import mak.dc.network.packet.DeadCraftDebugForcePakcet;
+import mak.dc.network.packet.DeadCraftForceSyncPakcet;
 import mak.dc.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.network.packet.DeadCraftEnderConverterPacket;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
@@ -109,7 +109,7 @@ public class PacketPipeline extends
 		registerPacket(DeadCraftGodBottlerPacket.class);
 		registerPacket(DeadCraftEnderConverterPacket.class);
 		registerPacket(DeadCraftPowerSourcesPacket.class);
-		registerPacket(DeadCraftDebugForcePakcet.class);
+		registerPacket(DeadCraftForceSyncPakcet.class);
 	}
 
 	// Method to call from FMLPostInitializationEvent

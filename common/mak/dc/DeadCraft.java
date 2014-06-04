@@ -5,11 +5,11 @@ import mak.dc.config.ConfigHandler;
 import mak.dc.event.DeadCraftClientEvent;
 import mak.dc.event.DeadCraftEvents;
 import mak.dc.items.DeadCraftItems;
-import mak.dc.items.crafting.CanCraftingManager;
-import mak.dc.lib.Lib;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
+import mak.dc.util.Lib;
 import mak.dc.util.PowerManager;
+import mak.dc.util.cans.CanCraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;
@@ -23,10 +23,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-
-//TODO name loc
-//TODO check @Override
-
 
 @Mod(modid= Lib.MOD_ID, name= Lib.MOD_NAME, version= Lib.MOD_VERSION)
 

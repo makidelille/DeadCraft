@@ -2,9 +2,7 @@ package mak.dc.blocks;
 
 import java.util.Random;
 
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
-import mak.dc.tileEntities.TileEntityDeadCraft;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;

@@ -3,8 +3,11 @@ package mak.dc.event;
 
 import java.util.List;
 
+import mak.dc.DeadCraft;
 import mak.dc.items.ItemGodCan;
+import mak.dc.network.packet.DeadCraftForceSyncPakcet;
 import mak.dc.tileEntities.TileEntityDeadCraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,6 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 public class DeadCraftEvents {
 	
@@ -44,25 +48,4 @@ public class DeadCraftEvents {
 			ItemGodCan.pauseEffects(e.player.worldObj, is, e.player);
 		}
 	}
-	
-	@SubscribeEvent
-	public void onplayerjoined(EntityJoinWorldEvent e){
-		if (!(e.entity instanceof EntityPlayer)) return;
-		World world = e.world;
-		if(world != null) {
-			List tes = world.loadedTileEntityList;
-			for (int i = 0; i<tes.size(); i++) {
-				if(tes.get(i) instanceof TileEntityDeadCraft) {
-					((TileEntityDeadCraft)tes.get(i)).syncWithplayer((EntityPlayerMP) e.entity);
-					//FIXME sync bug on powerlines
-				}
-			}
-		}
-	}
-	@SubscribeEvent
-	public void onLoad(Load e) {
-		System.out.println("test");
-		System.out.println(e.world.isRemote);
-	}
-	
 }

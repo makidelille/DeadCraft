@@ -3,11 +3,8 @@ package mak.dc.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
-import mak.dc.items.ItemWrench;
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEggSpawner;
-import mak.dc.tileEntities.TileEntityGodBottler;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;

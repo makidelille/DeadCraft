@@ -1,13 +1,11 @@
 package mak.dc.items;
 
-import java.util.Iterator;
 import java.util.List;
 
 import mak.dc.entity.ai.EntityAIAvoidAPlayer;
 import mak.dc.entity.ai.EntityAITemptMindController;
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
 import mak.dc.util.DamageSourceDeadCraft;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -15,13 +13,11 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

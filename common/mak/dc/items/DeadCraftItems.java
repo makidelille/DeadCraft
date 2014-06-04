@@ -1,10 +1,8 @@
 package mak.dc.items;
 
-import com.ibm.icu.impl.IntTrieBuilder;
-
 import mak.dc.blocks.DeadCraftBlocks;
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Lib;
+import mak.dc.util.Lib;
+import mak.dc.util.Lib.IBTInfos;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

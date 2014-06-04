@@ -2,20 +2,16 @@ package mak.dc.items;
 
 import java.util.List;
 
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,12 +77,12 @@ public class ItemCrystal extends Item {
     public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
     	if(is.hasTagCompound() && is.getTagCompound().hasKey("charge")){
     		if(is.getTagCompound().getBoolean("creativeSpawn")) {
-    			l.add("tier" + " : " + (is.getItemDamage() +1));
+    			l.add(StatCollector.translateToLocal("dc.crystal.info.tier") + " : " + (is.getItemDamage() +1));
     			l.add(StatCollector.translateToLocal("dc.info.isCreative"));
     			l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.infinite") +EnumChatFormatting.RESET);
     		}
     		else {
-    			l.add("tier" + " : " + (is.getItemDamage()+1));
+    			l.add(StatCollector.translateToLocal("dc.crystal.info.tier") + " : " + (is.getItemDamage()+1));
 
     			l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" +  MAXCHARGE[is.getItemDamage()] + EnumChatFormatting.RESET);
     		}

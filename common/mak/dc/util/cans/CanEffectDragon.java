@@ -1,4 +1,4 @@
-package mak.dc.util.canEffects;
+package mak.dc.util.cans;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

@@ -2,34 +2,23 @@ package mak.dc.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import mak.dc.DeadCraft;
-import mak.dc.lib.IBTInfos;
-import mak.dc.lib.Textures;
-import mak.dc.util.canEffects.CanEffect;
-import net.minecraft.block.Block;
+import mak.dc.util.Lib.Textures;
+import mak.dc.util.cans.CanEffect;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
 
 public class ItemGodCan extends ItemFood{
 		

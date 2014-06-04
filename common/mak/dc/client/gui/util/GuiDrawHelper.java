@@ -1,11 +1,10 @@
 package mak.dc.client.gui.util;
 
-import mak.dc.lib.Lib;
-import mak.dc.lib.Textures;
+import mak.dc.util.Lib;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;

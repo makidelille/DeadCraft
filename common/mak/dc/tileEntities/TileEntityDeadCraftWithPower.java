@@ -176,7 +176,7 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 		ArrayList<String> re = new ArrayList<>();
 		re.add(StatCollector.translateToLocal("dc.power")+ " : " + this.power + "/" +  this.getMaxPower());
 		if(powerSources != null && !powerSources.isEmpty()) {
-			re.add("conection number" + " : " + powerSources.size());
+			re.add(StatCollector.translateToLocal("dc.block.power.info.connectionNb") + " : " + powerSources.size());
 		}
 		return re;
 	}

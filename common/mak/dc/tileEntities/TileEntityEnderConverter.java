@@ -19,6 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 
 public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPowerSender,IInventory{
 
@@ -248,9 +249,9 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	@Override
 	public List<String> getInfo() {
 		ArrayList<String> re = new ArrayList();
-		re.add("power : " + this.power);
-		re.add("power left in item :" + this.powerInItem);
-		re.add("connections :"  + this.receivers.size());
+		re.add(StatCollector.translateToLocal("dc.power") + " : " + this.power);
+		re.add(StatCollector.translateToLocal("dc.block.enderConverter.gui.powerLeft") + " : " + this.powerInItem);
+		re.add(StatCollector.translateToLocal("dc.block.power.info.connectionNb") + " : "  + this.receivers.size());
 		return re;
 	}
 

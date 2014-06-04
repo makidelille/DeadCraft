@@ -1,11 +1,11 @@
 package mak.dc.blocks;
 
 import mak.dc.items.DeadCraftItems;
-import mak.dc.items.itemBlock.ItemBlockDeadCraft;
-import mak.dc.lib.IBTInfos;
+import mak.dc.items.ItemBlockDeadCraft;
 import mak.dc.tileEntities.TileEntityEggSpawner;
 import mak.dc.tileEntities.TileEntityEnderConverter;
 import mak.dc.tileEntities.TileEntityGodBottler;
+import mak.dc.util.Lib.IBTInfos;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -88,6 +88,15 @@ public class DeadCraftBlocks {
 			Character.valueOf('D'), Items.diamond
 		
 		
+		});
+		
+		GameRegistry.addRecipe(new ItemStack(enderConverter,1), new Object[] {
+			"IGI",
+			"GBG",
+			"IGI",
+			Character.valueOf('I'), Items.iron_ingot,
+			Character.valueOf('G'), Blocks.glass_pane,
+			Character.valueOf('B'), Blocks.beacon
 		});
 		
 	}

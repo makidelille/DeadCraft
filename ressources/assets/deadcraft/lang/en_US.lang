@@ -8,6 +8,7 @@ item.godcan.name=God-Can
 tile.dragoneggspawner.name=Dragon Egg Spawner
 tile.enderpearlblock.name=Ender Block
 tile.godbottler.name=God-Bottler
+tile.enderconverter.name=Ender-Converter
 
 dc.true=True
 dc.false=False
@@ -28,11 +29,14 @@ dc.inactive=Inactive
 dc.block.info.notSet=Is not set yet
 dc.block.info.hasAllowedList=has an allowed list
 dc.block.gui.lock=Lock
+dc.block.gui.sync=Sync
 dc.block.notOwner=You're not the owner of this block
 dc.block.notAllowed=You're not allowed to use this block
 dc.block.owner=Owner
 dc.block.lockState=Lock State
 dc.block.allowed=Allowed users
+
+dc.block.power.info.connectionNb=Number of connections
 
 dc.block.eggSpawner.gui.status=State
 dc.block.eggSpawner.gui.eggInStock=Egg in Stock
@@ -58,6 +62,10 @@ dc.block.godBottler.gui.error.noEmptyCan=No empty Can
 dc.block.godBottler.gui.error.noRecipe=No matching recipe
 dc.block.godBottler.gui.error.noSpace=No free crafting space
 dc.block.godBottler.gui.error.sameId=Can has Already this effect
+dc.block.godBottler.info.redstone=Is redstone powered 
+dc.block.godBottler.info.isTop=This is the top Block, Data are stored bellow
+
+dc.block.enderConverter.gui.powerLeft=Power left in item
 
 dc.info.holdShift=-- Press Shift for info --
 dc.info.isCreative=Is creative spawned
@@ -73,10 +81,12 @@ dc.wrench.info.doBasics=You can do basics stuff
 dc.wrench.info.editSec=You can change the security
 dc.wrench.info.seeSec=You get the security information
 dc.wrench.info.seeInfo=You get information on the block
+dc.wrench.info.coord.header=Bind to
 dc.wrench.header.owner=Owner
 dc.wrench.header.allowed=Allowed
-dc.wrench.redstone=Is redstone powered 
-dc.wrench.isTop=This is the top Block, Data are stored bellow
+
+
+dc.crystal.info.tier=Tier
 
 dc.mindcontroller.info.creator=Creator
 dc.mindcontroller.info.activate=Right click to activate

@@ -5,13 +5,10 @@ import java.util.List;
 
 import mak.dc.DeadCraft;
 import mak.dc.blocks.BlockDeadCraft;
-import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityDeadCraft;
-import mak.dc.tileEntities.TileEntityEggSpawner;
-import mak.dc.tileEntities.TileEntityGodBottler;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
-import net.minecraft.block.Block;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -49,21 +46,18 @@ public class ItemWrench extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation (ItemStack is, EntityPlayer player, List list, boolean par4) {
+    	if(this.hasBlockCoord(is)){
+    		int[] coords = getBlockCoord(is);
+    		String head = StatCollector.translateToLocal("dc.wrench.info.coord.header") + " :";
+    		String coord = "x: " + coords[0] + ", " +"y: " + coords[1] + ", " + "z: " + coords[2] ;
+    		
+
+    		list.add(head);
+    		list.add(coord);
+    		
+    	}
     	if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
     		list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
-    		if(this.hasBlockCoord(is)){
-	    		int[] coords = getBlockCoord(is);
-	    		String head = "Bind to :";
-	    		String x = "X : " + coords[0];
-	    		String y = "Y : " + coords[1];
-	    		String z = "Z : " + coords[2];
-
-	    		list.add(head);
-	    		list.add(x);
-	    		list.add(y);
-	    		list.add(z);
-	    		
-	    	}
     	}
     	if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 	    	String infos0 = EnumChatFormatting.GREEN +StatCollector.translateToLocal("dc.wrench.info.change");

@@ -1,15 +1,13 @@
 package mak.dc.client.gui;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import mak.dc.client.gui.container.ContainerGodBottler;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
-import mak.dc.items.ItemGodCan;
-import mak.dc.lib.Lib;
-import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityGodBottler;
+import mak.dc.util.Lib;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumChatFormatting;

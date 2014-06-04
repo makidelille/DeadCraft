@@ -2,9 +2,9 @@ package mak.dc.client.render.block;
 
 import mak.dc.blocks.BlockEnderConverter;
 import mak.dc.client.IInventoryRenderer;
-import mak.dc.lib.Lib;
-import mak.dc.lib.Textures;
 import mak.dc.tileEntities.TileEntityEnderConverter;
+import mak.dc.util.Lib;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;

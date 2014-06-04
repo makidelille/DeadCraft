@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import mak.dc.DeadCraft;
 import mak.dc.items.ItemCrystal;
 import mak.dc.items.ItemGodCan;
-import mak.dc.items.crafting.CanCraftingManager;
-import mak.dc.lib.IBTInfos;
 import mak.dc.network.packet.DeadCraftGodBottlerPacket;
 import mak.dc.util.IPowerSender;
+import mak.dc.util.Lib.IBTInfos;
+import mak.dc.util.cans.CanCraftingManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -21,7 +21,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
@@ -672,8 +671,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	@Override
 	public List<String> getInfo() {
 		ArrayList<String> re = (ArrayList<String>) (this.isTop() ?pair.getInfo() :  super.getInfo());
-		if(this.isTop()) re.add(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.wrench.isTop"));
-		if(!this.isTop())re.add(StatCollector.translateToLocal("dc.wrench.redstone")+ " : " + (this.isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) ));
+		if(this.isTop()) re.add(EnumChatFormatting.GRAY +"" +EnumChatFormatting.ITALIC + StatCollector.translateToLocal("dc.block.godBottler.info.isTop"));
+		if(!this.isTop())re.add(StatCollector.translateToLocal("dc.block.godBottler.info.redstone")+ " : " + (this.isRSPowered() ? (EnumChatFormatting.GREEN + StatCollector.translateToLocal("dc.true")) : (EnumChatFormatting.RED + StatCollector.translateToLocal("dc.false")) ));
 		return re;
 	}
 	

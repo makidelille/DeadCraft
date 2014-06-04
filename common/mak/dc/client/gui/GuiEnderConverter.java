@@ -1,16 +1,16 @@
 package mak.dc.client.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import mak.dc.client.gui.container.ContainerEnderConverter;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
-import mak.dc.lib.Lib;
 import mak.dc.tileEntities.TileEntityEnderConverter;
-import mak.dc.lib.Textures;
+import mak.dc.util.Lib;
+import mak.dc.util.Lib.Textures;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiEnderConverter extends GuiCustom{
 	
@@ -45,9 +45,9 @@ public class GuiEnderConverter extends GuiCustom{
 		int x = mx - guiLeft;
 		int y = my - guiTop;
 		if(x <= 80 +16 && x >= 80  && y >= 61 && y <=61 +16)
-			this.drawInfoPanel("" + te.getPowerLeft(), "Power left : ", 17, 60, 60);
+			this.drawInfoPanel("" + te.getPowerLeft(), StatCollector.translateToLocal("dc.block.enderConverter.gui.powerLeft") + " : ", 17, 60, 60);
 		if(x <= 79 + 18 && x>=79 && y <= 6 +52 && y>=6)
-			this.drawInfoPanel("" + te.getPower()  + "/" + te.MAXPOWER/1000 + "K", "Power : ", 17, y, 60);		
+			this.drawInfoPanel("" + te.getPower()  + "/" + te.MAXPOWER/1000 + StatCollector.translateToLocal("dc.kilo"),StatCollector.translateToLocal("dc.power") +  " : ", 17, y, 60);		
 	}
 
 	@Override
