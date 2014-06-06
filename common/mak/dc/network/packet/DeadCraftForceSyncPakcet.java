@@ -64,17 +64,19 @@ public class DeadCraftForceSyncPakcet extends AbstractPacket {
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		World world = player.worldObj;
-		EntityPlayerMP sync = (EntityPlayerMP) world.getPlayerEntityByName(this.player);
-		if(sync == null) return;
-		if(!syncWithAll){
-			TileEntity te = world.getTileEntity(x, y, z);
-			if(te instanceof TileEntityDeadCraft) ((TileEntityDeadCraft) te).syncWithplayer(sync);
-		}else{
-			List tes = world.loadedTileEntityList;
-			for (int i = 0; i<tes.size(); i++) {
-				if(tes.get(i) instanceof TileEntityDeadCraft) {
-					System.out.println(tes.get(i));
-					((TileEntityDeadCraft)tes.get(i)).syncWithplayer(sync);
+		if(!world.isRemote) {
+			EntityPlayerMP sync = (EntityPlayerMP) world.getPlayerEntityByName(this.player);
+			if(sync == null) return;
+			if(!syncWithAll){
+				TileEntity te = world.getTileEntity(x, y, z);
+				if(te instanceof TileEntityDeadCraft) ((TileEntityDeadCraft) te).syncWithplayer(sync);
+			}else{
+				List tes = world.loadedTileEntityList;
+				for (int i = 0; i<tes.size(); i++) {
+					if(tes.get(i) instanceof TileEntityDeadCraft) {
+						System.out.println(tes.get(i));
+						((TileEntityDeadCraft)tes.get(i)).syncWithplayer(sync);
+					}
 				}
 			}
 		}

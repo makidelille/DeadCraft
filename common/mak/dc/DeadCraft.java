@@ -4,6 +4,7 @@ import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.config.ConfigHandler;
 import mak.dc.event.DeadCraftClientEvent;
 import mak.dc.event.DeadCraftEvents;
+import mak.dc.event.DeadCraftFMLEvents;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -25,9 +27,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid= Lib.MOD_ID, name= Lib.MOD_NAME, version= Lib.MOD_VERSION)
-
-//@NetworkMod(channels = {Lib.MOD_ID}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
-
 public class DeadCraft {
 	
 	
@@ -89,6 +88,7 @@ public class DeadCraft {
 			 canCraftingManager.postInitialise();
 			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
 			 if(event.getSide().isClient() )MinecraftForge.EVENT_BUS.register(new DeadCraftClientEvent());
+			 FMLCommonHandler.instance().bus().register(new DeadCraftFMLEvents());
 			
 			 logger.log(Level.INFO, "DeadCraft is loaded");
 		}

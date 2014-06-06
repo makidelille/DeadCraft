@@ -48,4 +48,5 @@ public class DeadCraftEvents {
 			ItemGodCan.pauseEffects(e.player.worldObj, is, e.player);
 		}
 	}
+	
 }
