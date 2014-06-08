@@ -1,29 +1,16 @@
 package mak.dc.event;
 
 
-import java.util.List;
-
-import mak.dc.DeadCraft;
 import mak.dc.items.ItemGodCan;
-import mak.dc.network.packet.DeadCraftForceSyncPakcet;
-import mak.dc.tileEntities.TileEntityDeadCraft;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
-import net.minecraftforge.event.world.WorldEvent.Load;
-import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 public class DeadCraftEvents {
-	
+		
 	@SubscribeEvent
 	public void onPlayerOpenGui(PlayerOpenContainerEvent e) {
 		InventoryPlayer playerInv = e.entityPlayer.inventory;

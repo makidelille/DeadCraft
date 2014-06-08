@@ -7,7 +7,7 @@ import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.network.packet.DeadCraftAdminPacket;
-import mak.dc.network.packet.DeadCraftForceSyncPakcet;
+import mak.dc.network.packet.DeadCraftClientToServerPacket;
 import mak.dc.tileEntities.TileEntityDeadCraft;
 import mak.dc.util.Lib;
 import mak.dc.util.Lib.Textures;
@@ -281,7 +281,7 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         	((GuiButton) this.buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
         	break;
         case 4 :
-        	DeadCraft.packetPipeline.sendToServer(new DeadCraftForceSyncPakcet(Minecraft.getMinecraft().thePlayer));
+        	DeadCraft.packetPipeline.sendToServer(new DeadCraftClientToServerPacket(-2 , Minecraft.getMinecraft().thePlayer.getCommandSenderName() , 0, 0, 0, 0));
         	break;
         }
        

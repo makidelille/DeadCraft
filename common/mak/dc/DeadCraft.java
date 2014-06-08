@@ -4,7 +4,6 @@ import mak.dc.blocks.DeadCraftBlocks;
 import mak.dc.config.ConfigHandler;
 import mak.dc.event.DeadCraftClientEvent;
 import mak.dc.event.DeadCraftEvents;
-import mak.dc.event.DeadCraftFMLEvents;
 import mak.dc.items.DeadCraftItems;
 import mak.dc.network.PacketPipeline;
 import mak.dc.proxy.CommonProxy;
@@ -87,9 +86,7 @@ public class DeadCraft {
 			 packetPipeline.postInitialise();
 			 canCraftingManager.postInitialise();
 			 MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
-			 if(event.getSide().isClient() )MinecraftForge.EVENT_BUS.register(new DeadCraftClientEvent());
-			 FMLCommonHandler.instance().bus().register(new DeadCraftFMLEvents());
-			
+			 if(event.getSide().isClient() )MinecraftForge.EVENT_BUS.register(new DeadCraftClientEvent());			
 			 logger.log(Level.INFO, "DeadCraft is loaded");
 		}
 }

@@ -11,6 +11,7 @@ import mak.dc.util.IPowerSender;
 import mak.dc.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -119,7 +120,7 @@ public class ItemWrench extends Item {
         if(!world.isRemote && world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityDeadCraft) {
             TileEntityDeadCraft te = (TileEntityDeadCraft) world.getTileEntity(x, y, z);
             String username = player.getCommandSenderName();
-            if (!player.isSneaking()) {
+            if (!player.isSneaking() && te.isUserAllowed(username)) {
                 switch (stack.getItemDamage()) {
                     case 0:
                     	if(world.getBlock(x, y, z) instanceof BlockDeadCraft && te.isUserAllowed(username)) {
@@ -142,11 +143,11 @@ public class ItemWrench extends Item {
                         return false;
                 }
                 return true;
-                
             }else if(player.isSneaking()){
-                stack.setItemDamage(stack.getItemDamage() < 2 ? (stack.getItemDamage() + 1) : 0);
-            }else{
-                player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.notOwner")));
+            	//TODO do smthg
+            
+        	}else{
+                player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.notAllowed")));
             }
         }
         return false;
@@ -178,7 +179,7 @@ public class ItemWrench extends Item {
 
     @Override
     public ItemStack onItemRightClick (ItemStack is, World world, EntityPlayer player) {
-        if(!world.isRemote && player.isSneaking()) {
+        if(!world.isRemote && player.isSneaking()) { //TODO change to detect if you click a block or not
             is.setItemDamage(is.getItemDamage() < 2 ? (is.getItemDamage() + 1) : 0);
         }else if(!world.isRemote) {
         	if(hasBlockCoord(is)) removeBlockCoord(is);

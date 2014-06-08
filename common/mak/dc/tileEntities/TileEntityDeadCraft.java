@@ -144,7 +144,7 @@ public class TileEntityDeadCraft extends TileEntity {
 		return null;
 	}
 
-	public void syncWithplayer(EntityPlayerMP player) {}
+	public void syncWithplayer(EntityPlayer player) {}
 
 
 

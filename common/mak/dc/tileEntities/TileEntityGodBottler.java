@@ -285,8 +285,8 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 	}
 	
 	@Override
-	public void syncWithplayer(EntityPlayerMP player) {
-		DeadCraft.packetPipeline.sendTo(new DeadCraftGodBottlerPacket(this), player);
+	public void syncWithplayer(EntityPlayer player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftGodBottlerPacket(this), (EntityPlayerMP) player);
 		super.syncWithplayer(player);
 	}
 

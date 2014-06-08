@@ -14,6 +14,7 @@ import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
 import mak.dc.util.PowerManager;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	
 	public static final int MAXPOWER = 50_000;
 	private static final int CHARGERATE = 50;
+	private static final int MAXTRANSFERTRATE = 500;
 
 	private static PowerManager powerManager = DeadCraft.powerManager.getInstance();
 	
@@ -47,7 +49,7 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 		
 		if(!worldObj.isRemote) {
 			if(!isSync) sync();
-			
+						
 			ItemStack fuel = this.getStackInSlot(0);
 			if(fuel != null && powerInItem <= 0) {
 				if(powerManager.isFuel(fuel) && power < MAXPOWER - CHARGERATE){
@@ -85,8 +87,8 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	}
 	
 	@Override
-	public void syncWithplayer(EntityPlayerMP player) {
-		DeadCraft.packetPipeline.sendTo(new DeadCraftEnderConverterPacket(this), player);
+	public void syncWithplayer(EntityPlayer player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftEnderConverterPacket(this), (EntityPlayerMP) player);
 	}
 		
 	@Override
@@ -149,8 +151,8 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 	@Override
 	public void onAskedPower(IPowerReceiver receiver,int amount) {
 		if(!worldObj.isRemote) {
-			if(power - amount <0)
-				amount = power;
+			if(MAXTRANSFERTRATE - amount <0)
+				amount = MAXTRANSFERTRATE;
 			if(receiver != null) this.receivers.put(receiver, amount);
 		}
 		
@@ -270,6 +272,11 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
 			((IPowerReceiver) entry.getKey()).setSourceChange();
 		}
 		
+	}
+
+	@Override
+	public int getMaxTransfertRate() {
+		return this.MAXTRANSFERTRATE;
 	}
 
 }

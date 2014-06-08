@@ -3,11 +3,11 @@ package mak.dc.tileEntities;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
 import mak.dc.DeadCraft;
 import mak.dc.network.packet.DeadCraftPowerSourcesPacket;
 import mak.dc.util.IPowerReceiver;
 import mak.dc.util.IPowerSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -116,8 +116,8 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
 	}
 	
 	@Override
-	public void syncWithplayer(EntityPlayerMP player) {
-		DeadCraft.packetPipeline.sendTo(new DeadCraftPowerSourcesPacket(this), player);
+	public void syncWithplayer(EntityPlayer player) {
+		DeadCraft.packetPipeline.sendTo(new DeadCraftPowerSourcesPacket(this), (EntityPlayerMP) player);
 		super.syncWithplayer(player);
 	}
 
