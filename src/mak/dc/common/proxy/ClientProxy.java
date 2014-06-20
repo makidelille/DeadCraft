@@ -2,12 +2,14 @@ package mak.dc.common.proxy;
 
 import mak.dc.client.render.TESRInventoryRenderer;
 import mak.dc.client.render.TESRInventoryRenderer.TESRIndex;
+import mak.dc.client.render.block.SpecialRenderTileEntityCompressor;
 import mak.dc.client.render.block.SpecialRenderTileEntityEnderConverter;
 import mak.dc.client.render.block.SpecialRenderTileEntityGodBottler;
 import mak.dc.client.render.item.RendererItemGodCan;
 import mak.dc.client.render.item.RendererItemMindController;
 import mak.dc.common.blocks.DeadCraftBlocks;
 import mak.dc.common.items.DeadCraftItems;
+import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
 import net.minecraft.world.World;
@@ -45,6 +47,9 @@ public class ClientProxy extends CommonProxy {
         
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnderConverter.class, new SpecialRenderTileEntityEnderConverter());
         TESRInventoryRenderer.blockByTESR.put(new TESRIndex(DeadCraftBlocks.enderConverter, 0), new SpecialRenderTileEntityEnderConverter());
+        
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCompressor.class, new SpecialRenderTileEntityCompressor());
+        TESRInventoryRenderer.blockByTESR.put(new TESRIndex(DeadCraftBlocks.compressor, 0), new SpecialRenderTileEntityCompressor());
     }
     
 }

@@ -19,7 +19,7 @@ public class ItemCompacted extends Item {
     
     @Override
     public void registerIcons(IIconRegister iconRegister) {
-        iconRegister.registerIcon(Textures.COMPACTED_TEXT_LOC);
+        iconRegister.registerIcon(Textures.COMPACTED_MODEL_TEXT_LOC);
     }
     
     private static Item getItem(ItemStack is) {
@@ -50,20 +50,25 @@ public class ItemCompacted extends Item {
     }
     
     public static ItemStack compactStackInto(ItemStack stack) {
+        if(stack == null) return null;
         ItemStack result = new ItemStack(DeadCraftItems.compacted);
-        if (stack.getItem() instanceof ItemCompacted) {
-            // TODO handle it
-            return result;
+        NBTTagCompound tag = new NBTTagCompound();
+        if (stack.getItem() instanceof ItemCompacted && stack.getTagCompound() != null) {
+            int size = stack.getTagCompound().getInteger("stackSize");
+            size += stack.stackSize;
+            tag.setInteger("stackSize", size);
+            tag.setInteger("stackId", stack.getTagCompound().getInteger("stackId"));
+            tag.setInteger("StackDamage", stack.getTagCompound().getInteger("StackDamage"));
+            tag.setTag("stackTag", stack.getTagCompound().getTag("stackTag"));
         } else {
-            NBTTagCompound tag = result.getTagCompound();
-            if (tag == null) tag = new NBTTagCompound();
             tag.setInteger("stackId", Item.getIdFromItem(stack.getItem()));
             tag.setInteger("stackSize", stack.stackSize);
             tag.setInteger("StackDamage", stack.getItemDamage());
             tag.setTag("stackTag", stack.getTagCompound());
-            result.setTagCompound(tag);
-            return result;
         }
+        result.setTagCompound(tag);
+        return result;
+        
     }
     
     public static ItemStack uncompactStack(ItemStack stack) {

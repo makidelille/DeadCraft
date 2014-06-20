@@ -15,10 +15,12 @@ public class Lib {
         public static final String BLOCK_ENDERPEARLBLOCK_KEY = "enderpearlblock";
         public static final String BLOCK_BOTTLER_KEY = "godbottler";
         public static final String BLOCK_ENDERCONVERTER_KEY = "enderconverter";
+        public static final String BLOCK_COMPRESSOR_KEY = "compressor";
         
         public static final String TILE_EGGSPANWER_KEY = "eggspawnertileentity";
         public static final String TILE_BOTTLER_KEY = "godbottlertileentity";
         public static final String TILE_ENDERCONVERTER_KEY = "enderconvertertileentity";
+        public static final String TILE_COMPRESSOR_KEY = "compressortileentity";
         
     }
     
@@ -39,12 +41,12 @@ public class Lib {
         public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base", _TEXT_LOC + "controller_lock", _TEXT_LOC + "controller_info" };
         public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
         public static final String CRYSTAL_TEXT_LOC = _TEXT_LOC + "crystal";
-        public static final String COMPACTED_TEXT_LOC = _TEXT_LOC + "compacted";
         
         /** Models Textures localization */
         public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";
         public static final String GODBOTTLER_MODEL_TEXT_LOC = PATH_MODEL + "godbottlertexturemap.png";
         public static final String GODCAN_MODEL_TEXT_LOC = PATH_MODEL + "godcantexturemap.png";
+        public static final String COMPACTED_MODEL_TEXT_LOC = PATH_MODEL + "compactedmap.png";
         public static final String ENDERCONVERTER_TEXT_LOC = PATH_MODEL + "enderconvertertexturemap.png";
         
         /** Gui */
@@ -53,6 +55,8 @@ public class Lib {
         public static final String DEADCRAFTMAIN_GUI_TEXT_LOC = PATH_GUI + "deadcraftmain.png";
         public static final String GODBOTTLER_GUI_TEXT_LOC = PATH_GUI + "godbottler.png";
         public static final String ENDERCONVERTER_GUI_TEXT_LOC = PATH_GUI + "enderconverter.png";
+        public static final String COMPRESSOR_GUI_TEXT_LOC = PATH_GUI + "compressor.png";
+
         
     }
     

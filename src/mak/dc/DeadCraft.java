@@ -26,7 +26,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Lib.MOD_ID, name = Lib.MOD_NAME, version = Lib.MOD_VERSION)
 public class DeadCraft {
     
-    @SidedProxy(clientSide = "mak.dc.proxy.ClientProxy", serverSide = "mak.dc.proxy.CommonProxy")
+    @SidedProxy(clientSide = "mak.dc.common.proxy.ClientProxy", serverSide = "mak.dc.common.proxy.CommonProxy")
     public static CommonProxy proxy;
     
     @Instance("deadcraft")

@@ -1,6 +1,7 @@
 package mak.dc.client.gui.container;
 
 import mak.dc.client.gui.container.slot.SlotGodBottler;
+import mak.dc.client.gui.container.slot.SlotPower;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -18,7 +19,7 @@ public class ContainerGodBottler extends ContainerDeadCraft {
         te = te2;
         invPlayer = inventory;
         
-        addSlotToContainer(new SlotGodBottler(te, 0, 17, 62));
+        addSlotToContainer(new SlotPower(te, 0, 17, 62));
         addSlotToContainer(new SlotGodBottler(te, 1, 65, 6));
         addSlotToContainer(new SlotGodBottler(te, 2, 99, 63));
         for (int i = 0; i < 2; i++) {

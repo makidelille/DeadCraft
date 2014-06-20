@@ -29,7 +29,6 @@ public class SlotEggSpawner extends Slot {
         else if (slot == 1) return stack.getItem() == Items.skull;
         else if (slot == 3 || slot == 5) return Item.getIdFromItem(stack.getItem()) == Block.getIdFromBlock(Blocks.obsidian);
         else if (slot == 4) return Item.getIdFromItem(stack.getItem()) == Block.getIdFromBlock(Blocks.diamond_block);
-        else if (slot == 6) return stack.getItem() == DeadCraftItems.crystal;
         else return false;
     }
     

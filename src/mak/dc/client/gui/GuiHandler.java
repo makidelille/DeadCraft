@@ -1,10 +1,12 @@
 package mak.dc.client.gui;
 
 import mak.dc.DeadCraft;
+import mak.dc.client.gui.container.ContainerCompressor;
 import mak.dc.client.gui.container.ContainerDeadCraft;
 import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.container.ContainerEnderConverter;
 import mak.dc.client.gui.container.ContainerGodBottler;
+import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.common.tileEntities.TileEntityDeadCraft;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;
@@ -37,6 +39,9 @@ public class GuiHandler implements IGuiHandler {
             case 3:
                 if (te != null) return new GuiEnderConverter(player.inventory, (TileEntityEnderConverter) te, ID);
                 break;
+            case 4:
+                if (te != null) return new GuiCompressor(player.inventory, (TileEntityCompressor) te, ID);
+                break;
         
         }
         
@@ -62,6 +67,10 @@ public class GuiHandler implements IGuiHandler {
             case 3:
                 te = world.getTileEntity(x, y, z);
                 if (te != null && te instanceof TileEntityEnderConverter) return new ContainerEnderConverter(player.inventory, (TileEntityEnderConverter) te);
+                break;
+            case 4:
+                te = world.getTileEntity(x, y, z);
+                if (te != null && te instanceof TileEntityCompressor) return new ContainerCompressor(player.inventory, (TileEntityCompressor) te);
                 break;
         }
         

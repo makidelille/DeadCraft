@@ -18,8 +18,6 @@ public class SlotGodBottler extends Slot {
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
         switch (i) {
-            case 0:
-                return par1ItemStack.getItem() instanceof ItemCrystal;
             case 1:
                 return par1ItemStack.getItem() instanceof ItemGodCan;
             case 2:

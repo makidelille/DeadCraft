@@ -47,13 +47,13 @@ public class ModelGodBottler extends ModelBase {
         BLeft.setRotationPoint(7F, 8F, 0F);
         BLeft.setTextureSize(128, 128);
         BLeft.mirror = true;
-        setRotation(BLeft, 0F, 1.570796F, 0F);
+        setRotation(BLeft, 0F, (float) (Math.PI /2f), 0F);
         BRight = new ModelRenderer(this, 72, 0);
         BRight.addBox(-8F, -12F, -1F, 16, 24, 2);
         BRight.setRotationPoint(-7F, 8F, 0F);
         BRight.setTextureSize(128, 128);
         BRight.mirror = true;
-        setRotation(BRight, 0F, -1.570796F, 0F);
+        setRotation(BRight, 0F, -(float) (Math.PI /2f), 0F);
         Plateau = new ModelRenderer(this, 26, 26);
         Plateau.addBox(-5F, 0F, -5F, 10, 1, 10);
         Plateau.setRotationPoint(0F, 14F, 0F);

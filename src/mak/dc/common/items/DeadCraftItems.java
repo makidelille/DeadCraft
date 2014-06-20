@@ -58,6 +58,7 @@ public class DeadCraftItems {
         DeadCraftBlocks.enderPearlBlock.setCreativeTab(tabDeadCraft);
         DeadCraftBlocks.godBottler.setCreativeTab(tabDeadCraft);
         DeadCraftBlocks.enderConverter.setCreativeTab(tabDeadCraft);
+        DeadCraftBlocks.compressor.setCreativeTab(tabDeadCraft);
     }
     
     public static void registerCraftRecipe() {

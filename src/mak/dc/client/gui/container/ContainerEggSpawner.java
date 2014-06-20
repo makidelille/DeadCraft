@@ -1,6 +1,7 @@
 package mak.dc.client.gui.container;
 
 import mak.dc.client.gui.container.slot.SlotEggSpawner;
+import mak.dc.client.gui.container.slot.SlotPower;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +27,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
             }
         }
         
-        addSlotToContainer(new SlotEggSpawner(te, 6, 29, 72));
+        addSlotToContainer(new SlotPower(te, 6, 29, 72));
         
         for (int x = 0; x < 9; x++) {
             addSlotToContainer(new Slot(invPlayer, x, 11 + 18 * x, 165));
