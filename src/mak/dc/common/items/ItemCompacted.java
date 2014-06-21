@@ -35,6 +35,7 @@ public class ItemCompacted extends Item {
     private static int getSize(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return 0;
+        ItemStack stack = new ItemStack(getItem(is));
         return tag.getInteger("stackSize");
     }
     
@@ -60,7 +61,7 @@ public class ItemCompacted extends Item {
             size *= stack.stackSize;
             tag.setInteger("stackSize", size);
             tag.setInteger("stackId", stack.getTagCompound().getInteger("stackId"));
-            tag.setInteger("stackDamage", stack.getTagCompound().getInteger("StackDamage"));
+            tag.setInteger("stackDamage", stack.getTagCompound().getInteger("stackDamage"));
             if(tag.hasKey("stackTag")) tag.setTag("stackTag", stack.getTagCompound().getTag("stackTag"));
         } else {
             tag.setInteger("stackId", Item.getIdFromItem(stack.getItem()));
@@ -72,13 +73,32 @@ public class ItemCompacted extends Item {
         return result;
         
     }
-    
-    public static ItemStack uncompactStack(ItemStack stack) {
+    /**
+     * @param compressed stack
+     * @return array of stack, first is the uncompressed, second the left overs
+     */
+    public static ItemStack[] uncompactStack(ItemStack stack) {
         if(!(stack.getItem() instanceof ItemCompacted)) return null;
         Item it = getItem(stack);
-        if (it == null) return null;
-        ItemStack re = new ItemStack(it, getSize(stack), getDmg(stack));
-        re.setTagCompound(getTag(stack));
+        if (it == null || stack.getTagCompound() == null) return null;
+        ItemStack[] re = new ItemStack[2];
+        int size = getMaxSize(stack);
+        NBTTagCompound tag = stack.getTagCompound();
+        ItemStack temp = new ItemStack(it, size, getDmg(stack));
+        if(getTag(stack) != null) temp.setTagCompound(getTag(stack));
+        re[0] = temp;
+        int newSize = getSize(stack) - size;
+        tag.setInteger("stackSize", newSize);
+        stack.setTagCompound(tag);
+        re[1] = stack;
+        if(newSize <= 0) re[1] = null;
         return re;
+    }
+
+    private static int getMaxSize(ItemStack is) {
+        NBTTagCompound tag = is.getTagCompound();
+        if (tag == null) return 0;
+        ItemStack stack = new ItemStack(getItem(is));
+        return tag.getInteger("stackSize") > stack.getMaxStackSize() ? stack.getMaxStackSize() : tag.getInteger("stackSize");
     }
 }

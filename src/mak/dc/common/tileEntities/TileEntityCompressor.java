@@ -4,6 +4,7 @@ import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemCompacted;
 import mak.dc.common.items.ItemCrystal;
 import mak.dc.network.pipeline.packets.DeadCraftCompressorPacket;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -14,7 +15,9 @@ import net.minecraft.nbt.NBTTagList;
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory {
     private static final int MAXCHARGESPEED = 50;
     private static final int MAXCHARGE = 5_000;
-    public static final int BUILDTIME = 500;
+    private static final int POWERUSE = 50;
+    
+    public static final int BUILDTIME = 250;
     
     public static final byte slotPower = 0;
     public static final byte slotInput = 1;
@@ -30,36 +33,49 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if(!worldObj.isRemote){
-            if(!this.isSync) sync();
+        if (!worldObj.isRemote) {
+            if (!this.isSync) sync();
             boolean flag = false;
-            if(isInverted) flag = getStackInSlot(slotInput) != null && getStackInSlot(slotInput).getItem() instanceof ItemCompacted;
-            else flag = getStackInSlot(slotInput) != null;
-            if(flag && getStackInSlot(slotOutput) == null && !wip){
+            if (isInverted) flag = getStackInSlot(slotInput) != null && getStackInSlot(slotInput).getItem() instanceof ItemCompacted && getStackInSlot(slotInput).stackSize == 1;
+            else if (!isInverted) flag = getStackInSlot(slotInput) != null;
+            if (flag && getStackInSlot(slotOutput) == null && !wip) {
                 wip = true;
                 tempbuffer = getStackInSlot(slotInput);
                 setInventorySlotContents(slotInput, null);
                 isSync = false;
             }
-            if(progress >= BUILDTIME){
+            if (progress >= BUILDTIME) {
                 ItemStack re;
-                if(isInverted){
-                    re = ItemCompacted.uncompactStack(tempbuffer);
-                }else{
+                if (isInverted) {
+                    ItemStack[] res = ItemCompacted.uncompactStack(tempbuffer);
+                    re = res[0];
+                    if (res[1] != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, res[1]));
+                } else {
                     re = ItemCompacted.compactStackInto(tempbuffer);
+                    tempbuffer = null;
                 }
                 setInventorySlotContents(slotOutput, re);
-                tempbuffer = null;
-                wip = false;   
+                wip = false;
                 isSync = false;
             }
+            if (wip) {
+                if(getCharge() >= POWERUSE){
+                    setCharge(getCharge() - POWERUSE);
+                    progress++;
+                }else{
+                    wip = false;
+                }
+            } else {
+                progress = 0;
+            }
         }
-        if(wip){
-            progress++;
-        }else{
-            progress = 0;
+        if (worldObj.isRemote) {
+            if (wip) {
+                progress++;
+            } else {
+                progress = 0;
+            }
         }
-  
         
     }
     
@@ -68,7 +84,6 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         super.syncWithplayer(player);
         DeadCraft.packetPipeline.sendTo(new DeadCraftCompressorPacket(this), (EntityPlayerMP) player);
     }
-    
     
     private void sync() {
         DeadCraft.packetPipeline.sendToDimension(new DeadCraftCompressorPacket(this), this.worldObj.getWorldInfo().getVanillaDimension());
@@ -85,7 +100,7 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
             
             if (slot >= 0 && slot < getSizeInventory()) {
                 setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
-            }else if(slot == -1) tempbuffer = ItemStack.loadItemStackFromNBT(item);
+            } else if (slot == -1) tempbuffer = ItemStack.loadItemStackFromNBT(item);
             
         }
         
@@ -112,7 +127,7 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
             }
         }
         ItemStack temp = tempbuffer;
-        if(temp != null){
+        if (temp != null) {
             NBTTagCompound item = new NBTTagCompound();
             item.setByte("Slot", (byte) -1);
             temp.writeToNBT(item);
@@ -126,7 +141,6 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         
     }
     
-    
     @Override
     public int getMaxChargeSpeed() {
         return MAXCHARGESPEED;
@@ -136,17 +150,17 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     public int getMaxPower() {
         return MAXCHARGE;
     }
-
+    
     @Override
     public int getSizeInventory() {
         return inv.length;
     }
-
+    
     @Override
     public ItemStack getStackInSlot(int var1) {
         return inv[var1];
     }
-
+    
     @Override
     public ItemStack decrStackSize(int i, int count) {
         ItemStack itemstack = getStackInSlot(i);
@@ -160,12 +174,12 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         }
         return itemstack;
     }
-
+    
     @Override
     public ItemStack getStackInSlotOnClosing(int var1) {
         return inv[var1];
     }
-
+    
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         inv[i] = itemstack;
@@ -173,66 +187,67 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
             itemstack.stackSize = getInventoryStackLimit();
         }
     }
-
+    
     @Override
     public String getInventoryName() {
         return null;
     }
-
+    
     @Override
     public boolean hasCustomInventoryName() {
         return false;
     }
-
+    
     @Override
     public int getInventoryStackLimit() {
         return 64;
     }
-
+    
     @Override
-    public void openInventory() {}
-
+    public void openInventory() {
+    }
+    
     @Override
-    public void closeInventory() {}
-
+    public void closeInventory() {
+    }
+    
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack var2) {
-        switch(slot) {
-            case slotInput : return true;
-            case slotOutput : return false;
-            case slotPower : return var2.getItem() instanceof ItemCrystal;
+        switch (slot) {
+            case slotInput:
+                return true;
+            case slotOutput:
+                return false;
+            case slotPower:
+                return var2.getItem() instanceof ItemCrystal;
         }
         return false;
     }
-
-
-
+    
     public int getProgress() {
         return progress;
     }
     
-    public boolean isInverted(){
+    public boolean isInverted() {
         return isInverted;
     }
-
-
-
+    
     public void setProgress(int data) {
         this.progress = data;
     }
-
+    
     public boolean hasStarted() {
         return this.wip;
     }
-
+    
     public void setWorkInProgress(boolean wip2) {
         this.wip = wip2;
-        if(!worldObj.isRemote) isSync = false;
+        if (!worldObj.isRemote) isSync = false;
         
     }
-
+    
     public void setInverted(boolean isInverted2) {
-        if(!wip) this.isInverted = isInverted2;
-        if(!worldObj.isRemote) isSync = false;
-    }    
+        if (!wip) this.isInverted = isInverted2;
+        if (!worldObj.isRemote) isSync = false;
+    }
 }
