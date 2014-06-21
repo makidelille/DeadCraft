@@ -1,0 +1,106 @@
+itemGroup.DeadCraft=Dead Craft
+
+item.deadwand.name=Wand of Death
+item.crystal.name=Crystal
+item.mindcontroller.name=MindController
+item.wrench.name=Wrench
+item.godcan.name=God-Can
+tile.dragoneggspawner.name=Dragon Egg Spawner
+tile.enderpearlblock.name=Ender Block
+tile.godbottler.name=God-Bottler
+tile.enderconverter.name=Ender-Converter
+
+dc.true=True
+dc.false=False
+dc.public=Public
+dc.private=Private
+dc.power=Power
+dc.charge=Charge
+dc.none=None
+dc.progress=Progress
+dc.infinite=Infinite
+dc.second=s
+dc.kilo=K
+dc.start=Start
+dc.stop=Stop
+dc.active=Active
+dc.inactive=Inactive
+
+dc.block.info.notSet=Is not set yet
+dc.block.info.hasAllowedList=has an allowed list
+dc.block.gui.lock=Lock
+dc.block.gui.sync=Sync
+dc.block.notOwner=You're not the owner of this block
+dc.block.notAllowed=You're not allowed to use this block
+dc.block.owner=Owner
+dc.block.lockState=Lock State
+dc.block.allowed=Allowed users
+
+dc.block.power.info.connectionNb=Number of connections
+
+dc.block.eggSpawner.gui.status=State
+dc.block.eggSpawner.gui.eggInStock=Egg in Stock
+dc.block.eggSpawner.gui.redstone.mode=Redstone
+dc.block.eggSpawner.gui.redstone.normal=Normal
+dc.block.eggSpawner.gui.redstone.inverted=Inverted
+dc.block.eggSpawner.gui.redstone.disable=Disable
+dc.block.eggSpawner.gui.run.mode=Run Mode
+dc.block.eggSpawner.gui.run.single=Single run
+dc.block.eggSpawner.gui.run.loop=On Loop
+dc.block.eggSpawner.gui.info.header=Infos
+dc.block.eggSpawner.gui.info.info=This bow is used to given information about the functions of the buttons
+dc.block.eggSpawner.gui.info.redstone.normal=The spawner will emit a short pulse when an egg is spawned in the world
+dc.block.eggSpawner.gui.info.redstone.inverted=The spawner will stop emiting a redstone signal when an egg spawns
+dc.block.eggSpawner.gui.info.redstone.off=The spawner will not emit redstone signals wheter it spawns an egg or not
+dc.block.eggSpawner.gui.info.single=The spawner will only produce one egg when you click on 'start'
+dc.block.eggSpawner.gui.info.loop=The spawner will produce egg as long as you don't click on the 'stop'
+
+dc.block.godBottler.gui.error.header=Problems
+dc.block.godBottler.gui.error.noPower=No Power
+dc.block.godBottler.gui.error.noRedstone=No Redstone
+dc.block.godBottler.gui.error.noEmptyCan=No empty Can
+dc.block.godBottler.gui.error.noRecipe=No matching recipe
+dc.block.godBottler.gui.error.noSpace=No free crafting space
+dc.block.godBottler.gui.error.sameId=Can has Already this effect
+dc.block.godBottler.info.redstone=Is redstone powered 
+dc.block.godBottler.info.isTop=This is the top Block, Data are stored bellow
+
+dc.block.enderConverter.gui.powerLeft=Power left in item
+
+dc.info.holdShift=-- Press Shift for info --
+dc.info.isCreative=Is creative spawned
+
+dc.wrench.info.name.base=Base
+dc.wrench.info.name.admin=Admin
+dc.wrench.info.name.info=Info
+dc.wrench.info.change=Shift + Right click to change mode
+dc.wrench.info.wrenchMode=Wrench mode
+dc.wrench.info.ifAllowed=If you're allowed to use the block
+dc.wrench.info.ifAdmin=If you're the owner of the block
+dc.wrench.info.doBasics=You can do basics stuff
+dc.wrench.info.editSec=You can change the security
+dc.wrench.info.seeSec=You get the security information
+dc.wrench.info.seeInfo=You get information on the block
+dc.wrench.info.coord.header=Bind to
+dc.wrench.header.owner=Owner
+dc.wrench.header.allowed=Allowed
+
+
+dc.crystal.info.tier=Tier
+
+dc.mindcontroller.info.creator=Creator
+dc.mindcontroller.info.activate=Right click to activate
+dc.mindcontroller.useNotCreat=Do not use the items of the others
+dc.mindcontroller.usePlayer=Do not use the MindController on people
+
+dc.godcan.info.effectid=Effect Id
+dc.godcan.info.isActive=Is Active
+dc.godcan.info.time=Time in use
+dc.godcan.info.effects=Effects
+dc.godcan.info.noEffect=No effect
+
+dc.canEffect.fly.name=Fly
+dc.canEffect.potion.name=Potion
+dc.canEffect.potion_speed.name=Speed Boost
+dc.canEffect.potion_resistance.name=Resistance Boost
+dc.caneffect.potion_haste.name=Mining Speed Boost
