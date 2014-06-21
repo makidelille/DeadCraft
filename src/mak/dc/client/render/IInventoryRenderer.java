@@ -1,4 +1,4 @@
-package mak.dc.client;
+package mak.dc.client.render;
 
 
 public interface IInventoryRenderer {

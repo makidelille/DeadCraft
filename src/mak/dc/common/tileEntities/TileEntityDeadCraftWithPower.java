@@ -6,7 +6,7 @@ import java.util.List;
 import mak.dc.DeadCraft;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
-import mak.dc.network.packets.DeadCraftPowerSourcesPacket;
+import mak.dc.network.pipeline.packets.DeadCraftPowerSourcesPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -74,7 +74,9 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
     
     public abstract int getMaxPower();
     
-    public abstract int getCharge();
+    public int getCharge(){
+        return this.power;
+    }
     
     @Override
     public List<IPowerSender> getPowerSource() {
@@ -124,6 +126,10 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
     @Override
     public void setSourceChange() {
         sourceChanged = true;
+    }
+    
+    public void setCharge(int charge) {
+        this.power = charge;
     }
     
     private void sync() {

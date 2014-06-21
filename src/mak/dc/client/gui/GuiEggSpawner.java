@@ -8,7 +8,7 @@ import mak.dc.client.gui.util.GuiRectangle;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.Textures;
-import mak.dc.network.packets.DeadCraftEggSpawnerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftEggSpawnerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.texture.TextureMap;

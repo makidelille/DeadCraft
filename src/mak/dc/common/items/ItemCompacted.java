@@ -15,6 +15,8 @@ public class ItemCompacted extends Item {
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
         list.add("item : " + getItem(stack).getUnlocalizedName());
         list.add("size : " + getSize(stack));
+        list.add("dmg : " + getDmg(stack));
+        if(getTag(stack) != null) list.add("has custom data");
     }
     
     @Override
@@ -55,16 +57,16 @@ public class ItemCompacted extends Item {
         NBTTagCompound tag = new NBTTagCompound();
         if (stack.getItem() instanceof ItemCompacted && stack.getTagCompound() != null) {
             int size = stack.getTagCompound().getInteger("stackSize");
-            size += stack.stackSize;
+            size *= stack.stackSize;
             tag.setInteger("stackSize", size);
             tag.setInteger("stackId", stack.getTagCompound().getInteger("stackId"));
-            tag.setInteger("StackDamage", stack.getTagCompound().getInteger("StackDamage"));
-            tag.setTag("stackTag", stack.getTagCompound().getTag("stackTag"));
+            tag.setInteger("stackDamage", stack.getTagCompound().getInteger("StackDamage"));
+            if(tag.hasKey("stackTag")) tag.setTag("stackTag", stack.getTagCompound().getTag("stackTag"));
         } else {
             tag.setInteger("stackId", Item.getIdFromItem(stack.getItem()));
             tag.setInteger("stackSize", stack.stackSize);
-            tag.setInteger("StackDamage", stack.getItemDamage());
-            tag.setTag("stackTag", stack.getTagCompound());
+            tag.setInteger("stackDamage", stack.getItemDamage());
+            if(stack.hasTagCompound()) tag.setTag("stackTag", stack.getTagCompound());
         }
         result.setTagCompound(tag);
         return result;
@@ -72,6 +74,7 @@ public class ItemCompacted extends Item {
     }
     
     public static ItemStack uncompactStack(ItemStack stack) {
+        if(!(stack.getItem() instanceof ItemCompacted)) return null;
         Item it = getItem(stack);
         if (it == null) return null;
         ItemStack re = new ItemStack(it, getSize(stack), getDmg(stack));

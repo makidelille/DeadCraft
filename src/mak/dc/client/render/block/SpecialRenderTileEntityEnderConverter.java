@@ -1,6 +1,6 @@
 package mak.dc.client.render.block;
 
-import mak.dc.client.IInventoryRenderer;
+import mak.dc.client.render.IInventoryRenderer;
 import mak.dc.common.blocks.BlockEnderConverter;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;
 import mak.dc.common.util.Lib;

@@ -1,8 +1,8 @@
 package mak.dc.client.render.block;
 
-import mak.dc.client.IInventoryRenderer;
 import mak.dc.client.model.ModelGodBottler;
 import mak.dc.client.model.ModelGodCan;
+import mak.dc.client.render.IInventoryRenderer;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.Textures;

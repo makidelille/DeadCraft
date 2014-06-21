@@ -7,7 +7,7 @@ import mak.dc.common.items.DeadCraftItems;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.PowerManager;
 import mak.dc.common.util.cans.CanCraftingManager;
-import mak.dc.network.PacketPipeline;
+import mak.dc.network.pipeline.PacketPipeline;
 import mak.dc.network.proxy.CommonProxy;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -26,7 +26,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Lib.MOD_ID, name = Lib.MOD_NAME, version = Lib.MOD_VERSION)
 public class DeadCraft {
     
-    @SidedProxy(clientSide = "mak.dc.common.proxy.ClientProxy", serverSide = "mak.dc.common.proxy.CommonProxy")
+    @SidedProxy(clientSide = Lib.PROXY_CLIENT, serverSide = Lib.PROXY_SERVER)
     public static CommonProxy proxy;
     
     @Instance("deadcraft")

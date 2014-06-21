@@ -1,12 +1,16 @@
 package mak.dc.client.gui;
 
+import mak.dc.DeadCraft;
 import mak.dc.client.gui.container.ContainerCompressor;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiRectangle;
+import mak.dc.client.gui.util.GuiSwitch;
 import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.Textures;
+import mak.dc.network.pipeline.packets.DeadCraftCompressorPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -41,6 +45,28 @@ public class GuiCompressor extends GuiCustom {
         
     }
     
+    @Override
+    protected void drawGuiContainerForegroundLayer(int x, int y) {
+        this.drawString(getFontRenderer(), "inverted : " + te.isInverted(), 1, 1, 0x404040); //TODO strings
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        this.buttonList.add(new GuiButton(0,guiLeft + 76, guiTop + 16, 30, 12, "button")); //TODO strings
+    }
+    
+    @Override
+    public void actionPerformed(GuiButton button) {
+        super.actionPerformed(button);
+        switch (button.id) {
+            case 0:
+                DeadCraft.packetPipeline.sendToServer(new DeadCraftCompressorPacket(te.xCoord,te.yCoord,te.zCoord, !te.isInverted()));
+                break;
+        }
+    }
+    
+    
     private int getSize(int i) {
         switch (i) {
             case 0:
@@ -51,9 +77,5 @@ public class GuiCompressor extends GuiCustom {
         return 0;
     }
     
-    @Override
-    protected void drawGuiContainerForegroundLayer(int x, int y) {
-        
-    }
     
 }

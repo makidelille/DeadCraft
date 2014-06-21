@@ -1,6 +1,15 @@
 package mak.dc.common.util;
 
-public class Lib {
+import mak.dc.network.proxy.ClientProxy;
+import mak.dc.network.proxy.CommonProxy;
+
+public final class Lib {
+    
+    public static final String MOD_NAME = "Dead Craft";
+    public static final String MOD_ID = "deadcraft";
+    public static final String MOD_VERSION = "@VERSION@";
+    public static final String PROXY_CLIENT = "mak.dc.network.proxy.ClientProxy";
+    public static final String PROXY_SERVER = "mak.dc.network.proxy.CommonProxy";
     
     public static class IBTInfos {
         
@@ -56,13 +65,8 @@ public class Lib {
         public static final String GODBOTTLER_GUI_TEXT_LOC = PATH_GUI + "godbottler.png";
         public static final String ENDERCONVERTER_GUI_TEXT_LOC = PATH_GUI + "enderconverter.png";
         public static final String COMPRESSOR_GUI_TEXT_LOC = PATH_GUI + "compressor.png";
-
         
     }
     
-    public static final String MOD_NAME = "Dead Craft";
     
-    public static final String MOD_ID = "deadcraft";
-    
-    public static final String MOD_VERSION = "0.01 alpha";
 }

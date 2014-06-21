@@ -12,7 +12,7 @@ import mak.dc.common.items.ItemCrystal;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.common.util.PowerManager;
-import mak.dc.network.packets.DeadCraftEnderConverterPacket;
+import mak.dc.network.pipeline.packets.DeadCraftEnderConverterPacket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

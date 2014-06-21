@@ -1,4 +1,4 @@
-package mak.dc.network.packets;
+package mak.dc.network.pipeline.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

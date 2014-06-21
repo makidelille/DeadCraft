@@ -2,12 +2,13 @@ package mak.dc.client.render.block;
 
 import org.lwjgl.opengl.GL11;
 
-import mak.dc.client.IInventoryRenderer;
 import mak.dc.client.model.ModelCompresor;
+import mak.dc.client.render.IInventoryRenderer;
 import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.Textures;
+import mak.dc.network.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -18,7 +19,6 @@ public class SpecialRenderTileEntityCompressor extends TileEntitySpecialRenderer
     
     private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.COMPACTED_MODEL_TEXT_LOC);
     private static final ModelCompresor model = new ModelCompresor();
-    private float a =0;
     
     public SpecialRenderTileEntityCompressor(){
         func_147497_a(TileEntityRendererDispatcher.instance);
@@ -34,14 +34,15 @@ public class SpecialRenderTileEntityCompressor extends TileEntitySpecialRenderer
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glTranslated(x + 0.5f, y+1.5f, z + 0.5f);
         GL11.glRotatef(180f, 1f, 0f, 0f);
-        //a+= 0.01f;
-        a=0;
-        float off = a  * 1/16f;
+        float off = 0;
+        if(te != null){
+            float prog = ((float) te.getProgress()) / te.BUILDTIME; 
+            off = -4 * prog * (prog -1)  * 7/16f;
+        }
         model.PistonTop.offsetY = off;
         model.Top.offsetY = off;
         model.Press.offsetY = off;
         model.TopPress.offsetY = off;
-        
         
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         model.render(0.0625F);

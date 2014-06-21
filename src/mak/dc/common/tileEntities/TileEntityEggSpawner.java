@@ -446,11 +446,5 @@ public class TileEntityEggSpawner extends TileEntityDeadCraftWithPower implement
         compound.setInteger("eggInStock", eggInStock);
         compound.setByte("redState", redState);
         compound.setByte("mode", mode);
-    }
-
-    @Override
-    public int getCharge() {
-        return power;
-    }
-    
+    }    
 }

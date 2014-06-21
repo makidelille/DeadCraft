@@ -1,4 +1,4 @@
-package mak.dc.network;
+package mak.dc.network.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -12,13 +12,14 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import mak.dc.network.packets.AbstractPacket;
-import mak.dc.network.packets.DeadCraftAdminPacket;
-import mak.dc.network.packets.DeadCraftClientToServerPacket;
-import mak.dc.network.packets.DeadCraftEggSpawnerPacket;
-import mak.dc.network.packets.DeadCraftEnderConverterPacket;
-import mak.dc.network.packets.DeadCraftGodBottlerPacket;
-import mak.dc.network.packets.DeadCraftPowerSourcesPacket;
+import mak.dc.network.pipeline.packets.AbstractPacket;
+import mak.dc.network.pipeline.packets.DeadCraftAdminPacket;
+import mak.dc.network.pipeline.packets.DeadCraftClientToServerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftCompressorPacket;
+import mak.dc.network.pipeline.packets.DeadCraftEggSpawnerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftEnderConverterPacket;
+import mak.dc.network.pipeline.packets.DeadCraftGodBottlerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftPowerSourcesPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -130,6 +131,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         registerPacket(DeadCraftEnderConverterPacket.class);
         registerPacket(DeadCraftPowerSourcesPacket.class);
         registerPacket(DeadCraftClientToServerPacket.class);
+        registerPacket(DeadCraftCompressorPacket.class);
     }
     
     /**

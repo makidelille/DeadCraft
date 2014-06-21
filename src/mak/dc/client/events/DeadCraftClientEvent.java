@@ -8,7 +8,7 @@ import mak.dc.common.tileEntities.TileEntityGodBottler;
 import mak.dc.common.util.DrawHelper;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
-import mak.dc.network.packets.DeadCraftClientToServerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftClientToServerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

@@ -13,7 +13,7 @@ import mak.dc.common.items.ItemGodCan;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.common.util.Lib.IBTInfos;
 import mak.dc.common.util.cans.CanCraftingManager;
-import mak.dc.network.packets.DeadCraftGodBottlerPacket;
+import mak.dc.network.pipeline.packets.DeadCraftGodBottlerPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -734,7 +734,7 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
 
     @Override
     public int getCharge() {
-        return isTop() ? pair.getCharge() : power;
+        return isTop() ? pair.getCharge() : super.getCharge();
     }
     
 }
