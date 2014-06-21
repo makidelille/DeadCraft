@@ -1,10 +1,9 @@
-package mak.dc.common.network.packet;
+package mak.dc.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import mak.dc.DeadCraft;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;
-import mak.dc.common.util.AbstractPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

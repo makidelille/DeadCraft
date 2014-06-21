@@ -1,4 +1,4 @@
-package mak.dc.common.network;
+package mak.dc.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -12,13 +12,13 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import mak.dc.common.network.packet.DeadCraftAdminPacket;
-import mak.dc.common.network.packet.DeadCraftClientToServerPacket;
-import mak.dc.common.network.packet.DeadCraftEggSpawnerPacket;
-import mak.dc.common.network.packet.DeadCraftEnderConverterPacket;
-import mak.dc.common.network.packet.DeadCraftGodBottlerPacket;
-import mak.dc.common.network.packet.DeadCraftPowerSourcesPacket;
-import mak.dc.common.util.AbstractPacket;
+import mak.dc.network.packets.AbstractPacket;
+import mak.dc.network.packets.DeadCraftAdminPacket;
+import mak.dc.network.packets.DeadCraftClientToServerPacket;
+import mak.dc.network.packets.DeadCraftEggSpawnerPacket;
+import mak.dc.network.packets.DeadCraftEnderConverterPacket;
+import mak.dc.network.packets.DeadCraftGodBottlerPacket;
+import mak.dc.network.packets.DeadCraftPowerSourcesPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

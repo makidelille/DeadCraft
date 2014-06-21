@@ -1,4 +1,4 @@
-package mak.dc.common.proxy;
+package mak.dc.network.proxy;
 
 import mak.dc.client.render.TESRInventoryRenderer;
 import mak.dc.client.render.TESRInventoryRenderer.TESRIndex;

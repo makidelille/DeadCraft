@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.DeadCraft;
-import mak.dc.common.network.packet.DeadCraftPowerSourcesPacket;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
+import mak.dc.network.packets.DeadCraftPowerSourcesPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,9 +70,11 @@ public abstract class TileEntityDeadCraftWithPower extends TileEntityDeadCraft i
         return re;
     }
     
-    protected abstract int getMaxChargeSpeed();
+    public abstract int getMaxChargeSpeed();
     
-    protected abstract int getMaxPower();
+    public abstract int getMaxPower();
+    
+    public abstract int getCharge();
     
     @Override
     public List<IPowerSender> getPowerSource() {

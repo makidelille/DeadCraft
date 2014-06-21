@@ -76,7 +76,7 @@ public class GuiGodBottler extends GuiCustom {
     protected void drawGuiContainerForegroundLayer(int x, int y) {
         GL11.glDisable(GL11.GL_LIGHTING);
         GuiRectangle rect = new GuiRectangle(this, 16, 7, 18, 52);
-        rect.drawHoverString(x, y, StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getPower() + "/" + TileEntityGodBottler.MAXPOWER / 1000f + StatCollector.translateToLocal("dc.kilo"));
+        rect.drawHoverString(x, y, StatCollector.translateToLocal("dc.power") + " :\n" + EnumChatFormatting.YELLOW + te.getCharge() + "/" + TileEntityGodBottler.MAXPOWER / 1000f + StatCollector.translateToLocal("dc.kilo"));
         
         if (!te.hasStarted()) {
             drawInfoPanel(getProblems(), StatCollector.translateToLocal("dc.block.godBottler.gui.error.header"), -93, 8, 92);
@@ -94,7 +94,7 @@ public class GuiGodBottler extends GuiCustom {
     }
     
     private int getSizeBar(int i) {
-        if (i == 5) return (int) (52 * (float) te.getPower() / TileEntityGodBottler.MAXPOWER);
+        if (i == 5) return (int) (52 * (float) te.getCharge() / TileEntityGodBottler.MAXPOWER);
         float workedTime = te.getWorkedTime();
         float x = (float) te.getWorkedTime() / (float) te.BUILDTIME;
         if (workedTime <= TileEntityGodBottler.BUILDTIME / 3f) {

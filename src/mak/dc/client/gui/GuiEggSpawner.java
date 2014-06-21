@@ -5,10 +5,10 @@ import mak.dc.client.gui.container.ContainerEggSpawner;
 import mak.dc.client.gui.util.GuiCustom;
 import mak.dc.client.gui.util.GuiDrawHelper;
 import mak.dc.client.gui.util.GuiRectangle;
-import mak.dc.common.network.packet.DeadCraftEggSpawnerPacket;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.Textures;
+import mak.dc.network.packets.DeadCraftEggSpawnerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -62,7 +62,7 @@ public class GuiEggSpawner extends GuiCustom {
         int powerBar;
         int durationBarLenght;
         
-        powerBar = (int) (50 * (float) te.getPower() / TileEntityEggSpawner.MAXPOWER);
+        powerBar = (int) (50 * (float) te.getCharge() / TileEntityEggSpawner.MAXPOWER);
         subRect.set(1, new GuiRectangle(this, 29, 18 + 50 - powerBar, 16, powerBar));
         subRect.get(1).draw(185, 64 + 50 - powerBar);
         
@@ -93,7 +93,7 @@ public class GuiEggSpawner extends GuiCustom {
         str = StatCollector.translateToLocal("dc.progress") + " : " + te.getProgress() + "%";
         getFontRenderer().drawSplitString(str, 65, 67, 110, 0x404040);
         
-        str = StatCollector.translateToLocal("dc.power") + " : " + te.getPower() + "/" + TileEntityEggSpawner.MAXPOWER / 1000 + StatCollector.translateToLocal("dc.kilo");
+        str = StatCollector.translateToLocal("dc.power") + " : " + te.getCharge() + "/" + TileEntityEggSpawner.MAXPOWER / 1000 + StatCollector.translateToLocal("dc.kilo");
         getFontRenderer().drawSplitString(str, 65, 77, 110, 0x404040);
         
         str = StatCollector.translateToLocal("dc.block.eggSpawner.gui.eggInStock") + " : " + te.getEggInStock();

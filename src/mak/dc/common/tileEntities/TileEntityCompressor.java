@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory {
     private static final int MAXCHARGESPEED = 50;
-    private static final int MAXCHARGE = 5_000;
-    private static final int BUILDTIME = 100;
+    private static final int MAXCHARGE = 5_00;
+    public static final int BUILDTIME = 100;
     
     public static final byte slotPower = 0;
     public static final byte slotInput = 1;
@@ -18,6 +18,8 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     private ItemStack tempbuffer;
     private int progress;
     private boolean wip;
+    private boolean isInverted;
+    private int charge;
     
     @Override
     public void updateEntity() {
@@ -30,15 +32,17 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         if(wip){
             progress++;
         }else{
+            wip = true;
             progress = 0;
         }
-        System.out.println(progress);
         if(progress >= BUILDTIME){
-            ItemStack re = ItemCompacted.compactStackInto(tempbuffer);
-            setInventorySlotContents(slotOutput, re);
+//            ItemStack re = ItemCompacted.compactStackInto(tempbuffer);
+//            setInventorySlotContents(slotOutput, re);
             wip = false;            
         }
         
+        if(charge < MAXCHARGE) charge++;
+        else charge =0;
         
         
     }
@@ -46,12 +50,12 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     
     
     @Override
-    protected int getMaxChargeSpeed() {
+    public int getMaxChargeSpeed() {
         return MAXCHARGESPEED;
     }
     
     @Override
-    protected int getMaxPower() {
+    public int getMaxPower() {
         return MAXCHARGE;
     }
 
@@ -121,6 +125,23 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
             case slotPower : return var2.getItem() instanceof ItemCrystal;
         }
         return false;
+    }
+
+
+
+    public int getProgress() {
+        return progress;
+    }
+    
+    public boolean isInverted(){
+        return isInverted;
+    }
+
+
+
+    @Override
+    public int getCharge() {
+        return charge;
     }
     
 }

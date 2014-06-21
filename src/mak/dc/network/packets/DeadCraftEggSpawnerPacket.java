@@ -1,9 +1,8 @@
-package mak.dc.common.network.packet;
+package mak.dc.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
-import mak.dc.common.util.AbstractPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 

@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemCrystal;
 import mak.dc.common.items.ItemGodCan;
-import mak.dc.common.network.packet.DeadCraftGodBottlerPacket;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.common.util.Lib.IBTInfos;
 import mak.dc.common.util.cans.CanCraftingManager;
+import mak.dc.network.packets.DeadCraftGodBottlerPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -318,21 +318,17 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
     }
     
     @Override
-    protected int getMaxChargeSpeed() {
+    public int getMaxChargeSpeed() {
         return MAXCHARGESPEED;
     }
     
     @Override
-    protected int getMaxPower() {
+    public int getMaxPower() {
         return MAXPOWER;
     }
     
     public TileEntityGodBottler getPair() {
         return pair;
-    }
-    
-    public int getPower() {
-        return isTop() ? pair.getPower() : power;
     }
     
     @Override
@@ -734,6 +730,11 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
             nbtTagCompound.setInteger("workTime", workedTime);
         }
         isSync = false;
+    }
+
+    @Override
+    public int getCharge() {
+        return isTop() ? pair.getCharge() : power;
     }
     
 }

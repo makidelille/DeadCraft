@@ -1,4 +1,4 @@
-package mak.dc.common.proxy;
+package mak.dc.network.proxy;
 
 import mak.dc.client.gui.GuiHandler;
 import net.minecraft.world.World;

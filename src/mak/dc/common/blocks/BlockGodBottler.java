@@ -3,8 +3,8 @@ package mak.dc.common.blocks;
 import java.util.Random;
 
 import mak.dc.DeadCraft;
-import mak.dc.common.proxy.ClientProxy;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
+import mak.dc.network.proxy.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;

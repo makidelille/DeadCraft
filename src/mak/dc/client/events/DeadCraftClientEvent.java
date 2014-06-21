@@ -1,14 +1,14 @@
-package mak.dc.common.event;
+package mak.dc.client.events;
 
 import java.util.List;
 
 import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemWrench;
-import mak.dc.common.network.packet.DeadCraftClientToServerPacket;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
 import mak.dc.common.util.DrawHelper;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
+import mak.dc.network.packets.DeadCraftClientToServerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

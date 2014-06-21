@@ -50,7 +50,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
         player.sendProgressBarUpdate(this, 2, te.getStarted());
         player.sendProgressBarUpdate(this, 3, te.getRedstoneState());
         player.sendProgressBarUpdate(this, 4, te.getMode());
-        player.sendProgressBarUpdate(this, 5, te.getPower());
+        player.sendProgressBarUpdate(this, 5, te.getCharge());
     }
     
     @Override
@@ -63,7 +63,7 @@ public class ContainerEggSpawner extends ContainerDeadCraft {
             ((ICrafting) player).sendProgressBarUpdate(this, 2, te.getStarted());
             ((ICrafting) player).sendProgressBarUpdate(this, 3, te.getRedstoneState());
             ((ICrafting) player).sendProgressBarUpdate(this, 4, te.getMode());
-            ((ICrafting) player).sendProgressBarUpdate(this, 5, te.getPower());
+            ((ICrafting) player).sendProgressBarUpdate(this, 5, te.getCharge());
             
         }
     }

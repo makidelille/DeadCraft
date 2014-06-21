@@ -1,14 +1,14 @@
 package mak.dc;
 
+import mak.dc.client.events.DeadCraftClientEvent;
 import mak.dc.common.blocks.DeadCraftBlocks;
-import mak.dc.common.event.DeadCraftClientEvent;
 import mak.dc.common.event.DeadCraftEvents;
 import mak.dc.common.items.DeadCraftItems;
-import mak.dc.common.network.PacketPipeline;
-import mak.dc.common.proxy.CommonProxy;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.PowerManager;
 import mak.dc.common.util.cans.CanCraftingManager;
+import mak.dc.network.PacketPipeline;
+import mak.dc.network.proxy.CommonProxy;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;

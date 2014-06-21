@@ -3,7 +3,7 @@ package mak.dc.client.render;
 import java.util.HashMap;
 
 import mak.dc.client.IInventoryRenderer;
-import mak.dc.common.proxy.ClientProxy;
+import mak.dc.network.proxy.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;

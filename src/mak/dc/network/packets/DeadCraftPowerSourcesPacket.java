@@ -1,4 +1,4 @@
-package mak.dc.common.network.packet;
+package mak.dc.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.DeadCraft;
-import mak.dc.common.util.AbstractPacket;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
 import net.minecraft.entity.player.EntityPlayer;

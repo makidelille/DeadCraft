@@ -149,23 +149,19 @@ public class TileEntityEggSpawner extends TileEntityDeadCraftWithPower implement
     }
     
     @Override
-    protected int getMaxChargeSpeed() {
+    public int getMaxChargeSpeed() {
         return CHARGESPEED;
     }
     
     @Override
-    protected int getMaxPower() {
+    public int getMaxPower() {
         return MAXPOWER;
     }
     
     public byte getMode() {
         return mode;
     }
-    
-    public int getPower() {
-        return power;
-    }
-    
+   
     public int getProgress() {
         return 100 * buildTime / _maxBuildTime;
     }
@@ -450,6 +446,11 @@ public class TileEntityEggSpawner extends TileEntityDeadCraftWithPower implement
         compound.setInteger("eggInStock", eggInStock);
         compound.setByte("redState", redState);
         compound.setByte("mode", mode);
+    }
+
+    @Override
+    public int getCharge() {
+        return power;
     }
     
 }
