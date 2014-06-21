@@ -47,9 +47,7 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
             if (progress >= BUILDTIME) {
                 ItemStack re;
                 if (isInverted) {
-                    ItemStack[] res = ItemCompacted.uncompactStack(tempbuffer);
-                    re = res[0];
-                    if (res[1] != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, res[1]));
+                    re = ItemCompacted.uncompactStack(tempbuffer);
                 } else {
                     re = ItemCompacted.compactStackInto(tempbuffer);
                     tempbuffer = null;

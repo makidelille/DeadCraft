@@ -8,6 +8,7 @@ import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.network.proxy.ClientProxy;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -15,6 +16,7 @@ public class BlockCompressor extends BlockDeadCraft {
     
     protected BlockCompressor() {
         super(Material.iron);
+        this.setBlockTextureName("stone");
     }
    
     @Override
@@ -24,6 +26,8 @@ public class BlockCompressor extends BlockDeadCraft {
         }
         return true;
     }
+    
+    
     
     
     @Override

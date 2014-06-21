@@ -16,7 +16,7 @@ public class ItemCompacted extends Item {
         list.add("item : " + getItem(stack).getUnlocalizedName());
         list.add("size : " + getSize(stack));
         list.add("dmg : " + getDmg(stack));
-        if(getTag(stack) != null) list.add("has custom data");
+        if (getTag(stack) != null) list.add("has custom data");
     }
     
     @Override
@@ -28,7 +28,6 @@ public class ItemCompacted extends Item {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return null;
         int id = tag.getInteger("stackId");
-        if (id == Item.getIdFromItem(DeadCraftItems.compacted)) return null;
         return Item.getItemById(id);
     }
     
@@ -53,48 +52,33 @@ public class ItemCompacted extends Item {
     }
     
     public static ItemStack compactStackInto(ItemStack stack) {
-        if(stack == null) return null;
+        if (stack == null) return null;
         ItemStack result = new ItemStack(DeadCraftItems.compacted);
         NBTTagCompound tag = new NBTTagCompound();
-        if (stack.getItem() instanceof ItemCompacted && stack.getTagCompound() != null) {
-            int size = stack.getTagCompound().getInteger("stackSize");
-            size *= stack.stackSize;
-            tag.setInteger("stackSize", size);
-            tag.setInteger("stackId", stack.getTagCompound().getInteger("stackId"));
-            tag.setInteger("stackDamage", stack.getTagCompound().getInteger("stackDamage"));
-            if(tag.hasKey("stackTag")) tag.setTag("stackTag", stack.getTagCompound().getTag("stackTag"));
-        } else {
-            tag.setInteger("stackId", Item.getIdFromItem(stack.getItem()));
-            tag.setInteger("stackSize", stack.stackSize);
-            tag.setInteger("stackDamage", stack.getItemDamage());
-            if(stack.hasTagCompound()) tag.setTag("stackTag", stack.getTagCompound());
-        }
+        tag.setInteger("stackId", Item.getIdFromItem(stack.getItem()));
+        tag.setInteger("stackSize", stack.stackSize);
+        tag.setInteger("stackDamage", stack.getItemDamage());
+        if (stack.hasTagCompound()) tag.setTag("stackTag", stack.getTagCompound());
         result.setTagCompound(tag);
         return result;
         
     }
+    
     /**
      * @param compressed stack
      * @return array of stack, first is the uncompressed, second the left overs
      */
-    public static ItemStack[] uncompactStack(ItemStack stack) {
-        if(!(stack.getItem() instanceof ItemCompacted)) return null;
+    public static ItemStack uncompactStack(ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemCompacted)) return null;
         Item it = getItem(stack);
         if (it == null || stack.getTagCompound() == null) return null;
-        ItemStack[] re = new ItemStack[2];
         int size = getMaxSize(stack);
         NBTTagCompound tag = stack.getTagCompound();
         ItemStack temp = new ItemStack(it, size, getDmg(stack));
-        if(getTag(stack) != null) temp.setTagCompound(getTag(stack));
-        re[0] = temp;
-        int newSize = getSize(stack) - size;
-        tag.setInteger("stackSize", newSize);
-        stack.setTagCompound(tag);
-        re[1] = stack;
-        if(newSize <= 0) re[1] = null;
-        return re;
+        if (getTag(stack) != null) temp.setTagCompound(getTag(stack));
+        return temp;
     }
-
+    
     private static int getMaxSize(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return 0;

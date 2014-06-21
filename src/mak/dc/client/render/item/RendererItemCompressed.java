@@ -99,22 +99,17 @@ public class RendererItemCompressed implements IItemRenderer {
         if (type.equals(ItemRenderType.INVENTORY)) {
             renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, item, 0, 0);
         }
-        
+        GL11.glScalef(0.9f, 0.9f, 0.9f);
+        GL11.glTranslatef(0, 1/16f, 0);
         Item it = ItemCompacted.getItem(item);
         ItemStack is = new ItemStack(it);
+        if(ItemCompacted.getTag(item) != null) is.setTagCompound(ItemCompacted.getTag(item));
         if (it != null) {
             
             IItemRenderer renderer = MinecraftForgeClient.getItemRenderer(is, type);
-            if (renderer != null) { // special render
-                switch (type) {
-                    case ENTITY:
-                        GL11.glTranslatef(1 / 2f, 1 / 4f, 0);
-                        break;
-                    case INVENTORY:
-                        break;
-                    default:
-                        break;
-                
+            if (renderer != null && renderer.handleRenderType(is, ItemRenderType.INVENTORY)) { // special render
+                if(!type.equals(ItemRenderType.EQUIPPED)){
+                    GL11.glScalef(0.05f, 0.05f, 0.05f);
                 }
                 renderer.renderItem(ItemRenderType.INVENTORY, is, data);
             } else if (it instanceof ItemBlock) {
