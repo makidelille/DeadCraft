@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class SpecialRenderTileEntityCompressor extends TileEntitySpecialRenderer implements IInventoryRenderer{
     
-    private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.COMPACTED_MODEL_TEXT_LOC);
+    private static final ResourceLocation texture = new ResourceLocation(Lib.MOD_ID, Textures.COMPRESSOR_MODEL_TEXT_LOC);
     private static final ModelCompresor model = new ModelCompresor();
     
     public SpecialRenderTileEntityCompressor(){

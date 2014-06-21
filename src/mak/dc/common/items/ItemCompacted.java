@@ -21,10 +21,10 @@ public class ItemCompacted extends Item {
     
     @Override
     public void registerIcons(IIconRegister iconRegister) {
-        iconRegister.registerIcon(Textures.COMPACTED_MODEL_TEXT_LOC);
+        this.itemIcon = iconRegister.registerIcon(Textures.COMPACTED_TEXT_LOC);
     }
     
-    private static Item getItem(ItemStack is) {
+    public static Item getItem(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return null;
         int id = tag.getInteger("stackId");
@@ -32,20 +32,20 @@ public class ItemCompacted extends Item {
         return Item.getItemById(id);
     }
     
-    private static int getSize(ItemStack is) {
+    public static int getSize(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return 0;
         ItemStack stack = new ItemStack(getItem(is));
         return tag.getInteger("stackSize");
     }
     
-    private static int getDmg(ItemStack is) {
+    public static int getDmg(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return 0;
         return tag.getInteger("stackDamage");
     }
     
-    private static NBTTagCompound getTag(ItemStack is) {
+    public static NBTTagCompound getTag(ItemStack is) {
         NBTTagCompound tag = is.getTagCompound();
         if (tag == null) return null;
         return (NBTTagCompound) tag.getTag("stackTag");

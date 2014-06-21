@@ -50,12 +50,13 @@ public final class Lib {
         public static final String[] CONTROLLER_TEXT_LOC = { _TEXT_LOC + "controller_base", _TEXT_LOC + "controller_lock", _TEXT_LOC + "controller_info" };
         public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
         public static final String CRYSTAL_TEXT_LOC = _TEXT_LOC + "crystal";
+        public static final String COMPACTED_TEXT_LOC = _TEXT_LOC + "compacted";
         
         /** Models Textures localization */
         public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";
         public static final String GODBOTTLER_MODEL_TEXT_LOC = PATH_MODEL + "godbottlertexturemap.png";
         public static final String GODCAN_MODEL_TEXT_LOC = PATH_MODEL + "godcantexturemap.png";
-        public static final String COMPACTED_MODEL_TEXT_LOC = PATH_MODEL + "compactedmap.png";
+        public static final String COMPRESSOR_MODEL_TEXT_LOC = PATH_MODEL + "compressormap.png";
         public static final String ENDERCONVERTER_TEXT_LOC = PATH_MODEL + "enderconvertertexturemap.png";
         
         /** Gui */
@@ -65,6 +66,7 @@ public final class Lib {
         public static final String GODBOTTLER_GUI_TEXT_LOC = PATH_GUI + "godbottler.png";
         public static final String ENDERCONVERTER_GUI_TEXT_LOC = PATH_GUI + "enderconverter.png";
         public static final String COMPRESSOR_GUI_TEXT_LOC = PATH_GUI + "compressor.png";
+
         
     }
     
