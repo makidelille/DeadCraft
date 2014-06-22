@@ -17,19 +17,23 @@ public class ItemCompacted extends Item {
     
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-       //TODO add "compression lvl" info
         ItemStack fakeStack = new ItemStack(getItem(stack), getSize(stack), getDmg(stack));
-        if(getTag(stack) != null) fakeStack.setTagCompound(getTag(stack));
-        String display = fakeStack.getDisplayName();
-        String itemName = StatCollector.translateToLocal(fakeStack.getItem().getUnlocalizedName() +".name");
-        list.add("Item : " + EnumChatFormatting.DARK_PURPLE + itemName);
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-            if(!itemName.equals(display)) list.add("Display name : " +EnumChatFormatting.ITALIC + EnumChatFormatting.DARK_AQUA + display);
-            list.add("Size : " + fakeStack.stackSize);
-            list.add("Damage : " + fakeStack.getItemDamage());
-            if(fakeStack.hasTagCompound()) list.add("Has custom data");
-        }else{
-            list.add("" + EnumChatFormatting.ITALIC + EnumChatFormatting.YELLOW + "-- press shift for more info --");
+        if (getTag(stack) != null) fakeStack.setTagCompound(getTag(stack));
+        if (fakeStack.getItem() instanceof ItemCompacted) {
+            
+            // TODO add "compression lvl" info
+        } else {
+            String display = fakeStack.getDisplayName();
+            String itemName = StatCollector.translateToLocal(fakeStack.getItem().getUnlocalizedName() + ".name");
+            list.add("Item : " + EnumChatFormatting.DARK_PURPLE + itemName);
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                if (!itemName.equals(display)) list.add("Display name : " + EnumChatFormatting.ITALIC + EnumChatFormatting.DARK_AQUA + display);
+                list.add("Size : " + fakeStack.stackSize);
+                list.add("Damage : " + fakeStack.getItemDamage());
+                if (fakeStack.hasTagCompound()) list.add("Has custom data");
+            } else {
+                list.add("" + EnumChatFormatting.ITALIC + EnumChatFormatting.YELLOW + "-- press shift for more info --");
+            }
         }
     }
     

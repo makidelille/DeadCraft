@@ -1,5 +1,7 @@
 package mak.dc.common.tileEntities;
 
+import java.util.List;
+
 import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemCompacted;
 import mak.dc.common.items.ItemCrystal;
@@ -196,6 +198,11 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     }
     
     @Override
+    public List<String> getInfo() {
+        return super.getInfo(); //TODO
+    }
+    
+    @Override
     public String getInventoryName() {
         return null;
     }
@@ -256,5 +263,9 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     public void setInverted(boolean isInverted2) {
         if (!wip) this.isInverted = isInverted2;
         if (!worldObj.isRemote) isSync = false;
+    }
+
+    public ItemStack getTempbuffer() {
+        return tempbuffer;
     }
 }

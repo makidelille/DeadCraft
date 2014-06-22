@@ -55,8 +55,8 @@ public class ModelCompresor extends ModelBase {
         TopPress.setTextureSize(64, 64);
         TopPress.mirror = true;
         setRotation(TopPress, 0F, 0F, 0F);
-        Press = new ModelRenderer(this, 52, 22);
-        Press.addBox(-1.5F, 0F, -1.5F, 3, 1, 3);
+        Press = new ModelRenderer(this, 52, 21);
+        Press.addBox(-1.5F, 0F, -1.5F, 3, 2, 3);
         Press.setRotationPoint(0F, 12F, 0F);
         Press.setTextureSize(64, 64);
         Press.mirror = true;
