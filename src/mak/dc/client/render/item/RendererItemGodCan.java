@@ -46,6 +46,7 @@ public class RendererItemGodCan implements IItemRenderer {
             case ENTITY:
                 scale = 0.05f;
                 GL11.glTranslatef(0f, 0.2f, 0f);
+                GL11.glRotatef(180f, 0, 1, 0);
                 GL11.glScalef(scale, scale, scale);
                 break;
             case EQUIPPED:
@@ -55,6 +56,7 @@ public class RendererItemGodCan implements IItemRenderer {
                 GL11.glRotatef(-145f, 0f, 0f, 1f);
                 GL11.glRotatef(-85f, 0f, 1f, 0f);
                 GL11.glTranslatef(-0.5f, 2f, 3f);
+                GL11.glRotatef(180f, 0, 1, 0);
                 break;
             case EQUIPPED_FIRST_PERSON:
                 GL11.glTranslatef(5f, -1f, 4f);
@@ -65,9 +67,11 @@ public class RendererItemGodCan implements IItemRenderer {
                 GL11.glScalef(scale, scale, scale);
                 break;
             case INVENTORY:
+                GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glTranslatef(8f, +8f, 0f);
                 GL11.glRotatef(45, 0, 1, 0);
                 GL11.glRotatef(45, 0, 0, 1);
+                GL11.glEnable(GL11.GL_LIGHTING);
                 break;
             case FIRST_PERSON_MAP:
                 break;

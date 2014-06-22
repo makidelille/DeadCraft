@@ -48,81 +48,61 @@ public class RendererItemCompressed implements IItemRenderer {
     }
     
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        // RenderBlocks renderBlock = new RenderBlocks();
-        // if (!ForgeHooksClient.renderEntityItem(new
-        // EntityItem(te.getWorldObj(), te.xCoord, te.yCoord + 2, te.zCoord,
-        // is), is, 0f, 0f, te.getWorldObj().rand,
-        // Minecraft.getMinecraft().renderEngine, renderBlock, is.stackSize)) {
-        // GL11.glRotatef(a, 0, 1f, 0);
-        //
-        // if (is.getItem() instanceof ItemBlock &&
-        // RenderBlocks.renderItemIn3d(Block.getBlockFromItem(is.getItem()).getRenderType()))
-        // {
-        // GL11.glTranslatef(0f, 0.5f, 0f);
-        // GL11.glScalef(0.3f, 0.3f, 0.3f);
-        // renderBlock.renderBlockAsItem(Block.getBlockFromItem(is.getItem()),
-        // is.getItemDamage(), 1f);
-        // } else {
-        // GL11.glScalef(0.4f, 0.4f, 0.4f);
-        // GL11.glTranslatef(-0.475f, 0.6f, 0.05f);
-        //
-        // for (int renderPass = 0; renderPass <
-        // is.getItem().getRenderPasses(is.getItemDamage()); renderPass++) {
-        // IIcon icon = is.getItem().getIcon(is, renderPass);
-        // if (icon != null) {
-        // int rgb = is.getItem().getColorFromItemStack(is, renderPass);
-        // float r = (rgb >> 16 & 255) / 255f;
-        // float g = (rgb >> 8 & 255) / 255f;
-        // float b = (rgb & 255) / 255f;
-        // GL11.glColor3f(r, g, b);
-        // float f = icon.getMinU();
-        // float f1 = icon.getMaxU();
-        // float f2 = icon.getMinV();
-        // float f3 = icon.getMaxV();
-        // ItemRenderer.renderItemIn2D(Tessellator.instance, f1, f2, f, f3,
-        // icon.getIconWidth(), icon.getIconHeight(), 1f / 16f);
-        // }
-        // }
-        // GL11.glRotatef(0f, 0f, 1f, 0f);
-        //
-        // }
-        // }
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+        if (!(stack.getItem() instanceof ItemCompacted)) return;
         
-        IIcon icon = item.getItem().getIcon(item, item.getItem().getRenderPasses(item.getItemDamage()));
-        RenderItem renderItem = (RenderItem) RenderManager.instance.entityRenderMap.get(EntityItem.class);
-        GL11.glColor3f(1, 1, 1);
-        if (icon != null) {
-            ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 1 / 16f);
-        }
+        Item itemInStack = ItemCompacted.getItem(stack);
+        ItemStack fakeStack = new ItemStack(itemInStack);
+        if (ItemCompacted.getTag(stack) != null) fakeStack.setTagCompound(ItemCompacted.getTag(stack));
+        
+        IItemRenderer specialRender = MinecraftForgeClient.getItemRenderer(fakeStack, type);
         
         if (type.equals(ItemRenderType.INVENTORY)) {
-            renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, item, 0, 0);
-        }
-        GL11.glScalef(0.9f, 0.9f, 0.9f);
-        GL11.glTranslatef(0, 1/16f, 0);
-        Item it = ItemCompacted.getItem(item);
-        ItemStack is = new ItemStack(it);
-        if(ItemCompacted.getTag(item) != null) is.setTagCompound(ItemCompacted.getTag(item));
-        if (it != null) {
-            
-            IItemRenderer renderer = MinecraftForgeClient.getItemRenderer(is, type);
-            if (renderer != null && renderer.handleRenderType(is, ItemRenderType.INVENTORY)) { // special render
-                if(!type.equals(ItemRenderType.EQUIPPED)){
-                    GL11.glScalef(0.05f, 0.05f, 0.05f);
-                }
-                renderer.renderItem(ItemRenderType.INVENTORY, is, data);
-            } else if (it instanceof ItemBlock) {
-                RenderBlocks renderBlock = new RenderBlocks();
-                renderBlock.renderBlockAsItem(Block.getBlockFromItem(it), 0, 0);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            RenderItem renderItem = new RenderItem();
+            renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, stack, 0, 0);
+            GL11.glTranslated(0f, 0f, -25f);
+            GL11.glScalef(0.75f, 0.75f, 0.75f);
+            GL11.glTranslatef(2.5f, 2.5f, 0);
+            if (specialRender != null && specialRender.handleRenderType(fakeStack, ItemRenderType.INVENTORY)) {
+                specialRender.renderItem(ItemRenderType.INVENTORY, fakeStack, data);
             } else {
-                if (type.equals(ItemRenderType.INVENTORY)) {
-                    renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, 0, 0);
+                renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, fakeStack, 0, 0);
+            }
+            GL11.glEnable(GL11.GL_LIGHTING);
+        } else if (type.equals(ItemRenderType.ENTITY) || type.equals(ItemRenderType.EQUIPPED) || type.equals(ItemRenderType.EQUIPPED_FIRST_PERSON)) {
+            GL11.glTranslatef(-0.5f, 0, 0);
+            if (type.equals(ItemRenderType.EQUIPPED_FIRST_PERSON)) {
+                GL11.glTranslatef(0.70f, -0.20f, 0.20f);
+                GL11.glRotatef(25f, 0, 1f, 0);
+            } else if (type.equals(ItemRenderType.EQUIPPED)) {
+                GL11.glTranslatef(0.5f, -0.1f, 0);
+                GL11.glRotatef(10f, 0, 0, 1);
+                GL11.glRotatef(25f, 1, 0, 1);
+                GL11.glScalef(0.8f, 0.8f, 0.8f);
+            } else if (type.equals(ItemRenderType.ENTITY)) {
+                // TODO add rotations
+            }
+            
+            IIcon icon = stack.getIconIndex();
+            if (icon != null) {
+                ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 1 / 16f);
+            }
+            GL11.glScalef(0.75f, 0.75f, 0.75f);
+            GL11.glTranslatef(0.65f, 0.20f, 0);
+            if (specialRender != null && specialRender.handleRenderType(fakeStack, ItemRenderType.ENTITY)) {
+                specialRender.renderItem(ItemRenderType.ENTITY, fakeStack, data);
+            } else {
+                if (itemInStack instanceof ItemBlock) {
+                    
+                    // TODO figure out
+                    
                 } else {
-                    for (int renderPass = 0; renderPass < is.getItem().getRenderPasses(is.getItemDamage()); renderPass++) {
-                        icon = is.getItem().getIcon(is, renderPass);
+                    GL11.glTranslatef(-0.5f, 0f, 0f);
+                    for (int renderPass = 0; renderPass < fakeStack.getItem().getRenderPasses(fakeStack.getItemDamage()); renderPass++) {
+                        icon = fakeStack.getItem().getIcon(fakeStack, renderPass);
                         if (icon != null) {
-                            int rgb = is.getItem().getColorFromItemStack(is, renderPass);
+                            int rgb = fakeStack.getItem().getColorFromItemStack(fakeStack, renderPass);
                             float r = (rgb >> 16 & 255) / 255f;
                             float g = (rgb >> 8 & 255) / 255f;
                             float b = (rgb & 255) / 255f;
@@ -135,8 +115,8 @@ public class RendererItemCompressed implements IItemRenderer {
                         }
                     }
                 }
-                
             }
+            
         }
         
     }
