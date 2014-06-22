@@ -66,7 +66,7 @@ public abstract class GuiCustom extends GuiContainer {
         if (infoStr.isEmpty()) {
             height = 1;
         }
-        drawHoverRect(x, y, x + max - 3, y + height * fontRendererObj.FONT_HEIGHT);
+        drawHoverRect(x, y, x + max - 3, y + height * fontRendererObj.FONT_HEIGHT + 3);
         drawInfoString(infoStr, header, x, y, max);
     }
     

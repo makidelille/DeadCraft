@@ -52,7 +52,8 @@ public class RendererItemCompressed implements IItemRenderer {
         if (!(stack.getItem() instanceof ItemCompacted)) return;
         
         Item itemInStack = ItemCompacted.getItem(stack);
-        ItemStack fakeStack = new ItemStack(itemInStack);
+        int meta = ItemCompacted.getDmg(stack);
+        ItemStack fakeStack = new ItemStack(itemInStack,1, meta);
         if (ItemCompacted.getTag(stack) != null) fakeStack.setTagCompound(ItemCompacted.getTag(stack));
         
         IItemRenderer specialRender = MinecraftForgeClient.getItemRenderer(fakeStack, type);

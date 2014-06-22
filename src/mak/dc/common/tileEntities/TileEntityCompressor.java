@@ -15,7 +15,8 @@ import net.minecraft.nbt.NBTTagList;
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory {
     private static final int MAXCHARGESPEED = 50;
     private static final int MAXCHARGE = 5_000;
-    private static final int POWERUSE = 50;
+    public static final int POWERUSE = 5;
+    public static final float COMPRESSMULT = 5f;
     
     public static final int BUILDTIME = 250;
     
@@ -35,10 +36,14 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         super.updateEntity();
         if (!worldObj.isRemote) {
             if (!this.isSync) sync();
+            if(!this.hasReceive && this.getCharge() <= (getMaxPower() - MAXCHARGESPEED) &&getStackInSlot(slotPower) != null && getStackInSlot(slotPower).getItem() instanceof ItemCrystal){
+                int power = MAXCHARGESPEED - ItemCrystal.dischargeItem(getStackInSlot(slotPower), MAXCHARGESPEED);
+                this.setCharge(getCharge() + power);
+            }
             boolean flag = false;
             if (isInverted) flag = getStackInSlot(slotInput) != null && getStackInSlot(slotInput).getItem() instanceof ItemCompacted && getStackInSlot(slotInput).stackSize == 1;
             else if (!isInverted) flag = getStackInSlot(slotInput) != null;
-            if (flag && getStackInSlot(slotOutput) == null && !wip) {
+            if (flag && getStackInSlot(slotOutput) == null && !wip && getCharge()>POWERUSE) {
                 wip = true;
                 tempbuffer = getStackInSlot(slotInput);
                 setInventorySlotContents(slotInput, null);
@@ -57,11 +62,15 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
                 isSync = false;
             }
             if (wip) {
-                if(getCharge() >= POWERUSE){
-                    setCharge(getCharge() - POWERUSE);
+                if(getCharge() >= POWERUSE * (isInverted ? 1:COMPRESSMULT)){
+                    setCharge((int) (getCharge() - POWERUSE * (isInverted ? 1:COMPRESSMULT)));
                     progress++;
                 }else{
                     wip = false;
+                    if(getStackInSlot(slotOutput) == null){
+                        setInventorySlotContents(slotOutput, tempbuffer);
+                        tempbuffer = null;
+                    }
                 }
             } else {
                 progress = 0;

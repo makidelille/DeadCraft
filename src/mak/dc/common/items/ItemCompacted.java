@@ -2,21 +2,35 @@ package mak.dc.common.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.common.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 public class ItemCompacted extends Item {
     
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-        list.add("item : " + getItem(stack).getUnlocalizedName());
-        list.add("size : " + getSize(stack));
-        list.add("dmg : " + getDmg(stack));
-        if (getTag(stack) != null) list.add("has custom data");
+       //TODO add "compression lvl" info
+        ItemStack fakeStack = new ItemStack(getItem(stack), getSize(stack), getDmg(stack));
+        if(getTag(stack) != null) fakeStack.setTagCompound(getTag(stack));
+        String display = fakeStack.getDisplayName();
+        String itemName = StatCollector.translateToLocal(fakeStack.getItem().getUnlocalizedName() +".name");
+        list.add("Item : " + EnumChatFormatting.DARK_PURPLE + itemName);
+        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+            if(!itemName.equals(display)) list.add("Display name : " +EnumChatFormatting.ITALIC + EnumChatFormatting.DARK_AQUA + display);
+            list.add("Size : " + fakeStack.stackSize);
+            list.add("Damage : " + fakeStack.getItemDamage());
+            if(fakeStack.hasTagCompound()) list.add("Has custom data");
+        }else{
+            list.add("" + EnumChatFormatting.ITALIC + EnumChatFormatting.YELLOW + "-- press shift for more info --");
+        }
     }
     
     @Override

@@ -17,7 +17,7 @@ public class DeadCraftBlocks {
     /** tileEntities block */
     public static BlockDeadCraft eggSpawner;
     public static BlockDeadCraft godBottler;
-    public static BlockDeadCraft compressor; 
+    public static BlockDeadCraft compressor;
     public static Block enderConverter;
     
     /** w/ tileEntities Blocks */
@@ -39,7 +39,6 @@ public class DeadCraftBlocks {
         GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);
         GameRegistry.registerBlock(enderConverter, ItemBlockDeadCraft.class, IBTInfos.BLOCK_ENDERCONVERTER_KEY);
         GameRegistry.registerBlock(compressor, ItemBlockDeadCraft.class, IBTInfos.BLOCK_COMPRESSOR_KEY);
-
         
         GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
         
@@ -63,6 +62,8 @@ public class DeadCraftBlocks {
         });
         
         GameRegistry.addRecipe(new ItemStack(enderConverter, 1), new Object[] { "IGI", "GBG", "IGI", Character.valueOf('I'), Items.iron_ingot, Character.valueOf('G'), Blocks.glass_pane, Character.valueOf('B'), Blocks.beacon });
+        
+        GameRegistry.addRecipe(new ItemStack(compressor, 1), new Object[] { "PSP", "CDC", "POP", Character.valueOf('P'), Blocks.piston, Character.valueOf('S'), Blocks.stone_slab, Character.valueOf('D'), Blocks.diamond_block, Character.valueOf('O'), Blocks.obsidian, Character.valueOf('C'), new ItemStack(DeadCraftItems.crystal, 1, 0) });
         
     }
     

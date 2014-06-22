@@ -12,6 +12,7 @@ import mak.dc.network.pipeline.packets.DeadCraftCompressorPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiCompressor extends GuiCustom {
@@ -40,20 +41,35 @@ public class GuiCompressor extends GuiCustom {
         this.subRect.set(0, new GuiRectangle(this, 77, 33, getSize(0), 18));
         
         this.subRect.get(1).draw(xSize, 52 - getSize(1));
-        this.subRect.add(1, new GuiRectangle(this, 7, 58-getSize(1), 18, getSize(1)));
-            
+        this.subRect.add(1, new GuiRectangle(this, 7, 58 - getSize(1), 18, getSize(1)));
         
+        initGui();
     }
     
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
-        this.drawString(getFontRenderer(), "inverted : " + te.isInverted(), 1, 1, 0x404040); //TODO strings
+        fontRendererObj.FONT_HEIGHT = 9;
+        fontRendererObj.drawString(EnumChatFormatting.UNDERLINE + "Mode :", 54, 7, 0x404040, false); // TODO loc
+        fontRendererObj.FONT_HEIGHT = 7;
+        fontRendererObj.drawString((te.isInverted() ? "Decompression" : "Compression"), 56, 17, 0x404040, false);
+        
+        if (new GuiRectangle(this, 7, 6, 18, 52).inRect(x, y)) {
+            this.drawInfoPanel(te.getCharge() + "/" + te.getMaxPower(), "Power :", -55, 7, 55);
+            String str = "0";
+            if (te.hasStarted()) {
+                str = "" + te.POWERUSE * (te.isInverted() ? 1 : te.COMPRESSMULT);
+            }
+            this.drawInfoPanel(str, "Usage :", -55, 32, 55);
+        }
+        
     }
-
+    
     @Override
     public void initGui() {
         super.initGui();
-        this.buttonList.add(new GuiButton(0,guiLeft + 76, guiTop + 16, 30, 12, "button")); //TODO strings
+        GuiButton but = new GuiButton(0, guiLeft + 56, guiTop + 56, 70, 16, "change mode");
+        but.enabled = !te.hasStarted();
+        this.buttonList.add(but); // TODO loc
     }
     
     @Override
@@ -61,11 +77,10 @@ public class GuiCompressor extends GuiCustom {
         super.actionPerformed(button);
         switch (button.id) {
             case 0:
-                DeadCraft.packetPipeline.sendToServer(new DeadCraftCompressorPacket(te.xCoord,te.yCoord,te.zCoord, !te.isInverted()));
+                DeadCraft.packetPipeline.sendToServer(new DeadCraftCompressorPacket(te.xCoord, te.yCoord, te.zCoord, !te.isInverted()));
                 break;
         }
     }
-    
     
     private int getSize(int i) {
         switch (i) {
@@ -76,6 +91,5 @@ public class GuiCompressor extends GuiCustom {
         }
         return 0;
     }
-    
     
 }
