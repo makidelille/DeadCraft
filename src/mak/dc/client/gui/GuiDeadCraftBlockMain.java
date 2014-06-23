@@ -101,9 +101,6 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
                 ((GuiButton) buttonList.get(2)).enabled = firstInList > 0;
                 ((GuiButton) buttonList.get(3)).enabled = firstInList < allowed.size() - 1;
                 break;
-            case 4:
-                DeadCraft.packetPipeline.sendToServer(new DeadCraftClientToServerPacket(-2, Minecraft.getMinecraft().thePlayer.getCommandSenderName(), 0, 0, 0, 0));
-                break;
         }
         
         haschange = true;
@@ -207,14 +204,11 @@ public class GuiDeadCraftBlockMain extends GuiCustom {
         up.enabled = firstInList > 0;
         GuiButton down = new GuiButton(3, guiLeft + 108, guiTop + 55, 10, 20, null);
         down.enabled = firstInList < allowed.size() - 1;
-        
-        GuiButton sync = new GuiButton(4, guiLeft + 125, guiTop + 30, 40, 10, StatCollector.translateToLocal("dc.block.gui.sync"));
-        
+                
         buttonList.add(b0);
         buttonList.add(b1);
         buttonList.add(up);
         buttonList.add(down);
-        buttonList.add(sync);
         
         entername = new GuiTextField(getFontRenderer(), 7, 10, 112, 12);
         entername.setFocused(true);

@@ -1,4 +1,4 @@
-package mak.dc.common.util;
+package mak.dc.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -68,6 +68,8 @@ public class DrawHelper {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
         ftRenderer.drawString(s, -width / 2, -height / 2 + 1, -1);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        
         
         GL11.glPopMatrix();
     }

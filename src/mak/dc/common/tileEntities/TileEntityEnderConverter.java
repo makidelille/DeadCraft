@@ -246,14 +246,19 @@ public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPo
                 }
             }
             if (powerInItem > 0) {
-                if (power + CHARGERATE < MAXPOWER) {
+                if (power + CHARGERATE < MAXPOWER && powerInItem - CHARGERATE > 0) {
                     powerInItem -= CHARGERATE;
                     power += CHARGERATE;
+                }else if(power + CHARGERATE < MAXPOWER){
+                    power += powerInItem;
+                    powerInItem = 0;                    
                 } else {
                     int space = MAXPOWER - power;
                     powerInItem -= space;
                     power += space;
                 }
+            }else{
+                powerInItem = 0;
             }
             
             if (!receivers.isEmpty()) {

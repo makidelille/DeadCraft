@@ -5,16 +5,19 @@ item.crystal.name=Crystal
 item.mindcontroller.name=MindController
 item.wrench.name=Wrench
 item.godcan.name=God-Can
+item.compact.name=Compacted Item
 tile.dragoneggspawner.name=Dragon Egg Spawner
 tile.enderpearlblock.name=Ender Block
 tile.godbottler.name=God-Bottler
 tile.enderconverter.name=Ender-Converter
+tile.compressor.name=Compressor
 
 dc.true=True
 dc.false=False
 dc.public=Public
 dc.private=Private
 dc.power=Power
+dc.pUsage=Usage
 dc.charge=Charge
 dc.none=None
 dc.progress=Progress
@@ -65,7 +68,16 @@ dc.block.godBottler.gui.error.sameId=Can has Already this effect
 dc.block.godBottler.info.redstone=Is redstone powered 
 dc.block.godBottler.info.isTop=This is the top Block, Data are stored bellow
 
-dc.block.enderConverter.gui.powerLeft=Power left in item
+dc.block.enderConverter.gui.powerLeft=Power left
+
+dc.block.compressor.gui.changeMode=Change mode
+dc.block.compressor.gui.mode=Mode
+dc.block.compressor.gui.comp=Compression
+dc.block.compressor.gui.decomp=Decompression
+dc.block.compressor.info.progress=Progress
+dc.block.compressor.info.mode=Mode
+dc.block.compressor.info.decomp=Decompression
+dc.block.compressor.info.comp=Compression
 
 dc.info.holdShift=-- Press Shift for info --
 dc.info.isCreative=Is creative spawned
@@ -104,3 +116,9 @@ dc.canEffect.potion.name=Potion
 dc.canEffect.potion_speed.name=Speed Boost
 dc.canEffect.potion_resistance.name=Resistance Boost
 dc.caneffect.potion_haste.name=Mining Speed Boost
+
+dc.compacted.info.size=Size
+dc.compacted.info.item=Item
+dc.compacted.info.compLvl=Compression level
+dc.compacted.info.displayName=Display name
+dc.compacted.info.dmg=Damage value

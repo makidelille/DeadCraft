@@ -1,5 +1,6 @@
 package mak.dc.common.tileEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mak.dc.DeadCraft;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory {
     private static final int MAXCHARGESPEED = 50;
@@ -199,7 +201,11 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     
     @Override
     public List<String> getInfo() {
-        return super.getInfo(); //TODO
+        ArrayList<String> l = new ArrayList<String>();
+        l.add(StatCollector.translateToLocal("dc.block.compressor.info.progress") + " : " + getProgress() +"/" + BUILDTIME);
+        l.add(StatCollector.translateToLocal("dc.block.compressor.info.mode") + " : " + (isInverted ? StatCollector.translateToLocal("dc.block.compressor.info.decomp") : StatCollector.translateToLocal("dc.block.compressor.info.comp")));
+        l.addAll(super.getInfo());
+        return l;
     }
     
     @Override

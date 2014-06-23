@@ -20,19 +20,25 @@ public class ItemCompacted extends Item {
         ItemStack fakeStack = new ItemStack(getItem(stack), getSize(stack), getDmg(stack));
         if (getTag(stack) != null) fakeStack.setTagCompound(getTag(stack));
         if (fakeStack.getItem() instanceof ItemCompacted) {
-            
-            // TODO add "compression lvl" info
+            fakeStack = getBaseStack(stack);
+            list.add(StatCollector.translateToLocal("dc.compacted.info.item") + " : " + EnumChatFormatting.DARK_PURPLE + fakeStack.getDisplayName());
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                list.add(StatCollector.translateToLocal("dc.compacted.info.size") + " : " + EnumChatFormatting.DARK_GREEN + getTotalSize(stack));
+                list.add(StatCollector.translateToLocal("dc.compacted.info.compLvl") + " : " + getCompressionLevel(stack));
+            } else {
+                list.add("" + EnumChatFormatting.ITALIC + EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
+            }
         } else {
+            if(fakeStack.getItem() == null) return;
             String display = fakeStack.getDisplayName();
             String itemName = StatCollector.translateToLocal(fakeStack.getItem().getUnlocalizedName() + ".name");
-            list.add("Item : " + EnumChatFormatting.DARK_PURPLE + itemName);
+            list.add(StatCollector.translateToLocal("dc.compacted.info.item") + " : " + EnumChatFormatting.DARK_PURPLE + itemName);
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                if (!itemName.equals(display)) list.add("Display name : " + EnumChatFormatting.ITALIC + EnumChatFormatting.DARK_AQUA + display);
-                list.add("Size : " + fakeStack.stackSize);
-                list.add("Damage : " + fakeStack.getItemDamage());
-                if (fakeStack.hasTagCompound()) list.add("Has custom data");
+                if (!itemName.equals(display)) list.add(StatCollector.translateToLocal("dc.compacted.info.displayName") + " : " + EnumChatFormatting.ITALIC + EnumChatFormatting.DARK_AQUA + display);
+                list.add(StatCollector.translateToLocal("dc.compacted.info.size") + " : " + EnumChatFormatting.DARK_GREEN  + fakeStack.stackSize);
+                list.add(StatCollector.translateToLocal("dc.compacted.info.dmg") + " : " + fakeStack.getItemDamage());
             } else {
-                list.add("" + EnumChatFormatting.ITALIC + EnumChatFormatting.YELLOW + "-- press shift for more info --");
+                list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
             }
         }
     }
@@ -84,7 +90,7 @@ public class ItemCompacted extends Item {
     
     /**
      * @param compressed stack
-     * @return array of stack, first is the uncompressed, second the left overs
+     * @return the uncrompressedStack
      */
     public static ItemStack uncompactStack(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemCompacted)) return null;
@@ -102,5 +108,34 @@ public class ItemCompacted extends Item {
         if (tag == null) return 0;
         ItemStack stack = new ItemStack(getItem(is));
         return tag.getInteger("stackSize") > stack.getMaxStackSize() ? stack.getMaxStackSize() : tag.getInteger("stackSize");
+    }
+    
+    private static int getCompressionLevel(ItemStack stack) {
+        int lvl = 0;
+        ItemStack unc = uncompactStack(stack);
+        while (unc.getItem() instanceof ItemCompacted) {
+            unc = uncompactStack(unc);
+            lvl++;
+        }
+        return lvl;
+    }
+    
+    private static int getTotalSize(ItemStack stack) {
+        int size = 1;
+        ItemStack unc = uncompactStack(stack);
+        while (unc.getItem() instanceof ItemCompacted) {
+            size *= unc.stackSize;
+            unc = uncompactStack(unc);
+        }
+        size *= unc.stackSize;
+        return size;
+    }
+    
+    private static ItemStack getBaseStack(ItemStack stack) {
+        ItemStack unc = uncompactStack(stack);
+        while (unc.getItem() instanceof ItemCompacted) {
+            unc = uncompactStack(unc);
+        }
+        return unc;
     }
 }

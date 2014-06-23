@@ -3,9 +3,9 @@ package mak.dc.client.events;
 import java.util.List;
 
 import mak.dc.DeadCraft;
+import mak.dc.client.render.DrawHelper;
 import mak.dc.common.items.ItemWrench;
 import mak.dc.common.tileEntities.TileEntityGodBottler;
-import mak.dc.common.util.DrawHelper;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.network.pipeline.packets.DeadCraftClientToServerPacket;
@@ -36,7 +36,7 @@ public class DeadCraftClientEvent {
         AxisAlignedBB bounds = ((TileEntity) te).getBlockType().getSelectedBoundingBoxFromPool(world, ((TileEntity) te).xCoord, ((TileEntity) te).yCoord, ((TileEntity) te).zCoord);
         bounds = bounds.copy().offset(-x, -y, -z);
         
-        DrawHelper.drawBlockOutline(bounds, 5f, 0, 1, 0, 0.1f + alphaP);
+        DrawHelper.drawBlockOutline(bounds, 5f, 0, 0.5f, 1, 0.1f + alphaP);
         
         double blockMidX = bounds.maxX - (bounds.maxX - bounds.minX) / 2d;
         double blockMidY = bounds.maxY - (bounds.maxY - bounds.minY) / 2d;
@@ -56,13 +56,13 @@ public class DeadCraftClientEvent {
                                                                                                                                                                                                                // -z);
             sourcebounds = sourcebounds.copy().offset(-x, -y, -z);
             
-            DrawHelper.drawBlockOutline(sourcebounds, 5f, 1, 0, 0, 0.1f + alphaP);
+            DrawHelper.drawBlockOutline(sourcebounds, 5f, 1, 0.5f, 0, 0.1f + alphaP);
             
             double sourceMidX = sourcebounds.maxX - (sourcebounds.maxX - sourcebounds.minX) / 2d;
             double sourceMidY = sourcebounds.maxY - (sourcebounds.maxY - sourcebounds.minY) / 2d;
             double sourceMidZ = sourcebounds.maxZ - (sourcebounds.maxZ - sourcebounds.minZ) / 2d;
             
-            DrawHelper.drawLine(blockMidX, blockMidY, blockMidZ, sourceMidX, sourceMidY, sourceMidZ, 0, 0, 255, (int) (32 + alphaP * 96f / 0.8f), 50f);
+            DrawHelper.drawLine(blockMidX, blockMidY, blockMidZ, sourceMidX, sourceMidY, sourceMidZ, 230, 230, 121, (int) (32 + alphaP * 96f / 0.8f), 50f);
             
             double dx = bounds.maxX - sourcebounds.maxX;
             double dz = bounds.maxZ - sourcebounds.maxZ;
@@ -82,10 +82,14 @@ public class DeadCraftClientEvent {
             
             float scale = 0.05f;
             
-            String info = ((TileEntity) source).getBlockType().getLocalizedName();
+//            String info = ((TileEntity) source).getBlockType().getLocalizedName();
+//            
+//            DrawHelper.drawFloatingString(info, midX, midY + 0.5, midZ, angle + 270, 0, roll, 0, 0, 0, 0, scale);
+//            DrawHelper.drawFloatingString(info, midX, midY + 0.5, midZ, angle + 90, 0, -roll, 0, 0, 0, 0, scale);
             
-            DrawHelper.drawFloatingString(info, midX, midY + 0.5, midZ, angle + 270, 0, roll, 0, 0, 0, 0, scale);
-            DrawHelper.drawFloatingString(info, midX, midY + 0.5, midZ, angle + 90, 0, -roll, 0, 0, 0, 0, scale);
+           GL11.glEnable(GL11.GL_LIGHTING);
+           GL11.glEnable(GL11.GL_BLEND);
+           GL11.glEnable(GL11.GL_TEXTURE_2D);
             
         }
     }

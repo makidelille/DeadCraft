@@ -1,7 +1,7 @@
 package mak.dc.common.blocks;
 
 import mak.dc.common.items.DeadCraftItems;
-import mak.dc.common.items.ItemBlockDeadCraft;
+import mak.dc.common.items.itemBlock.ItemBlockDeadCraft;
 import mak.dc.common.tileEntities.TileEntityCompressor;
 import mak.dc.common.tileEntities.TileEntityEggSpawner;
 import mak.dc.common.tileEntities.TileEntityEnderConverter;

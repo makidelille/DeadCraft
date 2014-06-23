@@ -193,8 +193,7 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
         GL11.glTranslated(x + 0.5f, y, z + 0.5f);
         
         if (te == null) { // inventory render
-            GL11.glDisable(GL11.GL_BLEND);
-            for (int i = 0; i < 4; i++) {
+           for (int i = 0; i < 4; i++) {
                 GL11.glRotatef(90f, 0, 1f, 0f);
                 renderSide();
                 if (BlockEnderConverter.renderPass == 1) {
@@ -203,7 +202,6 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
             }
             renderTop();
             renderBottom();
-            GL11.glEnable(GL11.GL_BLEND);
             
         } else {
             renderInside();
@@ -219,6 +217,7 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
             renderBottom();
             
         }
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
         
@@ -227,7 +226,6 @@ public class SpecialRenderTileEntityEnderConverter extends TileEntitySpecialRend
         } else {
             a = 0;
         }
-        
     }
     
     private void renderTop() {

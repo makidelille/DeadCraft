@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 public class GuiCompressor extends GuiCustom {
     
@@ -49,27 +50,27 @@ public class GuiCompressor extends GuiCustom {
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
         fontRendererObj.FONT_HEIGHT = 9;
-        fontRendererObj.drawString(EnumChatFormatting.UNDERLINE + "Mode :", 54, 7, 0x404040, false); // TODO loc
+        fontRendererObj.drawString(EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("dc.block.compressor.gui.mode") + " :", 54, 7, 0x404040, false);
         fontRendererObj.FONT_HEIGHT = 7;
-        fontRendererObj.drawString((te.isInverted() ? "Decompression" : "Compression"), 56, 17, 0x404040, false);
+        fontRendererObj.drawString((te.isInverted() ? StatCollector.translateToLocal("dc.block.compressor.gui.decomp") : StatCollector.translateToLocal("dc.block.compressor.gui.comp")), 56, 17, 0x404040, false);
         
         if (new GuiRectangle(this, 7, 6, 18, 52).inRect(x, y)) {
-            this.drawInfoPanel(te.getCharge() + "/" + te.getMaxPower(), "Power :", -55, 7, 55);
+            this.drawInfoPanel(te.getCharge() + "/" + te.getMaxPower(), StatCollector.translateToLocal("dc.power") + " :", -55, 7, 55);
             String str = "0";
             if (te.hasStarted()) {
                 str = "" + te.POWERUSE * (te.isInverted() ? 1 : te.COMPRESSMULT);
             }
-            this.drawInfoPanel(str, "Usage :", -55, 32, 55);
+            this.drawInfoPanel(str, StatCollector.translateToLocal("dc.pUsage") + " :", -55, 32, 55);
         }
-        
+        fontRendererObj.FONT_HEIGHT = 9;
     }
     
     @Override
     public void initGui() {
         super.initGui();
-        GuiButton but = new GuiButton(0, guiLeft + 56, guiTop + 56, 70, 16, "change mode");
+        GuiButton but = new GuiButton(0, guiLeft + 56, guiTop + 56, 70, 16, StatCollector.translateToLocal("dc.block.compressor.gui.changeMode"));
         but.enabled = !te.hasStarted();
-        this.buttonList.add(but); // TODO loc
+        this.buttonList.add(but);
     }
     
     @Override

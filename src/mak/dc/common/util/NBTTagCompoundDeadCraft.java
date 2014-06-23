@@ -14,7 +14,7 @@ public class NBTTagCompoundDeadCraft {
         lis.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("dc.block.owner") + " : " + EnumChatFormatting.ITALIC + tag.getString("owner") + EnumChatFormatting.RESET);
         lis.add(EnumChatFormatting.DARK_BLUE + StatCollector.translateToLocal("dc.block.lockState") + " : " + EnumChatFormatting.BOLD + (tag.getBoolean("locked") ? StatCollector.translateToLocal("dc.private") : StatCollector.translateToLocal("dc.public")) + EnumChatFormatting.RESET);
         if (tag.hasKey("nbAllowed") && tag.getInteger("nbAllowed") > 0) {
-            lis.add(EnumChatFormatting.GRAY + "" + EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("dc.block.info.hasAllowedList") + EnumChatFormatting.RESET);
+            lis.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("dc.block.info.hasAllowedList") + EnumChatFormatting.RESET);
         }
         return lis;
     }

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -53,9 +54,9 @@ public class RendererItemCompressed implements IItemRenderer {
         
         Item itemInStack = ItemCompacted.getItem(stack);
         int meta = ItemCompacted.getDmg(stack);
-        ItemStack fakeStack = new ItemStack(itemInStack,1, meta);
+        ItemStack fakeStack = new ItemStack(itemInStack, 1, meta);
         if (ItemCompacted.getTag(stack) != null) fakeStack.setTagCompound(ItemCompacted.getTag(stack));
-        
+        if (fakeStack.getItem() == null) return;
         IItemRenderer specialRender = MinecraftForgeClient.getItemRenderer(fakeStack, type);
         
         if (type.equals(ItemRenderType.INVENTORY)) {
@@ -82,7 +83,12 @@ public class RendererItemCompressed implements IItemRenderer {
                 GL11.glRotatef(25f, 1, 0, 1);
                 GL11.glScalef(0.8f, 0.8f, 0.8f);
             } else if (type.equals(ItemRenderType.ENTITY)) {
-                // TODO add rotations
+                GL11.glTranslated(0.5f, 0, 0);
+                EntityItem ent = (EntityItem) data[1];
+                float rot = (float) ((float)ent.age/100 * 360);
+                GL11.glRotatef(rot, 0, 1, 0);
+                GL11.glTranslated(-0.5f, 0, 0);
+                GL11.glTranslated(0, Math.cos(rot/360d)*0.05d + 0.05d, 0);
             }
             
             IIcon icon = stack.getIconIndex();
@@ -95,9 +101,16 @@ public class RendererItemCompressed implements IItemRenderer {
                 specialRender.renderItem(ItemRenderType.ENTITY, fakeStack, data);
             } else {
                 if (itemInStack instanceof ItemBlock) {
-                    
-                    // TODO figure out
-                    
+                    Block block = Block.getBlockFromItem(itemInStack);
+                    int render = block.getRenderType();
+                    RenderBlocks rb = new RenderBlocks();
+                    Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                    if (RenderBlocks.renderItemIn3d(block.getRenderType())) {
+                        GL11.glTranslatef(0f, 0.5f, -0.05f);
+                        GL11.glScalef(0.5f, 0.5f, 0.5f);
+                        GL11.glRotatef(45f, -0.25f, 1, 0);
+                        rb.renderBlockAsItem(block, meta, 1f);
+                    }
                 } else {
                     GL11.glTranslatef(-0.5f, 0f, 0f);
                     for (int renderPass = 0; renderPass < fakeStack.getItem().getRenderPasses(fakeStack.getItemDamage()); renderPass++) {

@@ -2,6 +2,8 @@ package mak.dc.common.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.common.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -108,13 +110,16 @@ public class ItemCrystal extends Item {
     public void addInformation(ItemStack is, EntityPlayer player, List l, boolean par4) {
         if (is.hasTagCompound() && is.getTagCompound().hasKey("charge")) {
             if (is.getTagCompound().getBoolean("creativeSpawn")) {
-                l.add(StatCollector.translateToLocal("dc.crystal.info.tier") + " : " + (is.getItemDamage() + 1));
-                l.add(StatCollector.translateToLocal("dc.info.isCreative"));
                 l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.infinite") + EnumChatFormatting.RESET);
             } else {
-                l.add(StatCollector.translateToLocal("dc.crystal.info.tier") + " : " + (is.getItemDamage() + 1));
-                
                 l.add(StatCollector.translateToLocal("dc.charge") + " : " + EnumChatFormatting.YELLOW + is.getTagCompound().getInteger("charge") + "/" + MAXCHARGE[is.getItemDamage()] + EnumChatFormatting.RESET);
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+                l.add(StatCollector.translateToLocal("dc.crystal.info.tier") + " : " + EnumChatFormatting.DARK_GREEN + (is.getItemDamage() + 1));
+                if (is.getTagCompound().getBoolean("creativeSpawn"))
+                    l.add(StatCollector.translateToLocal("dc.info.isCreative"));
+            }else{
+                l.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("dc.info.holdShift"));
             }
         }
     }

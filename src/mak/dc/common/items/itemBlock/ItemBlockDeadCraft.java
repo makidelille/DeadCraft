@@ -1,4 +1,4 @@
-package mak.dc.common.items;
+package mak.dc.common.items.itemBlock;
 
 import java.util.List;
 
