@@ -5,8 +5,12 @@
 *.ear
 
 # IDEA Files #
-*.iml
-/.idea
+*.classpath
+*.project
+*.settings
+/bin
+/eclipse
+/build
 
 # Gradle #
 /.gradle
