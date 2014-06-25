@@ -1,5 +1,7 @@
 package mak.dc.client.events;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mak.dc.DeadCraft;
@@ -15,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
@@ -116,12 +119,20 @@ public class DeadCraftClientEvent {
             }
         }
     }
+   
+    private ArrayList<Chunk> chunks = new ArrayList<Chunk>();   
     
     @SubscribeEvent
     public void onChunckLoad(ChunkEvent.Load e) {
-        if (DeadCraft.proxy.getClientWorld() != null && e.getChunk() != null && Minecraft.getMinecraft().thePlayer != null) {
-            DeadCraft.packetPipeline.sendToServer(new DeadCraftClientToServerPacket(-1, Minecraft.getMinecraft().thePlayer.getCommandSenderName(), e.getChunk().xPosition, 0, e.getChunk().zPosition, 0));
+        if (DeadCraft.proxy.getClientWorld() != null && e.getChunk() != null && Minecraft.getMinecraft().thePlayer != null && !chunks.contains(e.getChunk())) {
+        	chunks.add(e.getChunk());
+        	DeadCraft.packetPipeline.sendToServer(new DeadCraftClientToServerPacket(-1, Minecraft.getMinecraft().thePlayer.getCommandSenderName(), e.getChunk().xPosition, 0, e.getChunk().zPosition, 0));
         }
+    }
+    @SubscribeEvent
+    public void onChunkUnload(ChunkEvent.Unload e){
+    	if(chunks.contains(e.getChunk()))
+    		chunks.remove(e.getChunk());
     }
     
 }

@@ -34,8 +34,7 @@ public class DrawHelper {
         FontRenderer ftRenderer = Minecraft.getMinecraft().fontRenderer;
         drawFloatingString(s, x, y, z, ftRenderer.getStringWidth(s), ftRenderer.FONT_HEIGHT + 1, yaw, pitch, roll, R, G, B, A, size);
     }
-    
-    // TODO implements split strings
+    //TODO later split string
     public static void drawFloatingString(String s, double x, double y, double z, int width, int height, double yaw, double pitch, double roll, int R, int G, int B, int A, float size) {
         FontRenderer ftRenderer = Minecraft.getMinecraft().fontRenderer;
         

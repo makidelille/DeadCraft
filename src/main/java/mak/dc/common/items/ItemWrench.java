@@ -193,8 +193,6 @@ public class ItemWrench extends Item {
                 }
                 return true;
             } else if (player.isSneaking()) {
-                // TODO do smthg
-                
             } else {
                 player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("dc.block.notAllowed")));
             }

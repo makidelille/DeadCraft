@@ -2,6 +2,7 @@ package mak.dc;
 
 import mak.dc.client.events.DeadCraftClientEvent;
 import mak.dc.common.blocks.DeadCraftBlocks;
+import mak.dc.common.event.DeadCraftCreationsEvent;
 import mak.dc.common.event.DeadCraftEvents;
 import mak.dc.common.items.DeadCraftItems;
 import mak.dc.common.util.Lib;
@@ -59,6 +60,7 @@ public class DeadCraft {
         packetPipeline.postInitialise();
         canCraftingManager.postInitialise();
         MinecraftForge.EVENT_BUS.register(new DeadCraftEvents());
+        MinecraftForge.EVENT_BUS.register(new DeadCraftCreationsEvent());
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new DeadCraftClientEvent());
         }

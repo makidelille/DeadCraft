@@ -1,0 +1,123 @@
+itemGroup.DeadCraft=Dead Craft
+
+item.deadwand.name=Baguette des Morts
+item.crystal.name=Cristal
+item.mindcontroller.name=Controlleur d'esprit
+item.wrench.name=clé
+item.godcan.name=Canette divine
+item.compact.name=Objet Compacté
+tile.dragoneggspawner.name=Producteur d'oeufs de dragon
+tile.enderpearlblock.name=Block de l'ender
+tile.godbottler.name=Embouteilleur divin
+tile.enderconverter.name=Convertisseur de l'ender
+tile.compressor.name=Compresseur
+
+dc.true=Vrai
+dc.false=Faux
+dc.public=Public
+dc.private=Privé
+dc.power=Energie
+dc.pUsage=Utilisation
+dc.charge=Charge
+dc.none=Aucun
+dc.progress=Progrés
+dc.infinite=Infinie
+dc.second=s
+dc.kilo=K
+dc.start=Depart
+dc.stop=Stop
+dc.active=Actif
+dc.inactive=Inactif
+
+dc.block.info.notSet=N'est pas configuré
+dc.block.info.hasAllowedList=A une liste d'autorisé
+dc.block.gui.lock=Verrou
+dc.block.notOwner=Vous n'etes pas le propriétaire de ce bloc
+dc.block.notAllowed=Vous n'etes pas autorisé à utiliser ce bloc
+dc.block.owner=Propriétaire
+dc.block.lockState=Etat du verrou
+dc.block.allowed=Utilisateur autorisé
+
+dc.block.power.info.connectionNb=Nombre de connections
+
+dc.block.eggSpawner.gui.status=Etat
+dc.block.eggSpawner.gui.eggInStock=Oeufs en stock
+dc.block.eggSpawner.gui.redstone.mode=Redstone
+dc.block.eggSpawner.gui.redstone.normal=Normal
+dc.block.eggSpawner.gui.redstone.inverted=Inversé
+dc.block.eggSpawner.gui.redstone.disable=Désactivé
+dc.block.eggSpawner.gui.run.mode=mode d'exécution
+dc.block.eggSpawner.gui.run.single=Passage unique
+dc.block.eggSpawner.gui.run.loop=En boucle
+dc.block.eggSpawner.gui.info.header=Infos
+dc.block.eggSpawner.gui.info.info=Cette zone donne des infos sur les fonctions des différents boutons
+dc.block.eggSpawner.gui.info.redstone.normal=Le bloc enverra une petite inpulsion de redstone à la production d'un oeuf
+dc.block.eggSpawner.gui.info.redstone.inverted=Le bloc arretra d'emettre un signal de redstone à la production d'un oeuf
+dc.block.eggSpawner.gui.info.redstone.off=Le bloc n'emettra jamais de signal de redstone
+dc.block.eggSpawner.gui.info.single=Le spawner produira qu'un seul oeuf si vous cliquer sur 'Depart'
+dc.block.eggSpawner.gui.info.loop=Le spawner produira en boucle des oeufs jusqu'à vous cliquiez sur 'Stop'
+
+dc.block.godBottler.gui.error.header=Problèmes
+dc.block.godBottler.gui.error.noPower=Pas d'energie
+dc.block.godBottler.gui.error.noRedstone=Pas de Redstone
+dc.block.godBottler.gui.error.noEmptyCan=La canette n'est pas vide
+dc.block.godBottler.gui.error.noRecipe=Pas de recettes corespondante
+dc.block.godBottler.gui.error.noSpace=Pas de place pour créer
+dc.block.godBottler.gui.error.sameId=La canette à deja cet effet
+dc.block.godBottler.info.redstone=Est alimenté en Redstone 
+dc.block.godBottler.info.isTop=Ceci est le block du haut, les données sont stockés en-dessous
+
+dc.block.enderConverter.gui.powerLeft=Energie restante
+
+dc.block.compressor.gui.changeMode=Changer de mode
+dc.block.compressor.gui.mode=Mode
+dc.block.compressor.gui.comp=Compression
+dc.block.compressor.gui.decomp=Decompression
+dc.block.compressor.info.progress=Progrés
+dc.block.compressor.info.mode=Mode
+dc.block.compressor.info.decomp=Decompression
+dc.block.compressor.info.comp=Compression
+
+dc.info.holdShift=-- Appuyer sur MAJ pour plus d'info --
+dc.info.isCreative=Est créer en creatif
+
+dc.wrench.info.name.base=Base
+dc.wrench.info.name.admin=Admin
+dc.wrench.info.name.info=Info
+dc.wrench.info.change=MAJ + clic droit pour changer de mode
+dc.wrench.info.wrenchMode=Mode de la clé
+dc.wrench.info.ifAllowed=Si vous etes autorisé à utiliser ce bloc
+dc.wrench.info.ifAdmin=Si vous etes le propriétaire de ce bloc
+dc.wrench.info.doBasics=Vous pouvez faire des choses basiques
+dc.wrench.info.editSec=Vous pouvez changer la sécurité
+dc.wrench.info.seeSec=Vous pourvez obtenir les informations de sécurité
+dc.wrench.info.seeInfo=vous pouvez obtenir les informations sur le bloc
+dc.wrench.info.coord.header=Liée à
+dc.wrench.header.owner=Propiétaire
+dc.wrench.header.allowed=Autorisé
+
+
+dc.crystal.info.tier=Niveau
+
+dc.mindcontroller.info.creator=Créateur
+dc.mindcontroller.info.activate=clic droit pour activé
+dc.mindcontroller.useNotCreat=N'utilisez pas les objets des autres
+dc.mindcontroller.usePlayer=N'utilisez pas le controlleur d'esprit sur les gens
+
+dc.godcan.info.effectid=Id de l'effet
+dc.godcan.info.isActive=Est actif
+dc.godcan.info.time=Temps d'activité
+dc.godcan.info.effects=Effets
+dc.godcan.info.noEffect=Pas d'effets
+
+dc.canEffect.fly.name=Vol
+dc.canEffect.potion.name=Potion
+dc.canEffect.potion_speed.name=Boost de vitesse
+dc.canEffect.potion_resistance.name=Boost de resistance
+dc.caneffect.potion_haste.name=Boost de minage
+
+dc.compacted.info.size=Taille
+dc.compacted.info.item=Objet
+dc.compacted.info.compLvl=Niveau de compression
+dc.compacted.info.displayName=Nom affiché
+dc.compacted.info.dmg=Metadata

@@ -29,8 +29,7 @@ public final class Lib {
         public static final String TILE_EGGSPANWER_KEY = "eggspawnertileentity";
         public static final String TILE_BOTTLER_KEY = "godbottlertileentity";
         public static final String TILE_ENDERCONVERTER_KEY = "enderconvertertileentity";
-        public static final String TILE_COMPRESSOR_KEY = "compressortileentity";
-        
+        public static final String TILE_COMPRESSOR_KEY = "compressortileentity";        
     }
     
     public static class Textures {

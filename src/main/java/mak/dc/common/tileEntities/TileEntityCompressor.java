@@ -11,12 +11,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 
-public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory {
+public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory {
     private static final int MAXCHARGESPEED = 50;
     private static final int MAXCHARGE = 5000;
     public static final int POWERUSE = 5;
@@ -274,4 +275,25 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
     public ItemStack getTempbuffer() {
         return tempbuffer;
     }
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		if(var1 == 0) return new int[] {slotOutput};
+		if (var1 == 1) return new int[] {slotInput};
+		return null;
+	}
+
+	@Override
+	public boolean canInsertItem(int var1, ItemStack var2, int var3) {
+		if (var3 == 0) return false;
+		if (var3 == 1 && var1 ==slotInput) return isItemValidForSlot(slotInput, var2);
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int var1, ItemStack var2, int var3) {
+		if(var3 == 1) return false;
+		if(var3 == 0) return var1 == slotOutput;
+		return false;
+	}
 }
