@@ -2,6 +2,7 @@ package mak.dc.common.entity.ai;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,22 +39,16 @@ public class EntityAIAvoidAPlayer extends EntityAIAvoidEntity {
     
     @Override
     public boolean shouldExecute() {
-        if (entity.getAttackTarget() instanceof EntityPlayer) {
-            EntityPlayer target = (EntityPlayer) entity.getAttackTarget();
-            if (target == playerToAvoid) {
-                closestLivingEntity = target;
-                
-                Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entity.worldObj.getWorldVec3Pool().getVecFromPool(closestLivingEntity.posX, closestLivingEntity.posY, closestLivingEntity.posZ));
-                
-                if (vec3 == null) return false;
-                else if (closestLivingEntity.getDistanceSq(vec3.xCoord, vec3.yCoord, vec3.zCoord) < closestLivingEntity.getDistanceSqToEntity(entity)) return false;
-                else {
-                    entityPathEntity = entityPathNavigate.getPathToXYZ(vec3.xCoord, vec3.yCoord, vec3.zCoord);
-                    return entityPathEntity == null ? false : entityPathEntity.isDestinationSame(vec3);
-                }
-            }
+        closestLivingEntity = playerToAvoid;
+        
+        Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entity.worldObj.getWorldVec3Pool().getVecFromPool(closestLivingEntity.posX, closestLivingEntity.posY, closestLivingEntity.posZ));
+        
+        if (vec3 == null) return false;
+        else if (closestLivingEntity.getDistanceSq(vec3.xCoord, vec3.yCoord, vec3.zCoord) < closestLivingEntity.getDistanceSqToEntity(entity)) return false;
+        else {
+            entityPathEntity = entityPathNavigate.getPathToXYZ(vec3.xCoord, vec3.yCoord, vec3.zCoord);
+            return entityPathEntity == null ? false : entityPathEntity.isDestinationSame(vec3);
         }
-        return false;
     }
     
     @Override

@@ -202,7 +202,7 @@ public class ItemMindController extends Item {
     private int getEntityCost(EntityLiving entLive) {
         float pv = entLive.getHealth();
         int armor = entLive.getTotalArmorValue();
-        return (int) ((pv + armor) * CostForHostileEntityUse);
+        return (int) ((pv + armor)/10 * CostForHostileEntityUse);
     }
     
     @SideOnly(Side.CLIENT)
@@ -303,7 +303,8 @@ public class ItemMindController extends Item {
                     return true;
                 }
                 if (checkEntity(entLive) && canDischargeItem(stack, getEntityCost(entLive))) {
-                    entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive, player, 4F, 1.2D, 2D));
+                    System.out.println("new ai");
+                	entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive, player, 4F, 1.2D, 2D));
                     dischargeItem(stack, getEntityCost(entLive));
                     player.worldObj.playSoundAtEntity(player, "fireworks.blast_far", 1f, 0.5f);
                     return true;
