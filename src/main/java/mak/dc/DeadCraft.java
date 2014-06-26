@@ -5,6 +5,7 @@ import mak.dc.common.blocks.DeadCraftBlocks;
 import mak.dc.common.event.DeadCraftCreationsEvent;
 import mak.dc.common.event.DeadCraftEvents;
 import mak.dc.common.items.DeadCraftItems;
+import mak.dc.common.util.Config;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.PowerManager;
 import mak.dc.common.util.cans.CanCraftingManager;
@@ -38,6 +39,7 @@ public class DeadCraft {
     public static final PacketPipeline packetPipeline = new PacketPipeline();
     public static final CanCraftingManager canCraftingManager = new CanCraftingManager();
     public static final PowerManager powerManager = new PowerManager();
+    public static Config config;
     
     @EventHandler
     public void Init(FMLInitializationEvent event) {
@@ -51,6 +53,7 @@ public class DeadCraft {
         packetPipeline.initialise();
         canCraftingManager.initialise();
         powerManager.initialise();
+        
         
     }
     
@@ -74,13 +77,15 @@ public class DeadCraft {
          * achievement register Render register sounds
          */
         
-//        ConfigHandler.init(event.getSuggestedConfigurationFile());
-        
+    	config = new Config(event.getSuggestedConfigurationFile());
+    	
         DeadCraftItems.init();
         
         DeadCraftBlocks.init();
         
         proxy.init();
         
+        
+        config.save();
     }
 }

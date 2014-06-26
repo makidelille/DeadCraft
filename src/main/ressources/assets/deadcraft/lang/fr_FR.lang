@@ -46,7 +46,7 @@ dc.block.eggSpawner.gui.redstone.mode=Redstone
 dc.block.eggSpawner.gui.redstone.normal=Normal
 dc.block.eggSpawner.gui.redstone.inverted=Inversé
 dc.block.eggSpawner.gui.redstone.disable=Désactivé
-dc.block.eggSpawner.gui.run.mode=mode d'exécution
+dc.block.eggSpawner.gui.run.mode=Mode
 dc.block.eggSpawner.gui.run.single=Passage unique
 dc.block.eggSpawner.gui.run.loop=En boucle
 dc.block.eggSpawner.gui.info.header=Infos
@@ -57,15 +57,15 @@ dc.block.eggSpawner.gui.info.redstone.off=Le bloc n'emettra jamais de signal de 
 dc.block.eggSpawner.gui.info.single=Le spawner produira qu'un seul oeuf si vous cliquer sur 'Depart'
 dc.block.eggSpawner.gui.info.loop=Le spawner produira en boucle des oeufs jusqu'à vous cliquiez sur 'Stop'
 
-dc.block.godBottler.gui.error.header=Problèmes
+dc.block.godBottler.gui.error.header=Problemes
 dc.block.godBottler.gui.error.noPower=Pas d'energie
 dc.block.godBottler.gui.error.noRedstone=Pas de Redstone
-dc.block.godBottler.gui.error.noEmptyCan=La canette n'est pas vide
+dc.block.godBottler.gui.error.noEmptyCan=Pas de canette
 dc.block.godBottler.gui.error.noRecipe=Pas de recettes corespondante
-dc.block.godBottler.gui.error.noSpace=Pas de place pour créer
+dc.block.godBottler.gui.error.noSpace=Pas de place pour creer
 dc.block.godBottler.gui.error.sameId=La canette à deja cet effet
 dc.block.godBottler.info.redstone=Est alimenté en Redstone 
-dc.block.godBottler.info.isTop=Ceci est le block du haut, les données sont stockés en-dessous
+dc.block.godBottler.info.isTop=Ceci est le block du haut, les donnees sont stockés en-dessous
 
 dc.block.enderConverter.gui.powerLeft=Energie restante
 

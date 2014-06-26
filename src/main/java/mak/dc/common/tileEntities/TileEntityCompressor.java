@@ -6,6 +6,7 @@ import java.util.List;
 import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemCompacted;
 import mak.dc.common.items.ItemCrystal;
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.network.pipeline.packets.DeadCraftCompressorPacket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,12 +19,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory {
-    private static final int MAXCHARGESPEED = 50;
-    private static final int MAXCHARGE = 5000;
-    public static final int POWERUSE = 5;
+    private static final int MAXCHARGESPEED = ConfigLib.BASE_MAXCHARGE;
+    private static final int MAXCHARGE = ConfigLib.BASE_MAXCHARGE;
+    public static final int POWERUSE = ConfigLib.MIN_CONSO;
     public static final float COMPRESSMULT = 5f;
     
-    public static final int BUILDTIME = 250;
+    public static final int BUILDTIME = ConfigLib.COMPRESS_TIME;
     
     public static final byte slotPower = 0;
     public static final byte slotInput = 1;

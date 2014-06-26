@@ -4,6 +4,7 @@ import java.util.List;
 
 import mak.dc.common.entity.ai.EntityAIAvoidAPlayer;
 import mak.dc.common.entity.ai.EntityAITemptMindController;
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.common.util.DamageSourceDeadCraft;
 import mak.dc.common.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -35,9 +36,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemMindController extends Item {
     
     /** handle by config */
-    private static int MAXCHARGE = 4000;
-    private static int CostForPassiveEntityUse = 100;  // Config
-    private static int CostForHostileEntityUse = 25;   // Config
+    private static int MAXCHARGE = ConfigLib.MIND_MAX;
+    private static int CostForPassiveEntityUse = ConfigLib.MIND_C_PASS; 
+    private static int CostForHostileEntityUse = ConfigLib.MIND_C_HOST;
     
     /**
      * @param stack

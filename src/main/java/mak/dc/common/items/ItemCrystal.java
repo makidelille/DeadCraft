@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.common.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,8 +22,8 @@ public class ItemCrystal extends Item {
     
     /** handle by config */
     
-    public static final int CRYSTALCOST = 100;
-    public static final int[] MAXCHARGE = { 2500, 10000, 40000 };
+    public static final int CRYSTALCOST = ConfigLib.CRYS_CRYSTALCOST;
+    public static final int[] MAXCHARGE = { ConfigLib.CRYS_DEFMAXCHARGE, 4*ConfigLib.CRYS_DEFMAXCHARGE, 16*ConfigLib.CRYS_DEFMAXCHARGE };
     public static final String[] tiers = { "1", "2", "3" };
     
     /**

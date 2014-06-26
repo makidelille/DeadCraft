@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemCrystal;
 import mak.dc.common.items.ItemGodCan;
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.common.util.Lib.IBTInfos;
 import mak.dc.common.util.cans.CanCraftingManager;
@@ -88,15 +89,15 @@ public class TileEntityGodBottler extends TileEntityDeadCraftWithPower implement
     /**
      * time to build (Server Side) && the size of power buffer
      */
-    public static final int BUILDTIME = 100;
+    public static final int BUILDTIME = ConfigLib.GODBOT_TIME;
     
-    public static final int MAXPOWER = 5000;
+    public static final int MAXPOWER = ConfigLib.BASE_MAXCHARGE;
     /**
      * rate of the charge and of the decharge
      */
-    private static final int MAXCHARGESPEED = 10;
+    private static final int MAXCHARGESPEED = ConfigLib.MAX_CHARGESPEED;
     
-    private static final int POWERUSAGE = 10;
+    private static final int POWERUSAGE = ConfigLib.MIN_CONSO * 2;
     private IPowerSender powerSource;
     
     private TileEntityGodBottler pair;

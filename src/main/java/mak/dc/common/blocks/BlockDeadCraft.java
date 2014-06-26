@@ -17,24 +17,6 @@ import net.minecraft.world.World;
 
 public abstract class BlockDeadCraft extends Block implements ITileEntityProvider {
     
-    private static int DeadCraftId;
-    
-    public static int getId() {
-        return DeadCraftId;
-    }
-    
-    public static int getNextId() {
-        return DeadCraftId++;
-    }
-    
-    public static void init() {
-        DeadCraftId = 0;
-    }
-    
-    public static void setid(int id) {
-        DeadCraftId = id;
-    }
-    
     public BlockDeadCraft(Material par2Material) {
         super(par2Material);
         setBlockUnbreakable();

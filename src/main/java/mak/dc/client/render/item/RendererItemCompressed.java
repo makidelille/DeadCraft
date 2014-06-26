@@ -83,7 +83,8 @@ public class RendererItemCompressed implements IItemRenderer {
                 GL11.glRotatef(25f, 1, 0, 1);
                 GL11.glScalef(0.8f, 0.8f, 0.8f);
             } else if (type.equals(ItemRenderType.ENTITY)) {
-                GL11.glTranslated(0.5f, 0, 0);
+                if(!(data[1] instanceof EntityItem)) return;
+            	GL11.glTranslated(0.5f, 0, 0);
                 EntityItem ent = (EntityItem) data[1];
                 float rot = (float) ((float)ent.age/100 * 360);
                 GL11.glRotatef(rot, 0, 1, 0);

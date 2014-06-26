@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import mak.dc.DeadCraft;
 import mak.dc.common.blocks.BlockEnderConverter;
 import mak.dc.common.items.ItemCrystal;
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.common.util.IPowerReceiver;
 import mak.dc.common.util.IPowerSender;
 import mak.dc.common.util.PowerManager;
@@ -24,9 +25,9 @@ import net.minecraft.util.StatCollector;
 
 public class TileEntityEnderConverter extends TileEntityDeadCraft implements IPowerSender, IInventory {
     
-    public static final int MAXPOWER = 50000;
-    private static final int CHARGERATE = 50;
-    private static final int MAXTRANSFERTRATE = 500;
+    public static final int MAXPOWER = 10 * ConfigLib.BASE_MAXCHARGE;
+    private static final int CHARGERATE = ConfigLib.MAX_CHARGESPEED;
+    private static final int MAXTRANSFERTRATE = 10 * CHARGERATE;
     
     private static PowerManager powerManager = DeadCraft.powerManager.getInstance();
     

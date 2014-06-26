@@ -83,21 +83,21 @@ public class GuiEggSpawner extends GuiCustom {
         GL11.glColor4f(1, 1, 1, 1);
         
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-        getFontRenderer().drawSplitString(te.getInventoryName(), 122, 22, 46, 0x404040);
+        drawSplitStringWithMaxSize(te.getInventoryName(), 122, 22, 0x404040, 46, 27);
         
         String str = null;
         
         str = StatCollector.translateToLocal("dc.block.eggSpawner.gui.status") + " : " + (te.hasStarted() ? StatCollector.translateToLocal("dc.active") : StatCollector.translateToLocal("dc.inactive"));
-        getFontRenderer().drawSplitString(str, 65, 57, 110, te.hasStarted() ? 0x00FF00 : 0xFF0000);
+        drawSplitStringWithMaxSize(str, 65, 57, te.hasStarted() ? 0x00FF00 : 0xFF0000 ,110,9);
         
         str = StatCollector.translateToLocal("dc.progress") + " : " + te.getProgress() + "%";
-        getFontRenderer().drawSplitString(str, 65, 67, 110, 0x404040);
+        drawSplitStringWithMaxSize(str, 65, 67, 0x404040,110,9);
         
         str = StatCollector.translateToLocal("dc.power") + " : " + te.getCharge() + "/" + TileEntityEggSpawner.MAXPOWER / 1000 + StatCollector.translateToLocal("dc.kilo");
-        getFontRenderer().drawSplitString(str, 65, 77, 110, 0x404040);
+        drawSplitStringWithMaxSize(str, 65, 77, 0x404040,110,9);
         
         str = StatCollector.translateToLocal("dc.block.eggSpawner.gui.eggInStock") + " : " + te.getEggInStock();
-        getFontRenderer().drawSplitString(str, 65, 87, 110, 0x404040);
+        drawSplitStringWithMaxSize(str, 65, 87, 0x404040,110,9);
         
         redGuiDisplay();
         prodGuiDisplay();

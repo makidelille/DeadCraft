@@ -5,6 +5,7 @@ import java.util.List;
 
 import mak.dc.common.items.DeadCraftItems;
 import mak.dc.common.items.ItemCrystal;
+import mak.dc.common.util.Config.ConfigLib;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -19,17 +20,15 @@ import net.minecraft.util.StatCollector;
 import cpw.mods.fml.common.FMLLog;
 
 public class TileEntityEggSpawner extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory {
+       
+    public static final int MAXPOWER = 10 * ConfigLib.BASE_MAXCHARGE;
     
-    private static final byte deadcraftId = 1;
-    
-    public static final int MAXPOWER = 100000;
-    
-    public static final int CHARGESPEED = 50;
-    public static final int POWERUSAGE = 5;
+    public static final int CHARGESPEED = ConfigLib.MAX_CHARGESPEED;
+    public static final int POWERUSAGE = ConfigLib.MIN_CONSO;
     
     private static final int[] slots = { 0, 1, 2, 3, 4, 5, 6, 7 };
     
-    public static int _maxBuildTime = 18000;
+    public static int _maxBuildTime = ConfigLib.EGGS_TIME;
     
     private ItemStack[] invContent;
     

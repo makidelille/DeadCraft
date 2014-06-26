@@ -2,6 +2,7 @@ package mak.dc.common.items;
 
 import java.util.List;
 
+import mak.dc.common.util.Config.ConfigLib;
 import mak.dc.common.util.Lib.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 
 public class ItemDeadWand extends Item {
     
-    public static final int MAXCHARGE = 250;
+    public static final int MAXCHARGE = ConfigLib.WAND_MAXCHARGE;
     
     public static int chargeItem(ItemStack stack, int chargeToAdd) {
         if (!stack.hasTagCompound()) return chargeToAdd;

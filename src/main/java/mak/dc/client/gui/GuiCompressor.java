@@ -49,10 +49,8 @@ public class GuiCompressor extends GuiCustom {
     
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
-        fontRendererObj.FONT_HEIGHT = 9;
-        fontRendererObj.drawString(EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("dc.block.compressor.gui.mode") + " :", 54, 7, 0x404040, false);
-        fontRendererObj.FONT_HEIGHT = 7;
-        fontRendererObj.drawString((te.isInverted() ? StatCollector.translateToLocal("dc.block.compressor.gui.decomp") : StatCollector.translateToLocal("dc.block.compressor.gui.comp")), 56, 17, 0x404040, false);
+    	drawSplitStringWithMaxSize(EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal("dc.block.compressor.gui.mode") + " :", 54, 7, 0x404040 , 60 ,9);
+    	drawSplitStringWithMaxSize((te.isInverted() ? StatCollector.translateToLocal("dc.block.compressor.gui.decomp") : StatCollector.translateToLocal("dc.block.compressor.gui.comp")), 56, 17, 0x404040, 90,7);
         
         if (new GuiRectangle(this, 7, 6, 18, 52).inRect(x, y)) {
             this.drawInfoPanel(te.getCharge() + "/" + te.getMaxPower(), StatCollector.translateToLocal("dc.power") + " :", -55, 7, 55);

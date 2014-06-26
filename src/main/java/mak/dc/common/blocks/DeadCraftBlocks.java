@@ -24,17 +24,13 @@ public class DeadCraftBlocks {
     public static Block enderPearlBlock;
     
     public static void init() {
-        
-        BlockDeadCraft.init();
-        
+                
         eggSpawner = new BlockEggSpawner().setBlockName(IBTInfos.BLOCK_EGGSPAWNER_KEY);
         enderPearlBlock = new BlockEnderPearlBlock().setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
         godBottler = new BlockGodBottler().setBlockName(IBTInfos.BLOCK_BOTTLER_KEY);
         enderConverter = new BlockEnderConverter().setBlockName(IBTInfos.BLOCK_ENDERCONVERTER_KEY);
         compressor = new BlockCompressor().setBlockName(IBTInfos.BLOCK_COMPRESSOR_KEY);
-        
-        BlockDeadCraft.setid(BlockDeadCraft.getNextId());
-        
+                
         GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
         GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);
         GameRegistry.registerBlock(enderConverter, ItemBlockDeadCraft.class, IBTInfos.BLOCK_ENDERCONVERTER_KEY);

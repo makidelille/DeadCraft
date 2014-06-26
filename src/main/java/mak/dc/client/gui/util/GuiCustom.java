@@ -76,6 +76,14 @@ public abstract class GuiCustom extends GuiContainer {
         ft.drawSplitString(infoStr, x, y + 10, maxSize, 0xBBBBBB);
     }
     
+    protected void drawSplitStringWithMaxSize(String str,int x,int y, int stringColor, int stringSize, int stringHeight){
+    	if(fontRendererObj.listFormattedStringToWidth(str, stringSize).size() * fontRendererObj.FONT_HEIGHT > stringHeight){
+    		fontRendererObj.FONT_HEIGHT = stringHeight / fontRendererObj.listFormattedStringToWidth(str, stringSize).size();
+    	}
+    	fontRendererObj.drawSplitString(str, x, y,stringSize, stringColor);
+    	fontRendererObj.FONT_HEIGHT = 9;
+    }
+    
     public List getButtonList() {
         return buttonList;
     }
