@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 
 public class TileEntityCompressor extends TileEntityDeadCraftWithPower implements IInventory, ISidedInventory {
-    private static final int MAXCHARGESPEED = ConfigLib.BASE_MAXCHARGE;
+    private static final int MAXCHARGESPEED = ConfigLib.MAX_CHARGESPEED;
     private static final int MAXCHARGE = ConfigLib.BASE_MAXCHARGE;
     public static final int POWERUSE = ConfigLib.MIN_CONSO;
     public static final float COMPRESSMULT = 5f;
@@ -42,7 +42,7 @@ public class TileEntityCompressor extends TileEntityDeadCraftWithPower implement
         super.updateEntity();
         if (!worldObj.isRemote) {
             if (!this.isSync) sync();
-            if(!this.hasReceive && this.getCharge() <= (getMaxPower() - MAXCHARGESPEED) &&getStackInSlot(slotPower) != null && getStackInSlot(slotPower).getItem() instanceof ItemCrystal){
+            if(!this.hasReceive && this.getCharge() <= (getMaxPower() - MAXCHARGESPEED) && getStackInSlot(slotPower) != null && getStackInSlot(slotPower).getItem() instanceof ItemCrystal){
                 int power = MAXCHARGESPEED - ItemCrystal.dischargeItem(getStackInSlot(slotPower), MAXCHARGESPEED);
                 this.setCharge(getCharge() + power);
             }

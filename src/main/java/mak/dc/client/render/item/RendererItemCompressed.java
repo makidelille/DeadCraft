@@ -83,13 +83,14 @@ public class RendererItemCompressed implements IItemRenderer {
                 GL11.glRotatef(25f, 1, 0, 1);
                 GL11.glScalef(0.8f, 0.8f, 0.8f);
             } else if (type.equals(ItemRenderType.ENTITY)) {
-                if(!(data[1] instanceof EntityItem)) return;
-            	GL11.glTranslated(0.5f, 0, 0);
-                EntityItem ent = (EntityItem) data[1];
-                float rot = (float) ((float)ent.age/100 * 360);
-                GL11.glRotatef(rot, 0, 1, 0);
-                GL11.glTranslated(-0.5f, 0, 0);
-                GL11.glTranslated(0, Math.cos(rot/360d)*0.05d + 0.05d, 0);
+                if(data[1] instanceof EntityItem) {
+	            	GL11.glTranslated(0.5f, 0, 0);
+	                EntityItem ent = (EntityItem) data[1];
+	                float rot = (float) ((float)ent.age/100 * 360);
+	                GL11.glRotatef(rot, 0, 1, 0);
+	                GL11.glTranslated(-0.5f, 0, 0);
+	                GL11.glTranslated(0, Math.cos(rot/360d)*0.05d + 0.05d, 0);
+                }
             }
             
             IIcon icon = stack.getIconIndex();
@@ -98,8 +99,8 @@ public class RendererItemCompressed implements IItemRenderer {
             }
             GL11.glScalef(0.75f, 0.75f, 0.75f);
             GL11.glTranslatef(0.65f, 0.20f, 0);
-            if (specialRender != null && specialRender.handleRenderType(fakeStack, ItemRenderType.ENTITY)) {
-                specialRender.renderItem(ItemRenderType.ENTITY, fakeStack, data);
+            if (specialRender != null && specialRender.handleRenderType(fakeStack, ItemRenderType.ENTITY)){
+        		specialRender.renderItem(ItemRenderType.ENTITY, fakeStack, data);
             } else {
                 if (itemInStack instanceof ItemBlock) {
                     Block block = Block.getBlockFromItem(itemInStack);
