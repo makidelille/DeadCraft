@@ -122,12 +122,12 @@ public class DeadCraftItems {
 		 * craft of godcan
 		 */
 		is = new ItemStack(godCan);
-		CraftingManager.getInstance().addRecipe(
-				is,
-				new Object[] { "III", "INI", " B ", Character.valueOf('I'),
-						Items.iron_ingot, Character.valueOf('N'),
-						Items.nether_star, Character.valueOf('B'),
-						Items.bucket, Character.valueOf('R'), Items.redstone });
+		CraftingManager.getInstance()
+				.addRecipe(
+						is,
+						new Object[] { "I I", "I I", " B ",
+								Character.valueOf('I'), Items.iron_ingot,
+								Character.valueOf('B'), Items.bucket });
 		/**
 		 * craft of Mindcontroller
 		 */

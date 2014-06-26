@@ -7,7 +7,7 @@ public final class Lib {
     
     public static final String MOD_NAME = "Dead Craft";
     public static final String MOD_ID = "deadcraft";
-    public static final String MOD_VERSION = "@VERSION@";
+    public static final String MOD_VERSION = "1.0";
     public static final String PROXY_CLIENT = "mak.dc.network.proxy.ClientProxy";
     public static final String PROXY_SERVER = "mak.dc.network.proxy.CommonProxy";
     

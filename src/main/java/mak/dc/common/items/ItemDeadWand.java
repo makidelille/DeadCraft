@@ -134,23 +134,23 @@ public class ItemDeadWand extends Item {
             
             if (charge >= MAXCHARGE) return true;
             else {
+            	ItemStack crystalIs = getCrystal(player);
+            	int chargeToAdd = (int) (1f / 3f * targetPv);
+            	if (crystalIs != null) {
+            		int chargeleft = ItemCrystal.chargeItem(crystalIs, (int) (2f / 3f * targetPv));
+            		chargeToAdd += chargeleft;
+            	}
                 
                 entity.attackEntityFrom(new DamageSource("magic"), targetPv);
                 player.worldObj.playSoundEffect(entity.posX + 0.5D, entity.posY + 0.5D, entity.posZ + 0.5D, "random.burp", 1.0F, 5f);
                 
                 if (!isCreative) {
-                    player.attackEntityFrom(new DamageSource("magic"), targetPv * 2f / 3f);
+                    player.attackEntityFrom(new DamageSource("magic"), targetPv * 1f / 3f * (crystalIs == null ? 1 : 0.1f));
                     
                     player.addPotionEffect(new PotionEffect(9, (int) targetPv * 20, 5, false));
                     player.addPotionEffect(new PotionEffect(17, (int) targetPv * 20, 5, false));
                 }
                 
-                ItemStack crystalIs = getCrystal(player);
-                int chargeToAdd = (int) (1f / 3f * targetPv);
-                if (crystalIs != null) {
-                    int chargeleft = ItemCrystal.chargeItem(crystalIs, (int) (2f / 3f * targetPv));
-                    chargeToAdd += chargeleft;
-                }
                 chargeItem(stack, chargeToAdd);
                 
                 return false;

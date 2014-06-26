@@ -1,0 +1,18 @@
+[
+{
+"modid": "deadcraft",
+"name": "DeadCraft",
+"description": "A mod that do things, and it's hard",
+"version": "1.0",
+"credits": "Created by Makidelille",
+"logoFile": "",
+"mcversion": "",
+"url": "http://github.com/makidelille/deadcraft",
+"updateUrl": "",
+"authors": [],
+"parent":"",
+"screenshots": [],
+"dependencies": [
+         ""
+]
+}
