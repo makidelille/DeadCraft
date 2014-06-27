@@ -81,7 +81,7 @@ public class BlockGodBottler extends BlockDeadCraft {
     
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z) == 4 ? AxisAlignedBB.getAABBPool().getAABB(x, y - 1, z, x + 1, y + 1, z + 1) : AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 2, z + 1);
+        return world.getBlockMetadata(x, y, z) == 4 ? AxisAlignedBB.getBoundingBox(x, y - 1, z, x + 1, y + 1, z + 1) : AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1);
     }
     
     @Override
