@@ -48,7 +48,7 @@ public class BlockEnderPearlBlock extends Block {
     @Override
     public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
         if (!world.isRemote) {
-            if (!((EntityPlayer) entity).capabilities.isCreativeMode && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
+            if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 teleportEntity(world, x, y, z, entity);
             }
         }
