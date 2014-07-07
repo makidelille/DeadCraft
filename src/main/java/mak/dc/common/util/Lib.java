@@ -69,5 +69,16 @@ public final class Lib {
         
     }
     
+    public static class GuiLib {
+    	
+    	public static final int ID_GUI_BLOCK_DC = 0;
+    	public static final int ID_GUI_BLOCK_EGGSPAWN = 1;
+    	public static final int ID_GUI_BLOCK_BOTTLER = 2;
+    	public static final int ID_GUI_BLOCK_CONVERTER = 3;
+    	public static final int ID_GUI_BLOCK_COMPRESSOR = 4;
+    	public static final int ID_INV_POWERITEM = 5;
+    	
+    }
+    
     
 }
