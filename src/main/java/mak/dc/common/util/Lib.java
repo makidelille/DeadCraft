@@ -65,7 +65,7 @@ public final class Lib {
         public static final String GODBOTTLER_GUI_TEXT_LOC = PATH_GUI + "godbottler.png";
         public static final String ENDERCONVERTER_GUI_TEXT_LOC = PATH_GUI + "enderconverter.png";
         public static final String COMPRESSOR_GUI_TEXT_LOC = PATH_GUI + "compressor.png";
-
+        public static final String ITEMCHARGE_GUI_TEXT_LOC = PATH_GUI + "itemcharge.png";
         
     }
     
