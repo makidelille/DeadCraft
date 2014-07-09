@@ -177,5 +177,9 @@ public class ItemCrystal extends Item {
     public boolean showDurabilityBar(ItemStack stack) {
         return stack.hasTagCompound() && !stack.getTagCompound().getBoolean("creativeSpawn");
     }
+
+	public static int getMaxCharge(ItemStack crys) {
+		return MAXCHARGE[crys.getItemDamage()];
+	}
     
 }

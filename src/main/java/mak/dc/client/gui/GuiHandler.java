@@ -28,7 +28,7 @@ public class GuiHandler implements IGuiHandler {
     
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(x, y, z); //TODO later tweak the way the gui id works
         switch (ID) {
             case 0:
                 if (te != null) return new GuiDeadCraftBlockMain(player.inventory, (TileEntityDeadCraft) te, ID);

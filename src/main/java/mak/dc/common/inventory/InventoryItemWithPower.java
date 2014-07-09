@@ -18,6 +18,7 @@ public class InventoryItemWithPower implements IInventory{
 		this.stack = itemWithPower;
 		this.player = player;
 		
+		
 		if(!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
@@ -49,6 +50,7 @@ public class InventoryItemWithPower implements IInventory{
                 itemstack = itemstack.splitStack(count);
             }
         }
+        markDirty();
         return itemstack;
     }
 
@@ -60,6 +62,7 @@ public class InventoryItemWithPower implements IInventory{
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2) {
 		inv = var2;		
+		markDirty();
 	}
 
 	@Override
@@ -79,10 +82,12 @@ public class InventoryItemWithPower implements IInventory{
 
 	@Override
 	public void markDirty() {
-		if (inv != null && inv.stackSize == 0)
+		if (inv != null && inv.stackSize == 0){
 			inv = null;
+		}
 		// be sure to write to NBT when the inventory changes!
 		writeToNBT(stack.getTagCompound());
+		player.setCurrentItemOrArmor(0, stack);
 	}
 
 	@Override
@@ -101,7 +106,7 @@ public class InventoryItemWithPower implements IInventory{
 		return var2.getItem() instanceof ItemCrystal;
 	}
 
-	private void writeToNBT(NBTTagCompound tag) {
+	private void writeToNBT(NBTTagCompound tag) {		
 		ItemWithPower.setCrystal(stack, inv);
 	}
 	

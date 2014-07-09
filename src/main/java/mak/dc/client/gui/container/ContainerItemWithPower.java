@@ -28,6 +28,8 @@ public class ContainerItemWithPower extends Container {
 	private InventoryItemWithPower stackInv;
 	private InventoryPlayer playerInv;
 
+	//TODO add shift clicks
+	
 	public ContainerItemWithPower(EntityPlayer player,
 			InventoryItemWithPower inv) {
 		this.playerInv = player.inventory;

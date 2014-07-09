@@ -33,9 +33,6 @@ public class GuiItemCharge extends GuiCustom{
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void drawGuiContainerForegroundLayer(int x, int y) {}
 
 }

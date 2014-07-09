@@ -193,14 +193,7 @@ public class ItemMindController extends ItemWithPower {
 //        }
 //        return re;
 //    }
-    
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-    	return 0; //TODO
-//        NBTTagCompound tag = stack.getTagCompound();
-//        if (tag == null) return 0;
-//        return 1d - (double) tag.getInteger("charge") / MAXCHARGE;
-    }
+
     
     private int getEntityCost(EntityLiving entLive) {
         float pv = entLive.getHealth();
@@ -336,11 +329,6 @@ public class ItemMindController extends ItemWithPower {
     public void registerIcons(IIconRegister iconRegister) {
         itemIcon = iconRegister.registerIcon(Textures.MINDCONTROLLER_TEXT_LOC);
     }
-    
-    @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        return stack.hasTagCompound() && !stack.getTagCompound().getBoolean("creative");
-    }
 
 	@Override
 	protected int getCost() {
@@ -379,18 +367,6 @@ public class ItemMindController extends ItemWithPower {
         if (entLive instanceof EntitySlime ) {
             player.worldObj.spawnEntityInWorld(new EntityLightningBolt(entLive.worldObj, entLive.posX, entLive.posY, entLive.posZ));
         }
-//   else if (!isUserCreator(stack, player)) {
-//        player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
-//        player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-//        player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "" + EnumChatFormatting.BOLD + StatCollector.translateToLocal("dc.mindcontroller.useNotCreat") + EnumChatFormatting.RESET));
-//        return true;
-//    } else if (ent instanceof EntityPlayer || ent instanceof EntityVillager) {
-//        World world = player.worldObj;
-//        world.spawnEntityInWorld(new EntityLightningBolt(world, player.posX, player.posY, player.posZ));
-//        player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
-//        player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + StatCollector.translateToLocal("dc.mindcontroller.usePlayer") + EnumChatFormatting.RESET));
-//        return true;
-//    }
 	}
 
 	@Override

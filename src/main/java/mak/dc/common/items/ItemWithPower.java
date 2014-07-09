@@ -1,5 +1,7 @@
 package mak.dc.common.items;
 
+import java.util.List;
+
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.GuiLib;
 import net.minecraft.entity.Entity;
@@ -71,7 +73,7 @@ public abstract class ItemWithPower extends Item {
 			EntityPlayer player);
 
 	protected abstract EnumPowerUseProp getUseType();
-
+	
 	protected void tryToUse(ItemStack stack, World world, Entity ent,
 			EntityPlayer player) {
 		if (consumePower(stack))
@@ -98,14 +100,37 @@ public abstract class ItemWithPower extends Item {
 					GuiLib.ID_INV_POWERITEM, world, (int) player.posX,
 					(int) player.posY, (int) player.posZ);
 		}
-		else System.out.println(stack.getTagCompound());
 		return stack;
+	}
+	
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return true;
+	}
+	
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack) {
+		if(hasCrystal(stack)){
+			ItemStack crys = getCrystal(stack);
+			return 1d - (double) ItemCrystal.getCharge(crys) / ItemCrystal.getMaxCharge(crys);
+		}
+		return 1d;
+	}
+	
+	
+	@Override
+	public void addInformation(ItemStack stack,
+			EntityPlayer player, List list, boolean par4) {
+		//TODO write the infos
 	}
 
 	public static void setCrystal(ItemStack item, ItemStack crys) {
-		if (hasCrystal(item) || crys == null
-				|| !(crys.getItem() instanceof ItemCrystal))
+		if (crys == null
+				|| !(crys.getItem() instanceof ItemCrystal)) {
+			if(item.getTagCompound().hasKey("crystal"))
+				item.getTagCompound().removeTag("crystal");
 			return;
+		}
 		NBTTagCompound cryTag = crys.writeToNBT(new NBTTagCompound());
 		item.getTagCompound().setTag("crystal", cryTag);
 	}
