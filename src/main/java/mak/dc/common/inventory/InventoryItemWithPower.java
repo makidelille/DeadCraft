@@ -92,7 +92,7 @@ public class InventoryItemWithPower implements IInventory{
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return var1 == player && var1.getHeldItem() == stack;
+		return var1 == player;
 	}
 
 	@Override

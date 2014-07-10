@@ -18,61 +18,63 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-public class ItemDeadWand extends Item {
+public class ItemDeadWand extends ItemWithPower {
     
+	//TODO rewrite the code
+	
     public static final int MAXCHARGE = ConfigLib.WAND_MAXCHARGE;
     
-    public static int chargeItem(ItemStack stack, int chargeToAdd) {
-        if (!stack.hasTagCompound()) return chargeToAdd;
-        NBTTagCompound tag = stack.getTagCompound();
-        int curentCharge = tag.getInteger("charge");
-        if (curentCharge >= MAXCHARGE) return chargeToAdd;
-        if (curentCharge + chargeToAdd > MAXCHARGE) {
-            tag.setInteger("charge", MAXCHARGE);
-            stack.setTagCompound(tag);
-            return curentCharge + chargeToAdd - MAXCHARGE;
-        } else {
-            tag.setInteger("charge", curentCharge + chargeToAdd);
-            stack.setTagCompound(tag);
-            return 0;
-        }
-        
-    }
-    
-    public static int dischargeItem(ItemStack stack, int chargeToRem) {
-        if (!stack.hasTagCompound()) return chargeToRem;
-        NBTTagCompound tag = stack.getTagCompound();
-        int curentCharge = tag.getInteger("charge");
-        if (curentCharge <= 0) return chargeToRem;
-        if (curentCharge - chargeToRem < 0) {
-            tag.setInteger("charge", 0);
-            stack.setTagCompound(tag);
-            return chargeToRem - curentCharge;
-        } else {
-            tag.setInteger("charge", curentCharge - chargeToRem);
-            stack.setTagCompound(tag);
-            return 0;
-        }
-    }
-    
-    public static int getCharge(ItemStack stack) {
-        if (!stack.hasTagCompound()) return 0;
-        NBTTagCompound tag = stack.getTagCompound();
-        return tag.getInteger("charge");
-    }
-    
-    private static ItemStack getCrystal(EntityPlayer player) {
-        ItemStack re = null;
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            ItemStack is = player.inventory.getStackInSlot(i);
-            if (is != null && is.getItem() instanceof ItemCrystal) {
-                if (!ItemCrystal.isFullyCharged(is)) return is;
-                re = is;
-            }
-        }
-        return re;
-    }
-    
+//    public static int chargeItem(ItemStack stack, int chargeToAdd) {
+//        if (!stack.hasTagCompound()) return chargeToAdd;
+//        NBTTagCompound tag = stack.getTagCompound();
+//        int curentCharge = tag.getInteger("charge");
+//        if (curentCharge >= MAXCHARGE) return chargeToAdd;
+//        if (curentCharge + chargeToAdd > MAXCHARGE) {
+//            tag.setInteger("charge", MAXCHARGE);
+//            stack.setTagCompound(tag);
+//            return curentCharge + chargeToAdd - MAXCHARGE;
+//        } else {
+//            tag.setInteger("charge", curentCharge + chargeToAdd);
+//            stack.setTagCompound(tag);
+//            return 0;
+//        }
+//        
+//    }
+//    
+//    public static int dischargeItem(ItemStack stack, int chargeToRem) {
+//        if (!stack.hasTagCompound()) return chargeToRem;
+//        NBTTagCompound tag = stack.getTagCompound();
+//        int curentCharge = tag.getInteger("charge");
+//        if (curentCharge <= 0) return chargeToRem;
+//        if (curentCharge - chargeToRem < 0) {
+//            tag.setInteger("charge", 0);
+//            stack.setTagCompound(tag);
+//            return chargeToRem - curentCharge;
+//        } else {
+//            tag.setInteger("charge", curentCharge - chargeToRem);
+//            stack.setTagCompound(tag);
+//            return 0;
+//        }
+//    }
+//    
+//    public static int getCharge(ItemStack stack) {
+//        if (!stack.hasTagCompound()) return 0;
+//        NBTTagCompound tag = stack.getTagCompound();
+//        return tag.getInteger("charge");
+//    }
+//    
+//    private static ItemStack getCrystal(EntityPlayer player) {
+//        ItemStack re = null;
+//        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+//            ItemStack is = player.inventory.getStackInSlot(i);
+//            if (is != null && is.getItem() instanceof ItemCrystal) {
+//                if (!ItemCrystal.isFullyCharged(is)) return is;
+//                re = is;
+//            }
+//        }
+//        return re;
+//    }
+//    
     public ItemDeadWand() {
         super();
         setMaxStackSize(1);
@@ -111,50 +113,50 @@ public class ItemDeadWand extends Item {
     
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        if (player.isSneaking()) {
-            int charge = getCharge(stack);
-            ItemStack cryIs = getCrystal(player);
-            if (charge > 0 && cryIs != null) {
-                int chargeleft = ItemCrystal.chargeItem(cryIs, charge);
-                dischargeItem(stack, charge - chargeleft);
-            }
-        }
+//        if (player.isSneaking()) {
+//            int charge = getCharge(stack);
+//            ItemStack cryIs = getCrystal(player);
+//            if (charge > 0 && cryIs != null) {
+//                int chargeleft = ItemCrystal.chargeItem(cryIs, charge);
+//                dischargeItem(stack, charge - chargeleft);
+//            }
+//        }
         return stack;
     }
     
     @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
         if (!player.worldObj.isRemote && entity.isEntityAlive()) {
-            if (!stack.hasTagCompound()) return false;
-            
-            NBTTagCompound tag = stack.getTagCompound();
-            float targetPv = ((EntityLivingBase) entity).getHealth();
-            boolean isCreative = player.capabilities.isCreativeMode;
-            int charge = tag.getInteger("charge");
-            
-            if (charge >= MAXCHARGE) return true;
-            else {
-            	ItemStack crystalIs = getCrystal(player);
-            	int chargeToAdd = (int) (1f / 3f * targetPv);
-            	if (crystalIs != null) {
-            		int chargeleft = ItemCrystal.chargeItem(crystalIs, (int) (2f / 3f * targetPv));
-            		chargeToAdd += chargeleft;
-            	}
-                
-                entity.attackEntityFrom(new DamageSource("magic"), targetPv);
-                player.worldObj.playSoundEffect(entity.posX + 0.5D, entity.posY + 0.5D, entity.posZ + 0.5D, "random.burp", 1.0F, 5f);
-                
-                if (!isCreative) {
-                    player.attackEntityFrom(new DamageSource("magic"), targetPv * 1f / 3f * (crystalIs == null ? 1 : 0.1f));
-                    
-                    player.addPotionEffect(new PotionEffect(9, (int) targetPv * 20, 5, false));
-                    player.addPotionEffect(new PotionEffect(17, (int) targetPv * 20, 5, false));
-                }
-                
-                chargeItem(stack, chargeToAdd);
-                
-                return false;
-            }
+//            if (!stack.hasTagCompound()) return false;
+//            
+//            NBTTagCompound tag = stack.getTagCompound();
+//            float targetPv = ((EntityLivingBase) entity).getHealth();
+//            boolean isCreative = player.capabilities.isCreativeMode;
+//            int charge = tag.getInteger("charge");
+//            
+//            if (charge >= MAXCHARGE) return true;
+//            else {
+//            	ItemStack crystalIs = getCrystal(player);
+//            	int chargeToAdd = (int) (1f / 3f * targetPv);
+//            	if (crystalIs != null) {
+//            		int chargeleft = ItemCrystal.chargeItem(crystalIs, (int) (2f / 3f * targetPv));
+//            		chargeToAdd += chargeleft;
+//            	}
+//                
+//                entity.attackEntityFrom(new DamageSource("magic"), targetPv);
+//                player.worldObj.playSoundEffect(entity.posX + 0.5D, entity.posY + 0.5D, entity.posZ + 0.5D, "random.burp", 1.0F, 5f);
+//                
+//                if (!isCreative) {
+//                    player.attackEntityFrom(new DamageSource("magic"), targetPv * 1f / 3f * (crystalIs == null ? 1 : 0.1f));
+//                    
+//                    player.addPotionEffect(new PotionEffect(9, (int) targetPv * 20, 5, false));
+//                    player.addPotionEffect(new PotionEffect(17, (int) targetPv * 20, 5, false));
+//                }
+//                
+//                chargeItem(stack, chargeToAdd);
+//                
+//                return false;
+//            }
         }
         return true;
     }
@@ -168,5 +170,21 @@ public class ItemDeadWand extends Item {
     public boolean showDurabilityBar(ItemStack stack) {
         return stack.hasTagCompound();
     }
+
+	@Override
+	protected int getCost() {
+		return 0;
+	}
+
+	@Override
+	protected void use(ItemStack stack, World world, Entity ent,
+			EntityPlayer player) {
+		
+	}
+
+	@Override
+	protected EnumPowerUseProp getUseType() {
+		return EnumPowerUseProp.ONUSE;
+	}
     
 }

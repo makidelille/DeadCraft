@@ -2,6 +2,8 @@ package mak.dc.common.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.GuiLib;
 import net.minecraft.entity.Entity;
@@ -56,24 +58,23 @@ public abstract class ItemWithPower extends Item {
 	public void onUpdate(ItemStack stack, World world, Entity ent, int slot,
 			boolean par5) {
 		super.onUpdate(stack, world, ent, slot, par5);
-		if(stack.getTagCompound() == null) stack.setTagCompound(new NBTTagCompound());
+		if (stack.getTagCompound() == null)
+			stack.setTagCompound(new NBTTagCompound());
 		EnumPowerUseProp prop = EnumPowerUseProp
 				.getProp(stack.getTagCompound());
 		if (prop.equals(EnumPowerUseProp.TICK)) {
 			if (this.consumePower(stack))
 				use(stack, world, ent, (EntityPlayer) ent);
-		}else if(prop.equals(EnumPowerUseProp.NULL)) {
+		} else if (prop.equals(EnumPowerUseProp.NULL)) {
 			EnumPowerUseProp.writeProp(stack.getTagCompound(), getUseType());
 		}
 	}
 
 	protected abstract int getCost();
-
 	protected abstract void use(ItemStack stack, World world, Entity ent,
 			EntityPlayer player);
-
 	protected abstract EnumPowerUseProp getUseType();
-	
+
 	protected void tryToUse(ItemStack stack, World world, Entity ent,
 			EntityPlayer player) {
 		if (consumePower(stack))
@@ -102,32 +103,50 @@ public abstract class ItemWithPower extends Item {
 		}
 		return stack;
 	}
-	
+
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 		return true;
 	}
-	
+
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		if(hasCrystal(stack)){
+		if (hasCrystal(stack)) {
 			ItemStack crys = getCrystal(stack);
-			return 1d - (double) ItemCrystal.getCharge(crys) / ItemCrystal.getMaxCharge(crys);
+			return 1d - (double) ItemCrystal.getCharge(crys)
+					/ ItemCrystal.getMaxCharge(crys);
 		}
 		return 1d;
 	}
-	
-	
+
 	@Override
-	public void addInformation(ItemStack stack,
-			EntityPlayer player, List list, boolean par4) {
-		//TODO write the infos
+	public void addInformation(ItemStack stack, EntityPlayer player, List list,
+			boolean par4) { //TODO add colors
+		if(hasCrystal(stack)) {
+			ItemStack crys = getCrystal(stack);
+			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				if(ItemCrystal.isCreative(crys)) {
+					list.add("creative spawned");
+					list.add("charge : infinite");
+				}else{
+					list.add("charge : " + ItemCrystal.getCharge(crys) + "/" + ItemCrystal.getMaxCharge(crys));
+					list.add("crystal tier : " + ItemCrystal.tiers[getCrystal(stack).getItemDamage()]);
+				}
+			}else{
+				if(ItemCrystal.isCreative(crys))
+					list.add("charge : infinite");
+				else
+					list.add("charge : " + ItemCrystal.getCharge(crys) + "/" + ItemCrystal.getMaxCharge(crys));
+				
+			}
+		}else{
+			list.add("no power source");
+		}
 	}
 
 	public static void setCrystal(ItemStack item, ItemStack crys) {
-		if (crys == null
-				|| !(crys.getItem() instanceof ItemCrystal)) {
-			if(item.getTagCompound().hasKey("crystal"))
+		if (crys == null || !(crys.getItem() instanceof ItemCrystal)) {
+			if (item.getTagCompound().hasKey("crystal"))
 				item.getTagCompound().removeTag("crystal");
 			return;
 		}

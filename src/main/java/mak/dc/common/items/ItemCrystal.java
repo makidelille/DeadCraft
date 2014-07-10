@@ -99,6 +99,11 @@ public class ItemCrystal extends Item {
         return tag.getInteger("charge") == MAXCHARGE[is.getItemDamage()];
     }
     
+    public static boolean isCreative(ItemStack is) {
+    	if(!is.hasTagCompound()) return false;
+    	return is.getTagCompound().hasKey("creativeSpawn") && is.getTagCompound().getBoolean("creativeSpawn");
+    }
+    
     private IIcon[] icons = new IIcon[3];
     
     public ItemCrystal() {
