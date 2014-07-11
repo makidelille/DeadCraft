@@ -1,5 +1,6 @@
 package mak.dc.common.blocks;
 
+import mak.dc.DeadCraft;
 import mak.dc.common.items.ItemWrench;
 import mak.dc.common.tileEntities.TileEntityDeadCraft;
 import net.minecraft.block.Block;
@@ -19,9 +20,9 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
     
     public BlockDeadCraft(Material par2Material) {
         super(par2Material);
-        setBlockUnbreakable();
-        setResistance(-1F);
-        
+        this.setBlockUnbreakable();
+        this.setResistance(-1F);
+        this.setCreativeTab(DeadCraft.tabDeadCraft);
     }
     
     @Override
@@ -106,6 +107,5 @@ public abstract class BlockDeadCraft extends Block implements ITileEntityProvide
     @Override
     public BlockDeadCraft setBlockName(String name) {
         return (BlockDeadCraft) super.setBlockName(name);
-    }
-    
+    }   
 }

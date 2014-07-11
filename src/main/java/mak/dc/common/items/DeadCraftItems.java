@@ -1,5 +1,6 @@
 package mak.dc.common.items;
 
+import mak.dc.DeadCraft;
 import mak.dc.common.blocks.DeadCraftBlocks;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.IBTInfos;
@@ -21,20 +22,19 @@ public class DeadCraftItems {
 	public static Item wrench;
 	public static Item godCan;
 	public static Item compacted;
-	public static CreativeTabs tabDeadCraft;
-
+	
 	public static void init() {
 
 		deadWand = new ItemDeadWand()
-				.setUnlocalizedName(IBTInfos.ITEM_DEADWAND_KEY);
+				.setUnlocalizedName(IBTInfos.ITEM_DEADWAND_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
 		crystal = new ItemCrystal()
-				.setUnlocalizedName(IBTInfos.ITEM_CRYSTAL_KEY);
+				.setUnlocalizedName(IBTInfos.ITEM_CRYSTAL_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
 		mindController = new ItemMindController()
-				.setUnlocalizedName(IBTInfos.ITEM_MINDCONTROLLER_KEY);
-		wrench = new ItemWrench().setUnlocalizedName(IBTInfos.ITEM_WRENCH_KEY);
-		godCan = new ItemGodCan().setUnlocalizedName(IBTInfos.ITEM_GODCAN_KEY);
+				.setUnlocalizedName(IBTInfos.ITEM_MINDCONTROLLER_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
+		wrench = new ItemWrench().setUnlocalizedName(IBTInfos.ITEM_WRENCH_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
+		godCan = new ItemGodCan().setUnlocalizedName(IBTInfos.ITEM_GODCAN_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
 		compacted = new ItemCompacted()
-				.setUnlocalizedName(IBTInfos.ITEM_COMPACTED_KEY);
+				.setUnlocalizedName(IBTInfos.ITEM_COMPACTED_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
 		GameRegistry.registerItem(deadWand, IBTInfos.ITEM_DEADWAND_KEY,
 				Lib.MOD_ID);
 		GameRegistry.registerItem(crystal, IBTInfos.ITEM_CRYSTAL_KEY,
@@ -45,28 +45,6 @@ public class DeadCraftItems {
 		GameRegistry.registerItem(godCan, IBTInfos.ITEM_GODCAN_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(compacted, IBTInfos.ITEM_COMPACTED_KEY,
 				Lib.MOD_ID);
-	}
-
-	public static void postInit() {
-		tabDeadCraft = new CreativeTabs("DeadCraft") {
-
-			@Override
-			public Item getTabIconItem() {
-				return deadWand;
-			}
-		};
-
-		deadWand.setCreativeTab(tabDeadCraft);
-		crystal.setCreativeTab(tabDeadCraft);
-		mindController.setCreativeTab(tabDeadCraft);
-		wrench.setCreativeTab(tabDeadCraft);
-		godCan.setCreativeTab(tabDeadCraft);
-
-		DeadCraftBlocks.eggSpawner.setCreativeTab(tabDeadCraft);
-		DeadCraftBlocks.enderPearlBlock.setCreativeTab(tabDeadCraft);
-		DeadCraftBlocks.godBottler.setCreativeTab(tabDeadCraft);
-		DeadCraftBlocks.enderConverter.setCreativeTab(tabDeadCraft);
-		DeadCraftBlocks.compressor.setCreativeTab(tabDeadCraft);
 	}
 
 	public static void registerCraftRecipe() {

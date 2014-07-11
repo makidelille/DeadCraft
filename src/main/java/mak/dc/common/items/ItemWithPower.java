@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
 public abstract class ItemWithPower extends Item {
+	protected static int discharge;
 	protected enum EnumPowerUseProp {
 		TICK(0), ONUSE(1), NULL(-1);
 
@@ -63,35 +64,34 @@ public abstract class ItemWithPower extends Item {
 		EnumPowerUseProp prop = EnumPowerUseProp
 				.getProp(stack.getTagCompound());
 		if (prop.equals(EnumPowerUseProp.TICK)) {
-			if (this.consumePower(stack))
 				use(stack, world, ent, (EntityPlayer) ent);
 		} else if (prop.equals(EnumPowerUseProp.NULL)) {
 			EnumPowerUseProp.writeProp(stack.getTagCompound(), getUseType());
 		}
 	}
 
-	protected abstract int getCost();
-	protected abstract void use(ItemStack stack, World world, Entity ent,
-			EntityPlayer player);
-	protected abstract EnumPowerUseProp getUseType();
-
-	protected void tryToUse(ItemStack stack, World world, Entity ent,
-			EntityPlayer player) {
-		if (consumePower(stack))
-			use(stack, world, ent, player);
-	}
-
-	protected boolean consumePower(ItemStack stack) {
-		ItemStack crys = getCrystal(stack);
-		if (crys == null)
-			return false;
-		int left = ItemCrystal.dischargeItem(crys, getCost());
-		if (left == 0) {
-			setCrystal(stack, crys);
+	protected boolean discharge(ItemStack item,int amount) {
+		if(!hasCrystal(item)) return false;
+		ItemStack crys = getCrystal(item);
+		if(ItemCrystal.canDischarge(crys, amount)) {
+			ItemCrystal.dischargeItem(crys, amount);
+			setCrystal(item, crys);
 			return true;
 		}
 		return false;
 	}
+	
+	/** method called on using the item energie.
+	 * you have to call discharge(stack, amount) in it before making any action
+	 * 
+	 * @param stack
+	 * @param world
+	 * @param ent
+	 * @param player
+	 */
+	protected abstract void use(ItemStack stack, World world, Entity ent,
+			EntityPlayer player);
+	protected abstract EnumPowerUseProp getUseType();
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world,

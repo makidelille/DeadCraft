@@ -1,5 +1,6 @@
 package mak.dc.common.blocks;
 
+import mak.dc.DeadCraft;
 import mak.dc.common.items.DeadCraftItems;
 import mak.dc.common.items.itemBlock.ItemBlockDeadCraft;
 import mak.dc.common.tileEntities.TileEntityCompressor;
@@ -26,10 +27,10 @@ public class DeadCraftBlocks {
     public static void init() {
                 
         eggSpawner = new BlockEggSpawner().setBlockName(IBTInfos.BLOCK_EGGSPAWNER_KEY);
-        enderPearlBlock = new BlockEnderPearlBlock().setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
         godBottler = new BlockGodBottler().setBlockName(IBTInfos.BLOCK_BOTTLER_KEY);
         enderConverter = new BlockEnderConverter().setBlockName(IBTInfos.BLOCK_ENDERCONVERTER_KEY);
         compressor = new BlockCompressor().setBlockName(IBTInfos.BLOCK_COMPRESSOR_KEY);
+        enderPearlBlock = new BlockEnderPearlBlock().setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
                 
         GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
         GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);

@@ -42,6 +42,9 @@ public final class Lib {
         /** Blocks textures localization */
         public static final String EGGSPAWNER_TEXT_LOC = _TEXT_LOC + "dragoneggspawner";
         public static final String ENDERBLOCK_TEXT_LOC = _TEXT_LOC + "enderpearlblock";
+        public static final String NETHERWOOD_LOG_TOP_TEXT_LOC = _TEXT_LOC + "netherWood_top";
+        public static final String NETHERWOOD_LOG_SIDE_TEXT_LOC = _TEXT_LOC + "netherWood_side";
+        public static final String NETHERWOOD_PLANK_TEXT_LOC = _TEXT_LOC + "netherWood_plank";
         
         /** Items textures localization */
         public static final String DEADWAND_TEXT_LOC = _TEXT_LOC + "deadwand";
@@ -50,6 +53,7 @@ public final class Lib {
         public static final String GODCAN_TEXT_LOC = _TEXT_LOC + "godcan";
         public static final String CRYSTAL_TEXT_LOC = _TEXT_LOC + "crystal";
         public static final String COMPACTED_TEXT_LOC = _TEXT_LOC + "compacted";
+        public static final String NETHERSTARNUGGET_TEXT_LOC = _TEXT_LOC + "netherstar_nugget";
         
         /** Models Textures localization */
         public static final String MINDCONTROLLER_MODEL_TEXT_LOC = PATH_MODEL + "mindcontrollermodeltexturemap.png";

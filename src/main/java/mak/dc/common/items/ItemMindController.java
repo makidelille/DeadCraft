@@ -76,7 +76,7 @@ public class ItemMindController extends ItemWithPower {
         
     }
     
-    private boolean checkEntity(EntityLiving entLive) {
+    private boolean isEntityMonster(EntityLiving entLive) {
         return entLive.isCreatureType(EnumCreatureType.monster, true) && entLive instanceof EntityCreature && !(entLive instanceof IBossDisplayData);
     }
        
@@ -111,7 +111,7 @@ public class ItemMindController extends ItemWithPower {
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity ent) {
         if (ent != null && !ent.worldObj.isRemote) {
             if (!(ent instanceof EntityPlayer) && isUserCreator(stack, player)) {
-            	this.tryToUse(stack, player.worldObj, ent, player);
+            	this.use(stack, player.worldObj, ent, player);
             } else if (!isUserCreator(stack, player)) {
                 player.worldObj.spawnEntityInWorld(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
                 player.attackEntityFrom(DamageSourceDeadCraft.lightning, 100F);
@@ -136,14 +136,9 @@ public class ItemMindController extends ItemWithPower {
     }
 
 	@Override
-	protected int getCost() {
-		return 100;
-	}
-
-	@Override
 	protected void use(ItemStack stack, World world, Entity ent, EntityPlayer player) {
 		EntityLiving entLive = (EntityLiving) ent;
-        if (entLive.isCreatureType(EnumCreatureType.creature, true)) {
+        if (entLive.isCreatureType(EnumCreatureType.creature, true) && discharge(stack, CostForPassiveEntityUse)) {
             EntityAITemptMindController ai = new EntityAITemptMindController((EntityCreature) entLive, 2D, false, player);
             boolean flag = true;
             for (int i = 0; i < entLive.tasks.taskEntries.size(); i++) {
@@ -162,7 +157,7 @@ public class ItemMindController extends ItemWithPower {
             
             return;
         }
-        if (checkEntity(entLive)) {
+        if (isEntityMonster(entLive) && discharge(stack, getEntityCost(entLive))) {
             System.out.println("new ai");
         	entLive.tasks.addTask(1, new EntityAIAvoidAPlayer((EntityCreature) entLive, player, 4F, 1.2D, 2D));
             player.worldObj.playSoundAtEntity(player, "fireworks.blast_far", 1f, 0.5f);
