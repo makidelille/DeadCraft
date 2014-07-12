@@ -4,6 +4,7 @@ import mak.dc.DeadCraft;
 import mak.dc.common.blocks.DeadCraftBlocks;
 import mak.dc.common.util.Lib;
 import mak.dc.common.util.Lib.IBTInfos;
+import mak.dc.common.util.Lib.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -22,6 +23,7 @@ public class DeadCraftItems {
 	public static Item wrench;
 	public static Item godCan;
 	public static Item compacted;
+	public static Item netherStarNugget;
 	
 	public static void init() {
 
@@ -35,6 +37,7 @@ public class DeadCraftItems {
 		godCan = new ItemGodCan().setUnlocalizedName(IBTInfos.ITEM_GODCAN_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
 		compacted = new ItemCompacted()
 				.setUnlocalizedName(IBTInfos.ITEM_COMPACTED_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
+		netherStarNugget = new Item().setUnlocalizedName(IBTInfos.ITEM_NETHERSTARNUGGET).setCreativeTab(DeadCraft.tabDeadCraft).setTextureName(Textures.NETHERSTARNUGGET_TEXT_LOC);
 		GameRegistry.registerItem(deadWand, IBTInfos.ITEM_DEADWAND_KEY,
 				Lib.MOD_ID);
 		GameRegistry.registerItem(crystal, IBTInfos.ITEM_CRYSTAL_KEY,
@@ -45,6 +48,7 @@ public class DeadCraftItems {
 		GameRegistry.registerItem(godCan, IBTInfos.ITEM_GODCAN_KEY, Lib.MOD_ID);
 		GameRegistry.registerItem(compacted, IBTInfos.ITEM_COMPACTED_KEY,
 				Lib.MOD_ID);
+		GameRegistry.registerItem(netherStarNugget, IBTInfos.ITEM_NETHERSTARNUGGET, Lib.MOD_ID);
 	}
 
 	public static void registerCraftRecipe() {

@@ -19,25 +19,29 @@ public class DeadCraftBlocks {
     public static BlockDeadCraft eggSpawner;
     public static BlockDeadCraft godBottler;
     public static BlockDeadCraft compressor;
-    public static Block enderConverter;
+    public static BlockDeadCraft enderConverter;
     
     /** w/ tileEntities Blocks */
     public static Block enderPearlBlock;
-    
+    public static Block netherStarLogBlock;
+	public static Block netherStarLeaveBlock;
     public static void init() {
                 
         eggSpawner = new BlockEggSpawner().setBlockName(IBTInfos.BLOCK_EGGSPAWNER_KEY);
         godBottler = new BlockGodBottler().setBlockName(IBTInfos.BLOCK_BOTTLER_KEY);
-        enderConverter = new BlockEnderConverter().setBlockName(IBTInfos.BLOCK_ENDERCONVERTER_KEY);
         compressor = new BlockCompressor().setBlockName(IBTInfos.BLOCK_COMPRESSOR_KEY);
+        enderConverter = new BlockEnderConverter().setBlockName(IBTInfos.BLOCK_ENDERCONVERTER_KEY);
+
         enderPearlBlock = new BlockEnderPearlBlock().setBlockName(IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY).setCreativeTab(DeadCraft.tabDeadCraft);
-                
+        netherStarLogBlock = new BlockNetherStarWood().setBlockName(IBTInfos.BLOCK_NETHERSTARTREE_LOG_KEY).setCreativeTab(DeadCraft.tabDeadCraft);        
+       
         GameRegistry.registerBlock(eggSpawner, ItemBlockDeadCraft.class, IBTInfos.BLOCK_EGGSPAWNER_KEY);
         GameRegistry.registerBlock(godBottler, ItemBlockDeadCraft.class, IBTInfos.BLOCK_BOTTLER_KEY);
         GameRegistry.registerBlock(enderConverter, ItemBlockDeadCraft.class, IBTInfos.BLOCK_ENDERCONVERTER_KEY);
         GameRegistry.registerBlock(compressor, ItemBlockDeadCraft.class, IBTInfos.BLOCK_COMPRESSOR_KEY);
         
         GameRegistry.registerBlock(enderPearlBlock, IBTInfos.BLOCK_ENDERPEARLBLOCK_KEY);
+        GameRegistry.registerBlock(netherStarLogBlock, IBTInfos.BLOCK_NETHERSTARTREE_LOG_KEY);
         
     }
     

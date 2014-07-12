@@ -25,11 +25,15 @@ public final class Lib {
         public static final String BLOCK_BOTTLER_KEY = "godbottler";
         public static final String BLOCK_ENDERCONVERTER_KEY = "enderconverter";
         public static final String BLOCK_COMPRESSOR_KEY = "compressor";
+        public static final String BLOCK_NETHERSTARTREE_LOG_KEY = "netherstarwoodlog"; 
+        public static final String BLOCK_NETHERSTARTREE_LEAVE_KEY = "netherstarleave";
+        public static final String BLOCK_NETEHERSTARTREE_PLANK_KEY = "netherstarplank";
         
         public static final String TILE_EGGSPANWER_KEY = "eggspawnertileentity";
         public static final String TILE_BOTTLER_KEY = "godbottlertileentity";
         public static final String TILE_ENDERCONVERTER_KEY = "enderconvertertileentity";
-        public static final String TILE_COMPRESSOR_KEY = "compressortileentity";        
+        public static final String TILE_COMPRESSOR_KEY = "compressortileentity";
+		public static final String ITEM_NETHERSTARNUGGET = "netherstarnugget";
     }
     
     public static class Textures {
